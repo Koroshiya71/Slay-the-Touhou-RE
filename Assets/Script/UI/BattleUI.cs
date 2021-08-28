@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using GameCore;
 using UnityEngine;
 
-
-//ÓÎÏ·Ö÷UI
-public class GameMainUI : BaseUI
+public class BattleUI : BaseUI
 {
     protected override void InitUiOnAwake()
     {
@@ -14,9 +12,8 @@ public class GameMainUI : BaseUI
 
     protected override void InitDataOnAwake()
     {
-
         base.InitDataOnAwake();
-        this.uiId = E_UiId.GameMainUI;
-        this.uiType.uiRootType = E_UIRootType.KeepAbove;
+        this.uiId = E_UiId.BattleUI;
+        this.uiType.uiRootType = E_UIRootType.Normal;
     }
 }

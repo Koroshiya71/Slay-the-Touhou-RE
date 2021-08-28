@@ -49,7 +49,7 @@ public enum E_UiId
     MainUI,
     GameMainUI,
     LoadingUI,
-    
+    BattleUI
 }
 public class GameDefine
 {
@@ -60,9 +60,7 @@ public class GameDefine
         { E_UiId.LoadingUI,"UIPrefab/"+"LoadingUI"},
         { E_UiId.MainUI,"UIPrefab/"+"MainUI"},
         { E_UiId.GameMainUI,"UIPrefab/"+"GameMainUI"},
-
-
-
+        { E_UiId.BattleUI,"UIPrefab/"+"BattleUI"},
     };
     public static Type GetUIScriptType(E_UiId uiId)
     {
@@ -81,6 +79,9 @@ public class GameDefine
                 break;
             case E_UiId.GameMainUI:
                 scriptType = typeof(GameMainUI);
+                break;
+            case E_UiId.BattleUI:
+                scriptType = typeof(BattleUI);
                 break;
             default:
                 break;

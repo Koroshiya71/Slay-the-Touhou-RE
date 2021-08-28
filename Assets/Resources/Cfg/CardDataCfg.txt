@@ -1,0 +1,4 @@
+ID,Name,ImgPath,Cost,Des,Type,Rare,Target,EffectNum,EffectIID1
+//卡牌ID,//卡牌名称,//卡图路径,//卡牌费用,//卡牌描述,//卡牌类型,//稀有度,//目标类型,//效果数量,//效果1ID
+-1,-1,-1,-1,-1,-1,-1,-1,-1,-1
+1001,斩击,Image/Card/CardImg/斩击,1,造成6点伤害,体术,普通,单体敌人,1,1001
