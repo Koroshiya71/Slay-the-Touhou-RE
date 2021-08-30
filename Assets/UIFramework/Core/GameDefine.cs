@@ -6,10 +6,7 @@ using System;
 //消息类型
 public enum E_MessageType
 {
-    //SellGoods,
-    //GoodsBeClick,
-    //TestMsg,
-    //UpGrade
+    BattleStart,
 }
 //物品的分类
 //public enum E_GoodsType

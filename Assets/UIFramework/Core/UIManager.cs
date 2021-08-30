@@ -163,7 +163,7 @@ namespace GameCore
             if (baseUI.isNeedDealWithUI)//说明这是一个普通窗体
             {
                if(dicShowUI.Count>0)
-                {   
+               {   
                    
                     if (baseUI.uiType.showMode == E_ShowUIMode.HideAll)
                     {
