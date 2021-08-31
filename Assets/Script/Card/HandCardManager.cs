@@ -52,9 +52,13 @@ public class HandCardManager : UnitySingleton<HandCardManager>
     {
         //第一张牌的X坐标和旋转角
         float firstX = -75 * (currentCardNum - 1);
-        float totalRotate = (currentCardNum) * 2;
+        //总旋转角
+        float totalRotate = (currentCardNum) * 1;
+        //旋转偏移量
         float offset = 0;
+        //中位地址
         int midIndex = currentCardNum / 2;
+        //y坐标偏移量
         float yPosOffset = 0;
         for (int i = 0; i < currentCardNum; i++)
         {
@@ -62,11 +66,11 @@ public class HandCardManager : UnitySingleton<HandCardManager>
             {
                 case 150:
                 case -150:
-                    yPosOffset = 10;
+                    yPosOffset = 5;
                     break;
                 case 300:
                 case -300:
-                    yPosOffset = 30;
+                    yPosOffset = 15;
                     break;
                 case 450:
                 case -450:
@@ -74,23 +78,23 @@ public class HandCardManager : UnitySingleton<HandCardManager>
                     break;
                 case 600:
                 case -600:
-                    yPosOffset = 100;
+                    yPosOffset = 50;
                     break;
                 case 225:
                 case -225:
-                    yPosOffset = 15;
+                    yPosOffset = 8;
                     break;
                 case 375:
                 case -375:
-                    yPosOffset = 40;
+                    yPosOffset = 20;
                     break;
                 case 525:
                 case -525:
-                    yPosOffset = 75;
+                    yPosOffset = 40;
                     break;
                 case 675:
                 case -675:
-                    yPosOffset = 120;
+                    yPosOffset = 65;
                     break;
                 default:
                     yPosOffset = 0;
@@ -99,13 +103,13 @@ public class HandCardManager : UnitySingleton<HandCardManager>
             handCardList[i].transform.localPosition = new Vector3(firstX + 150 * i, -yPosOffset, 0);
             if (currentCardNum % 2 == 0 && Mathf.Lerp(totalRotate, -totalRotate, ((float)(i) / currentCardNum)) == 0)
             {
-                offset = -4;
+                offset = -2;
             }
 
             if (i==midIndex&& currentCardNum % 2 == 1)
             {
                 handCardList[i].transform.localEulerAngles = new Vector3(0, 0, 0);
-                offset = -4;
+                offset = -2;
                 continue;
             }
             
