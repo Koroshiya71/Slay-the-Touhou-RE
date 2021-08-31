@@ -13,7 +13,6 @@ public class HandCard : BaseCard
         base.InitCard(cardID);
 
     }
-
     //获取卡牌外框
     protected override Sprite GetCardOutLine()
     {
@@ -27,6 +26,7 @@ public class HandCard : BaseCard
                 outLineName += "体术";
                 break;
         }
+
         switch (cardData.CardRare)
         {
             case CardRare.Normal:

@@ -20,7 +20,7 @@ public class BaseCard : MonoBehaviour
     //卡牌效果描述文本
     protected Text text_CardEffect;
     //事件触发器
-    protected EventTrigger eventTrigger;
+    protected EventTriggerListener eventListener;
     //初始化卡牌
     public virtual void InitCard(int cardID)
     {
@@ -32,6 +32,7 @@ public class BaseCard : MonoBehaviour
         img_OutLine.sprite = GetCardOutLine();
         text_CardEffect = GameTool.GetTheChildComponent<Text>(gameObject, "Text_CardEffect");
         text_CardEffect.text = cardData.CardDes;
+        
     }
 
     //获取卡牌外框
@@ -40,8 +41,19 @@ public class BaseCard : MonoBehaviour
         return null;
     }
 
+    //初始化事件
+    protected virtual void InitEvent()
+    {
+        eventListener=EventTriggerListener.Get(GameTool.FindTheChild(gameObject,"EventTrigger").gameObject);
+        eventListener.onClick += delegate
+        {
+            Debug.Log("点击");
+        };
+        Debug.Log(eventListener.onClick==null);
+    }
     protected virtual void Awake()
     {
         InitCard(1001);
+        InitEvent();
     }
 }
