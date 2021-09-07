@@ -17,7 +17,7 @@ public class HandCardManager : UnitySingleton<HandCardManager>
     //卡牌预制体
     private GameObject handCardPrefab;
     //手牌对象列表
-    private List<GameObject> handCardList = new List<GameObject>();
+    public List<GameObject> handCardList = new List<GameObject>();
     private void Awake()
     {
         EventDispatcher.AddListener(E_MessageType.BattleStart,InitHandCard);
@@ -28,7 +28,7 @@ public class HandCardManager : UnitySingleton<HandCardManager>
     {
         currentCardNum = 0;
         handCardGo = GameObject.Find("Cards_Hand");
-        handCardPrefab = ResourcesManager.Instance.LoadResources<GameObject>("Prefabs/Card/Card");
+        handCardPrefab = ResourcesManager.Instance.LoadResources<GameObject>("Prefabs/Card/HandCard");
     }
 
     //根据卡牌ID获取卡牌
@@ -39,7 +39,7 @@ public class HandCardManager : UnitySingleton<HandCardManager>
         {
             return;
         }
-        GameObject newCardGo = Instantiate(handCardPrefab, handCardGo.transform, true);
+        GameObject newCardGo = Instantiate(handCardPrefab, handCardGo.transform, false);
         newCardGo.transform.localScale = new Vector3(1, 1, 1);
         newCardGo.GetComponent<BaseCard>().InitCard(cardID);
         handCardList.Add(newCardGo);
@@ -74,7 +74,7 @@ public class HandCardManager : UnitySingleton<HandCardManager>
                     break;
                 case 450:
                 case -450:
-                    yPosOffset = 60;
+                    yPosOffset = 30;
                     break;
                 case 600:
                 case -600:
