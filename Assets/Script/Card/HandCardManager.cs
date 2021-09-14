@@ -18,6 +18,8 @@ public class HandCardManager : UnitySingleton<HandCardManager>
     private GameObject handCardPrefab;
     //手牌对象列表
     public List<GameObject> handCardList = new List<GameObject>();
+    //选中的卡牌对象
+    public HandCard holdingCard;
     private void Awake()
     {
         EventDispatcher.AddListener(E_MessageType.BattleStart,InitHandCard);
@@ -31,7 +33,7 @@ public class HandCardManager : UnitySingleton<HandCardManager>
         handCardPrefab = ResourcesManager.Instance.LoadResources<GameObject>("Prefabs/Card/HandCard");
     }
 
-    //根据卡牌ID获取卡牌
+    //根据卡牌ID获取卡牌到手牌
     public void GetCardByID(int cardID)
     {
         //如果手牌数大于等于手牌上限则跳出
@@ -41,7 +43,8 @@ public class HandCardManager : UnitySingleton<HandCardManager>
         }
         GameObject newCardGo = Instantiate(handCardPrefab, handCardGo.transform, false);
         newCardGo.transform.localScale = new Vector3(1, 1, 1);
-        newCardGo.GetComponent<BaseCard>().InitCard(cardID);
+        HandCard newCard = newCardGo.GetComponent<HandCard>();
+        newCard.InitCard(cardID);
         handCardList.Add(newCardGo);
         currentCardNum++;
         MoveAndRotateCard();
@@ -101,6 +104,7 @@ public class HandCardManager : UnitySingleton<HandCardManager>
                     break;
             }
             handCardList[i].transform.localPosition = new Vector3(firstX + 150 * i, -yPosOffset, 0);
+            
             if (currentCardNum % 2 == 0 && Mathf.Lerp(totalRotate, -totalRotate, ((float)(i) / currentCardNum)) == 0)
             {
                 offset = -2;
@@ -114,7 +118,7 @@ public class HandCardManager : UnitySingleton<HandCardManager>
             }
             
             handCardList[i].transform.localEulerAngles = new Vector3(0, 0, Mathf.Lerp(totalRotate,-totalRotate,((float)(i)/currentCardNum))+offset);
-
+            handCardList[i].GetComponent<HandCard>().SaveOriginalPos();
             
         }
     }

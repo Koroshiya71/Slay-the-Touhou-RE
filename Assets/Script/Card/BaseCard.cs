@@ -17,6 +17,7 @@ public class BaseCard : MonoBehaviour
     protected Image img_Main;
     //卡牌外边框
     protected Image img_OutLine;
+    
     //卡牌效果描述文本
     protected Text text_CardEffect;
     //事件触发器
