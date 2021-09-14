@@ -56,4 +56,25 @@ public class BaseCard : MonoBehaviour
     {
         InitEvent();
     }
+
+    //当鼠标选中卡牌时的回调
+    protected virtual void OnSelect()
+    {
+        
+    }
+    //当鼠标离开卡牌时的回调
+    protected virtual void OnExit()
+    {
+        
+    }
+    //当鼠标抬起时的回调
+    protected virtual void OnUp()
+    {
+       
+    }
+    //当鼠标点击时的回调
+    protected virtual void OnDown()
+    {
+
+    }
 }

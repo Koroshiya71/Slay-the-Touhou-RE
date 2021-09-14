@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 using UnityEngine;
 using UnityEngine.UI;
 using GameCore;
@@ -77,7 +78,7 @@ public class HandCard : BaseCard
         };
     }
     //当鼠标选中卡牌时的回调
-    private void OnSelect()
+    protected override void OnSelect()
     {
         cardAnimator.SetBool("Hover",true);
         for (int i = handCardList.IndexOf(this.gameObject) + 1; i < handCardList.Count; i++)
@@ -86,7 +87,7 @@ public class HandCard : BaseCard
         }
     }
     //当鼠标离开卡牌时的回调
-    private void OnExit()
+    protected override void OnExit()
     {
         cardAnimator.SetBool("Hover", false);
         for (int i = handCardList.IndexOf(this.gameObject) + 1; i < handCardList.Count; i++)
@@ -95,18 +96,22 @@ public class HandCard : BaseCard
         }
     }
     //当鼠标抬起时的回调
-    private void OnUp()
+    protected override void OnUp()
     {
         if (isDragging)
         {
             isDragging = false;
+            if (CheckUsable())
+            {
+                UseCard();
+                return;
+            }
             transform.position = originPos;
-            Debug.Log(originPos);
-
+            
         }
     }
     //当鼠标点击时的回调
-    private void OnDown()
+    protected override void OnDown()
     {
         isDragging = true;
 
@@ -115,14 +120,38 @@ public class HandCard : BaseCard
     public void SaveOriginalPos()
     {
         originPos = transform.position;
-        Debug.Log(originPos);
     }
+
+    //检查是否可以使用
+    private bool CheckUsable()
+    {
+        //TODO：如果费用不够则无法使用
+        //如果卡牌位置满足条件则可以使用
+        if (transform.position.y>=140)
+        {
+            useEffect.SetActive(true);
+            return true;
+        }
+        useEffect.SetActive(false);
+
+        return false;
+    }
+
+    //使用卡牌
+    public void UseCard()
+    {
+        //TODO：检查使用条件并触发效果
+        HandCardManager.Instance.RemoveCard(this.gameObject);
+
+    }
+
+
     private void Update()
     {
+        CheckUsable();
         if (isDragging)
         {
             transform.position = Input.mousePosition;
-
         }
     }
 }

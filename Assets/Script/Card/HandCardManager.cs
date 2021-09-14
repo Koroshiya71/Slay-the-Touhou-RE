@@ -51,7 +51,7 @@ public class HandCardManager : UnitySingleton<HandCardManager>
     }
 
     //调整卡牌位置和旋转
-    private void MoveAndRotateCard()
+    public void MoveAndRotateCard()
     {
         //第一张牌的X坐标和旋转角
         float firstX = -75 * (currentCardNum - 1);
@@ -129,5 +129,14 @@ public class HandCardManager : UnitySingleton<HandCardManager>
         {
             GetCardByID(1001);
         }
+    }
+    
+    //移除手牌
+    public void RemoveCard(GameObject cardGo)
+    {
+        handCardList.Remove(cardGo);
+        currentCardNum--;
+        Destroy(cardGo);
+        MoveAndRotateCard();
     }
 }
