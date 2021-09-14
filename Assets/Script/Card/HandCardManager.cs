@@ -19,7 +19,7 @@ public class HandCardManager : UnitySingleton<HandCardManager>
     //手牌对象列表
     public List<GameObject> handCardList = new List<GameObject>();
     //选中的卡牌对象
-    public HandCard holdingCard;
+    public HandCard selectedCard=null;
     private void Awake()
     {
         EventDispatcher.AddListener(E_MessageType.BattleStart,InitHandCard);

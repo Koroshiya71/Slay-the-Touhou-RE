@@ -25,11 +25,15 @@ public class BaseCard : MonoBehaviour
     //卡牌动画控制器
     protected Animator cardAnimator;
 
+    //用于控制事件交互的CanvasGroup
+    protected CanvasGroup canvasGroup;
     //初始化卡牌
     public virtual void InitCard(int cardID)
     {
         cardData = new CardData(cardID);
         this.cardID = cardID;
+        //获取各种UI、脚本、组件
+        canvasGroup = GetComponent<CanvasGroup>();
         img_Main = GameTool.GetTheChildComponent<Image>(gameObject, "Card_Main");
         img_Main.sprite = ResourcesManager.Instance.LoadResources<Sprite>(cardData.CardImgRes);
         img_OutLine = GameTool.GetTheChildComponent<Image>(gameObject, "Card_OutLine");
@@ -50,7 +54,26 @@ public class BaseCard : MonoBehaviour
     protected virtual void InitEvent()
     {
         eventListener=EventTriggerListener.Get(GameTool.FindTheChild(gameObject,"EventTrigger").gameObject);
-        
+        eventListener.onEnter += delegate
+        {
+            OnEnter();
+        };
+        eventListener.onExit += delegate
+        {
+            OnExit();
+        };
+        eventListener.onDown += delegate
+        {
+            OnDown();
+        };
+        eventListener.onUp += delegate
+        {
+            OnUp();
+        };
+        eventListener.onUpdateSelect += delegate
+        {
+            OnSelect();
+        };
     }
     protected virtual void Awake()
     {
@@ -58,7 +81,7 @@ public class BaseCard : MonoBehaviour
     }
 
     //当鼠标选中卡牌时的回调
-    protected virtual void OnSelect()
+    protected virtual void OnEnter()
     {
         
     }
@@ -74,6 +97,11 @@ public class BaseCard : MonoBehaviour
     }
     //当鼠标点击时的回调
     protected virtual void OnDown()
+    {
+
+    }
+    //当鼠标悬浮时的回调
+    protected virtual void OnSelect()
     {
 
     }

@@ -29,6 +29,9 @@ public class HandCard : BaseCard
         useEffect.SetActive(false);
         isDragging = false;
     }
+
+    //是否正被选中
+    private bool isSelecting;
     //获取卡牌外框
     protected override Sprite GetCardOutLine()
     {
@@ -60,36 +63,28 @@ public class HandCard : BaseCard
     protected override void InitEvent()
     {
         base.InitEvent();
-        eventListener.onEnter += delegate
-        {
-            OnSelect();
-        };
-        eventListener.onExit += delegate
-        {
-            OnExit();
-        };
-        eventListener.onDown += delegate
-        {
-            OnDown();
-        };
-        eventListener.onUp += delegate
-        {
-            OnUp();
-        };
+        
+        
     }
-    //当鼠标选中卡牌时的回调
-    protected override void OnSelect()
+    //当鼠标进入卡牌时的回调
+    protected override void OnEnter()
     {
         cardAnimator.SetBool("Hover",true);
+        HandCardManager.Instance.selectedCard = this;
+        isSelecting = true;
         for (int i = handCardList.IndexOf(this.gameObject) + 1; i < handCardList.Count; i++)
         {
             handCardList[i].GetComponent<HandCard>().cardAnimator.SetBool("Daging", true);
         }
     }
+   
     //当鼠标离开卡牌时的回调
     protected override void OnExit()
     {
         cardAnimator.SetBool("Hover", false);
+        isSelecting = false;
+        HandCardManager.Instance.selectedCard = null;
+
         for (int i = handCardList.IndexOf(this.gameObject) + 1; i < handCardList.Count; i++)
         {
             handCardList[i].GetComponent<HandCard>().cardAnimator.SetBool("Daging", false);
@@ -101,6 +96,8 @@ public class HandCard : BaseCard
         if (isDragging)
         {
             isDragging = false;
+            HandCardManager.Instance.selectedCard = null;
+            isSelecting = false;
             if (CheckUsable())
             {
                 UseCard();
@@ -114,7 +111,8 @@ public class HandCard : BaseCard
     protected override void OnDown()
     {
         isDragging = true;
-
+        isSelecting = true;
+        HandCardManager.Instance.selectedCard = this;
     }
     //记录初始位置
     public void SaveOriginalPos()
@@ -140,18 +138,55 @@ public class HandCard : BaseCard
     //使用卡牌
     public void UseCard()
     {
-        //TODO：检查使用条件并触发效果
+        //TODO：触发效果
+        for (int i = handCardList.IndexOf(this.gameObject) + 1; i < handCardList.Count; i++)
+        {
+            handCardList[i].GetComponent<HandCard>().cardAnimator.SetBool("Daging", false);
+        }
         HandCardManager.Instance.RemoveCard(this.gameObject);
+        HandCardManager.Instance.selectedCard = null;
 
     }
 
+    //取消UI事件检测
+    public void CancelUIEventListen()
+    {
+        canvasGroup.interactable = false;
+        canvasGroup.blocksRaycasts = false;
+    }
+    //激活UI事件检测
+    public void ActiveUIEventListen()
+    {
+        canvasGroup.interactable = true;
+        canvasGroup.blocksRaycasts = true;
+    }
 
+    //检查是否激活事件检测
+    public void CheckEventActive()
+    {
+        if (HandCardManager.Instance.selectedCard==null)
+        {
+            ActiveUIEventListen();
+            return;
+        }
+
+        if (!isSelecting)
+        {
+            CancelUIEventListen();
+        }
+        else
+        {
+            ActiveUIEventListen();
+        }
+    }
     private void Update()
     {
         CheckUsable();
+        CheckEventActive();
         if (isDragging)
         {
             transform.position = Input.mousePosition;
+            
         }
     }
 }
