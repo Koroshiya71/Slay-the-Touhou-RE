@@ -18,6 +18,8 @@ public class HandCard : BaseCard
     public bool IsDragging => isDragging;
     //初始卡牌位置
     private Vector3 originPos;
+    //初始卡牌旋转
+    private Vector3 originRot;
     //初始化卡牌，继承基本卡牌类但添加一些额外的初始化内容
     public override void InitCard(int cardID)
     {
@@ -104,7 +106,7 @@ public class HandCard : BaseCard
                 return;
             }
             transform.position = originPos;
-            
+            transform.rotation=Quaternion.Euler(originRot);
         }
     }
     //当鼠标点击时的回调
@@ -118,6 +120,7 @@ public class HandCard : BaseCard
     public void SaveOriginalPos()
     {
         originPos = transform.position;
+        originRot = transform.rotation.eulerAngles;
     }
 
     //检查是否可以使用
@@ -186,7 +189,7 @@ public class HandCard : BaseCard
         if (isDragging)
         {
             transform.position = Input.mousePosition;
-            
+            transform.rotation=Quaternion.Euler(0,0,0);
         }
     }
 }

@@ -62,9 +62,9 @@ public class HandCardManager : UnitySingleton<HandCardManager>
         //中位地址
         int midIndex = currentCardNum / 2;
         //y坐标偏移量
-        float yPosOffset = 0;
         for (int i = 0; i < currentCardNum; i++)
         {
+            float yPosOffset = 0;
             switch (firstX + 150 * i)
             {
                 case 150:
@@ -114,6 +114,8 @@ public class HandCardManager : UnitySingleton<HandCardManager>
             {
                 handCardList[i].transform.localEulerAngles = new Vector3(0, 0, 0);
                 offset = -2;
+                handCardList[i].GetComponent<HandCard>().SaveOriginalPos();
+
                 continue;
             }
             
