@@ -37,7 +37,7 @@ public enum CardTarget
     //需要单体敌人作为目标
     SingleEnemy,
     //不需要目标
-    NeedNotTarget
+    MyPlayer
 }
 
 //卡牌的用途
@@ -76,6 +76,9 @@ public class CardData
     //卡牌用途
     private CardUseType cardUseType;
 
+    //卡牌效果字典<ID,Value>
+    private Dictionary<int, int> cardEffectDic=new Dictionary<int, int>();
+
     ///属性
     public int CardID => cardID;
 
@@ -94,6 +97,8 @@ public class CardData
     public CardTarget CardTarget => cardTarget;
 
     public CardUseType CardUseType => cardUseType;
+
+    public Dictionary<int, int> CardEffectDic => cardEffectDic;
 
     //构造函数
     public CardData(int cardID=1001, string cardName = "斩击", string cardImgRes= "Image/Card/CardImg/斩击", int cardCost=1,
@@ -151,6 +156,13 @@ public class CardData
         }
 
         cardUseType = CardUseType.NormalCard;
+
+        int effectNum = int.Parse(ReadCfgCardData("EffectNum", cardID));
+        for (int i = 1; i <= effectNum; i++)
+        {
+            cardEffectDic.Add(int.Parse(ReadCfgCardData("EffectID"+i, cardID)),
+                int.Parse(ReadCfgCardData("EffectValue" + i, cardID)));
+        }
     }
 
     private String ReadCfgCardData(string key,int id)

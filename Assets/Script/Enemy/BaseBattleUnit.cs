@@ -24,23 +24,21 @@ public class BaseBattleUnit : MonoBehaviour
         InitDataOnAwake();
     }
 
+    //受到伤害
+    public virtual void TakeDamage(int damage)
+    {
+        //TODO：实际伤害结算
+        Debug.Log("受到"+damage+"点伤害");
+    }
+
     //触发器相关事件
     protected virtual void OnTriggerEnter2D(Collider2D other)
     {
-        //卡牌选中时启用选择特效
-        if (other.CompareTag("HandCard"))
-        {
-            selectEffect.SetActive(true);
-        }
+        
     }
 
     protected virtual void OnTriggerExit2D(Collider2D other)
     {
-        //卡牌离开时禁用选择特效
-
-        if (other.CompareTag("HandCard"))
-        {
-            selectEffect.SetActive(false);
-        }
+        
     }
 }

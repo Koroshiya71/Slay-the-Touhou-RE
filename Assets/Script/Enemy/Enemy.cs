@@ -1,18 +1,28 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Enemy : BaseBattleUnit
 {
-    // Start is called before the first frame update
-    void Start()
+    protected override void OnTriggerEnter2D(Collider2D other)
     {
-        
+        //卡牌选中时启用选择特效
+        if (other.CompareTag("HandCard")&&HandCardManager.Instance.selectedCard.mCardData.CardTarget==CardTarget.SingleEnemy)
+        {
+            BattleManager.Instance.selectedTarget = this;
+            selectEffect.SetActive(true);
+        }
     }
 
-    // Update is called once per frame
-    void Update()
+    protected override void OnTriggerExit2D(Collider2D other)
     {
-        
+        //卡牌离开时禁用选择特效
+
+        if (other.CompareTag("HandCard"))
+        {
+            BattleManager.Instance.selectedTarget = null;
+            selectEffect.SetActive(false);
+        }
     }
 }

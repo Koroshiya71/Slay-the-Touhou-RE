@@ -10,7 +10,7 @@ public class BaseCard : MonoBehaviour
 {
     //¿¨ÅÆÊý¾Ý
     protected CardData cardData=new CardData();
-
+    public CardData mCardData => cardData;
     //¿¨ÅÆID
     public int cardID=1001;
     //¿¨Í¼

@@ -141,7 +141,19 @@ public class HandCard : BaseCard
     //使用卡牌
     public void UseCard()
     {
-        //TODO：触发效果
+        BaseBattleUnit target=null;
+        foreach (var effect in cardData.CardEffectDic)
+        {
+            //根据卡牌的目标类型选择目标
+            switch (cardData.CardTarget)
+            {
+                case CardTarget.MyPlayer:
+                    break;
+                case CardTarget.SingleEnemy:
+                    break;
+            }
+            BattleManager.Instance.TakeEffect(effect.Key,effect.Value,target);
+        }
         for (int i = handCardList.IndexOf(this.gameObject) + 1; i < handCardList.Count; i++)
         {
             handCardList[i].GetComponent<HandCard>().cardAnimator.SetBool("Daging", false);
