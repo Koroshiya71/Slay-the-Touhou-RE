@@ -128,7 +128,7 @@ public class HandCard : BaseCard
     {
         //TODO：如果费用不够则无法使用
         //如果卡牌位置满足条件则可以使用
-        if (transform.position.y>=140)
+        if (transform.localPosition.y>=100)
         {
             useEffect.SetActive(true);
             return true;
