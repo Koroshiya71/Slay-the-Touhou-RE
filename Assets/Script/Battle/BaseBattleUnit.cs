@@ -14,8 +14,8 @@ public class BaseBattleUnit : MonoBehaviour
     private Text text_Hp;
     //选中特效
     protected GameObject selectEffect;
-    //初始化对象并获得相关组件
-    protected virtual void InitDataOnAwake()
+    //初始化UI和数据对象
+    protected virtual void InitDataAndUIOnAwake()
     {
         InitUnitData();
         //获取选中特效对象并在开始时禁用
@@ -35,7 +35,7 @@ public class BaseBattleUnit : MonoBehaviour
     }
     protected virtual void Awake()
     {
-        InitDataOnAwake();
+        InitDataAndUIOnAwake();
     }
 
     //受到伤害

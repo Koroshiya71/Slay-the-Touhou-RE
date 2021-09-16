@@ -6,7 +6,9 @@ using System;
 //消息类型
 public enum E_MessageType
 {
-    BattleStart,
+    BattleStart,//战斗开始
+    SaveGame,//游戏存档
+    UseCard,//使用卡牌
 }
 //物品的分类
 //public enum E_GoodsType

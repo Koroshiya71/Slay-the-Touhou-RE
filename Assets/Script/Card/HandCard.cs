@@ -112,6 +112,10 @@ public class HandCard : BaseCard
     //当鼠标点击时的回调
     protected override void OnDown()
     {
+        if (cardData.CardCost > BattleManager.Instance.CurrentEnergy )
+        {
+            return;
+        }
         isDragging = true;
         isSelecting = true;
         HandCardManager.Instance.selectedCard = this;
@@ -126,15 +130,15 @@ public class HandCard : BaseCard
     //检查是否可以使用
     private bool CheckUsable()
     {
-        //TODO：如果费用不够则无法使用
+
         //如果卡牌位置满足条件则可以使用
-        if (transform.localPosition.y>=100)
+        if (transform.localPosition.y>=100&&
+            !(cardData.CardTarget == CardTarget.SingleEnemy && BattleManager.Instance.selectedTarget == null))
         {
             useEffect.SetActive(true);
             return true;
         }
         useEffect.SetActive(false);
-
         return false;
     }
 
@@ -154,13 +158,14 @@ public class HandCard : BaseCard
             }
             BattleManager.Instance.TakeEffect(effect.Key,effect.Value,target);
         }
+        BattleManager.Instance.EditEnergy(BattleManager.Instance.CurrentEnergy-cardData.CardCost);
         for (int i = handCardList.IndexOf(this.gameObject) + 1; i < handCardList.Count; i++)
         {
             handCardList[i].GetComponent<HandCard>().cardAnimator.SetBool("Daging", false);
         }
         HandCardManager.Instance.RemoveCard(this.gameObject);
         HandCardManager.Instance.selectedCard = null;
-
+        EventDispatcher.TriggerEvent(E_MessageType.UseCard);
     }
 
     //取消UI事件检测

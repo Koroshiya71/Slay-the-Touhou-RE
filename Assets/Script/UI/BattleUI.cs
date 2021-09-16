@@ -2,12 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using GameCore;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class BattleUI : BaseUI
 {
+    private Text text_Eng;
+
+
     protected override void InitUiOnAwake()
     {
         base.InitUiOnAwake();
+        text_Eng = GameTool.GetTheChildComponent<Text>(gameObject, "Text_Eng");
     }
 
     protected override void InitDataOnAwake()
@@ -17,10 +22,25 @@ public class BattleUI : BaseUI
         this.uiType.uiRootType = E_UIRootType.Normal;
     }
 
+    //添加事件监听
+    public override void AddMessageListener()
+    {
+        EventDispatcher.AddListener(E_MessageType.UseCard, UpdateUI);
+        EventDispatcher.AddListener(E_MessageType.BattleStart, UpdateUI);
+
+    }
+
+    //更新战斗UI
+    public void UpdateUI()
+    {
+        text_Eng.text = BattleManager.Instance.CurrentEnergy + "/" + BattleManager.Instance.MaxEnergy;
+    }
+
+
+
     protected override void OnEnable()
     {
         base.OnEnable();
-        //战斗UI显示使触发战斗开始事件
-        EventDispatcher.TriggerEvent(E_MessageType.BattleStart);
+       BattleManager.Instance.InitBattle();
     }
 }
