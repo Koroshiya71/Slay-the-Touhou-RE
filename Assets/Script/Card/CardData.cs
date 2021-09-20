@@ -165,7 +165,7 @@ public class CardData
         }
     }
 
-    private String ReadCfgCardData(string key,int id)
+    private string ReadCfgCardData(string key,int id)
     {
         string data= DataController.Instance.ReadCfg(key, id, DataController.Instance.dicCardData);
         return data;

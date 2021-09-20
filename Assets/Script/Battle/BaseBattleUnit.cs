@@ -14,10 +14,12 @@ public class BaseBattleUnit : MonoBehaviour
     private Text text_Hp;
     //选中特效
     protected GameObject selectEffect;
+    //敌人图片
+    protected Image enemyImg;
     //初始化UI和数据对象
-    protected virtual void InitDataAndUIOnAwake()
+    protected virtual void InitDataAndUI(int id=1)
     {
-        InitUnitData();
+        InitUnitData(id);
         //获取选中特效对象并在开始时禁用
         selectEffect = GameTool.FindTheChild(gameObject, "Img_Select").gameObject;
         selectEffect.SetActive(false);
@@ -29,13 +31,13 @@ public class BaseBattleUnit : MonoBehaviour
         text_Hp.text = currentHp + " / " + maxHp;
     }
     //初始化该战斗单位的数据
-    protected virtual void InitUnitData(int ID=0)
+    protected virtual void InitUnitData(int id=1)
     {
         
     }
     protected virtual void Awake()
     {
-        InitDataAndUIOnAwake();
+        InitDataAndUI(1);
     }
 
     //受到伤害

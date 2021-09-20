@@ -15,6 +15,8 @@ public class BaseCard : MonoBehaviour
     public int cardID=1001;
     //¿¨Í¼
     protected Image img_Main;
+    //¿¨ÅÆÃû³Æ
+    protected Text text_CardName;
     //¿¨ÅÆÍâ±ß¿ò
     protected Image img_OutLine;
     
@@ -41,7 +43,39 @@ public class BaseCard : MonoBehaviour
         text_CardEffect = GameTool.GetTheChildComponent<Text>(gameObject, "Text_CardEffect");
         text_CardEffect.text = cardData.CardDes;
         cardAnimator = GetComponent<Animator>();
+        text_CardName = GameTool.GetTheChildComponent<Text>(gameObject, "Text_CardName");
+        text_CardName.text = cardData.CardName;
 
+        if (cardData.CardType!=CardType.SpellCard)
+        {
+            if (cardID>=1000&&cardID<2000)
+            {
+                switch (cardData.CardType)
+                {
+                    case CardType.TiShu:
+                        GameTool.GetTheChildComponent<Text>(gameObject, "Text_CardType").
+                            text = "ÑýÃÎ~" +"ÌåÊõ" ;
+                        break;
+                    case CardType.JiNeng:
+                        GameTool.GetTheChildComponent<Text>(gameObject, "Text_CardType").
+                            text = "ÑýÃÎ~" + "¼¼ÄÜ";
+                        break;
+                    case CardType.FaShu:
+                        GameTool.GetTheChildComponent<Text>(gameObject, "Text_CardType").
+                            text = "ÑýÃÎ~" + "·¨Êõ";
+                        break;
+                    case CardType.FangYu:
+                        GameTool.GetTheChildComponent<Text>(gameObject, "Text_CardType").
+                            text = "ÑýÃÎ~" + "·ÀÓù";
+                        break;
+                    case CardType.DanMu:
+                        GameTool.GetTheChildComponent<Text>(gameObject, "Text_CardType").
+                            text = "ÑýÃÎ~" + "µ¯Ä»";
+                        break;
+                }
+                
+            }
+        }
     }
 
     //»ñÈ¡¿¨ÅÆÍâ¿ò
