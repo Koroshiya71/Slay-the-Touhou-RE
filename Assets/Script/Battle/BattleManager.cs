@@ -15,7 +15,8 @@ public class BattleManager : UnitySingleton<BattleManager>
     //当前选中的目标
     public BaseBattleUnit selectedTarget;
 
-
+    //每回合抽卡数
+    public int turnDrawCardNum = 5;
 
     //初始化战斗
     public void InitBattle()
@@ -23,6 +24,12 @@ public class BattleManager : UnitySingleton<BattleManager>
         currentEnergy = maxEnergy;
         //战斗UI显示时触发战斗开始事件
         EventDispatcher.TriggerEvent(E_MessageType.BattleStart);
+
+        for (int i = 0; i < turnDrawCardNum; i++)
+        {
+            HandCardManager.Instance.GetCardByID(1001);
+        }
+
     }
 
     //设置费用
@@ -31,8 +38,8 @@ public class BattleManager : UnitySingleton<BattleManager>
         currentEnergy = newEnergy;
     }
     
-    //根据效果ID和效果值触发效果
-    public void TakeEffect(int effectID,int effectValue,BaseBattleUnit target=null)
+    //根据卡牌效果ID和效果值触发效果
+    public void TakeCardEffect(int effectID,int effectValue,BaseBattleUnit target=null)
     {
         //如果没有特别指定目标则默认指定当前选中的目标
         if (target==null)

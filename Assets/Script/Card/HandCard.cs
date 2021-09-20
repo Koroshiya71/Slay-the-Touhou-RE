@@ -156,7 +156,7 @@ public class HandCard : BaseCard
                 case CardTarget.SingleEnemy:
                     break;
             }
-            BattleManager.Instance.TakeEffect(effect.Key,effect.Value,target);
+            BattleManager.Instance.TakeCardEffect(effect.Key,effect.Value,target);
         }
         BattleManager.Instance.EditEnergy(BattleManager.Instance.CurrentEnergy-cardData.CardCost);
         for (int i = handCardList.IndexOf(this.gameObject) + 1; i < handCardList.Count; i++)
