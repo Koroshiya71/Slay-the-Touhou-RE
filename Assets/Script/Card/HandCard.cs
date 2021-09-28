@@ -19,14 +19,17 @@ public class HandCard : BaseCard
     public bool IsDragging => isDragging;
     //初始卡牌位置
     private Vector3 originPos;
+    public Vector3 OriginPos => originPos;
+
     //初始卡牌旋转
     private Vector3 originRot;
+
     //初始化卡牌，继承基本卡牌类但添加一些额外的初始化内容
     public override void InitCard(int cardID)
     {
         base.InitCard(cardID);
         //获取手牌列表
-        handCardList = HandCardManager.Instance.handCardList;
+        handCardList = HandCardManager.Instance.handCardGoList;
         //获取特效游戏物体
         useEffect = GameTool.FindTheChild(gameObject, "UseEffect").gameObject;
         useEffect.SetActive(false);

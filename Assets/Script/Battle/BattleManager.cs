@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using GameCore;
@@ -18,6 +19,39 @@ public class BattleManager : UnitySingleton<BattleManager>
     //每回合抽卡数
     public int turnDrawCardNum = 5;
 
+    /// <summary>
+    /// 敌人相关
+    /// </summary>
+    //敌人预制体
+    public GameObject enemyPrefab;
+
+    //敌人数组
+    public List<Enemy> inBattleEnemyList = new List<Enemy>();
+    //敌人位置数组
+    public List<Vector3> enemyPosList = new List<Vector3>();
+
+    //初始化战斗管理器
+    public void InitBattleManager()
+    {
+        //获取敌人预制体和敌人父物体
+        enemyPrefab = ResourcesManager.Instance.LoadResources<GameObject>("Prefabs/" + "Enemy/" + "Enemy");
+        //初始化敌人位置列表
+        enemyPosList= new List<Vector3>()
+        {
+            new Vector3(355,-75,0),
+            new Vector3(655,-75,0),
+            new Vector3(55,-75,0),
+        };
+        //初始化抽牌数
+        turnDrawCardNum = 5;
+        //初始化卡牌目标为空
+        selectedTarget = null;
+        //初始化能量
+        maxEnergy = 3;
+        currentEnergy = maxEnergy;
+    }
+
+
     //初始化战斗
     public void InitBattle()
     {
@@ -29,7 +63,18 @@ public class BattleManager : UnitySingleton<BattleManager>
         {
             HandCardManager.Instance.GetCardByID(1001);
         }
+        CreateEnemy(1);
+    }
 
+    //创建敌人
+    public void CreateEnemy(int enemyID)
+    {
+        GameObject enemyGO = Instantiate(enemyPrefab);
+        enemyGO.transform.SetParent(GameObject.Find("Enemies").transform);
+        enemyGO.transform.position = enemyPosList[inBattleEnemyList.Count];
+        Enemy newEnemy =enemyGO .GetComponent<Enemy>();
+        newEnemy.Init(enemyID);
+        inBattleEnemyList.Add(newEnemy);
     }
 
     //设置费用
@@ -56,5 +101,11 @@ public class BattleManager : UnitySingleton<BattleManager>
                 }
                 break;
         }
+    }
+
+
+    private void Awake()
+    {
+        InitBattleManager();
     }
 }

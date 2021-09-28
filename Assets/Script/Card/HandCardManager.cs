@@ -16,8 +16,9 @@ public class HandCardManager : UnitySingleton<HandCardManager>
     public int maxCardNum = 10;
     //卡牌预制体
     private GameObject handCardPrefab;
+    //手牌游戏物体列表
+    public List<GameObject> handCardGoList = new List<GameObject>();
     //手牌对象列表
-    public List<GameObject> handCardList = new List<GameObject>();
     //选中的卡牌对象
     public HandCard selectedCard=null;
     private void Awake()
@@ -45,11 +46,15 @@ public class HandCardManager : UnitySingleton<HandCardManager>
         newCardGo.transform.localScale = new Vector3(1, 1, 1);
         HandCard newCard = newCardGo.GetComponent<HandCard>();
         newCard.InitCard(cardID);
-        handCardList.Add(newCardGo);
+        handCardGoList.Add(newCardGo);
         currentCardNum++;
         MoveAndRotateCard();
+        foreach (var handCard in handCardGoList)
+        {
+            handCard.GetComponent<HandCard>().SaveOriginalPos();
+        }
     }
-
+    //
     //调整卡牌位置和旋转
     public void MoveAndRotateCard()
     {
@@ -103,8 +108,8 @@ public class HandCardManager : UnitySingleton<HandCardManager>
                     yPosOffset = 0;
                     break;
             }
-            handCardList[i].transform.localPosition = new Vector3(firstX + 150 * i, -yPosOffset, 0);
-            
+            handCardGoList[i].transform.localPosition = new Vector3(firstX + 150 * i, -yPosOffset, 0);
+
             if (currentCardNum % 2 == 0 && Mathf.Lerp(totalRotate, -totalRotate, ((float)(i) / currentCardNum)) == 0)
             {
                 offset = -2;
@@ -112,16 +117,14 @@ public class HandCardManager : UnitySingleton<HandCardManager>
 
             if (i==midIndex&& currentCardNum % 2 == 1)
             {
-                handCardList[i].transform.localEulerAngles = new Vector3(0, 0, 0);
+                handCardGoList[i].transform.localEulerAngles = new Vector3(0, 0, 0);
                 offset = -2;
-                handCardList[i].GetComponent<HandCard>().SaveOriginalPos();
-
                 continue;
             }
             
-            handCardList[i].transform.localEulerAngles = new Vector3(0, 0, Mathf.Lerp(totalRotate,-totalRotate,((float)(i)/currentCardNum))+offset);
-            handCardList[i].GetComponent<HandCard>().SaveOriginalPos();
-            
+            handCardGoList[i].transform.localEulerAngles = new Vector3(0, 0, Mathf.Lerp(totalRotate,-totalRotate,((float)(i)/currentCardNum))+offset);
+
+
         }
     }
 
@@ -136,7 +139,7 @@ public class HandCardManager : UnitySingleton<HandCardManager>
     //移除手牌
     public void RemoveCard(GameObject cardGo)
     {
-        handCardList.Remove(cardGo);
+        handCardGoList.Remove(cardGo);
         currentCardNum--;
         Destroy(cardGo);
         MoveAndRotateCard();

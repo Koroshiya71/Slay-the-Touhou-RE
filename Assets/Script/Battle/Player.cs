@@ -15,4 +15,9 @@ public class Player : BaseBattleUnit
     {
         
     }
+
+    protected override void Awake()
+    {
+        Init();
+    }
 }

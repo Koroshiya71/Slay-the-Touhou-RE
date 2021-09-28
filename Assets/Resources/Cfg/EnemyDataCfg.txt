@@ -1,4 +1,4 @@
-ID,Name,ResourcePath,EnemyType,MaxHp,InitSheild,ActNum,Act1ID,Act1Value,Act2ID,Act3ID,Act4ID,Act5ID,ActModeNum,ActMode1,ActMode2,ActMode3
+ID,Name,ResourcePath,EnemyType,MaxHp,InitShield,ActNum,Act1ID,Act1Value,Act2ID,Act3ID,Act4ID,Act5ID,ActModeNum,ActMode1,ActMode2,ActMode3
 //敌人ID,//敌人名称,//敌人素材路径,//敌人类型,//最大生命值,//初始护盾值,//行动数量,//行动1ID,//行动1数值,//行动2ID,//行动3ID,//行动4ID,//行动5ID,//行动模式数量,//行动模式1,//行动模式2,//行动模式3
 -1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1
 1,幽灵,Image/Enemy/幽灵A,普通,18,0,1,1001,5,-1,-1,-1,-1,1,1,-1,-1
