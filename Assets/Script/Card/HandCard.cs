@@ -109,8 +109,8 @@ public class HandCard : BaseCard
                 UseCard();
                 return;
             }
-            transform.position = originPos;
-            transform.rotation=Quaternion.Euler(originRot);
+            transform.localPosition = originPos;
+            transform.localEulerAngles=originRot;
         }
     }
     //当鼠标点击时的回调
@@ -127,8 +127,8 @@ public class HandCard : BaseCard
     //记录初始位置
     public void SaveOriginalPos()
     {
-        originPos = transform.position;
-        originRot = transform.rotation.eulerAngles;
+        originPos = transform.localPosition;
+        originRot = transform.localEulerAngles;
     }
 
     //检查是否可以使用

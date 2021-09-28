@@ -38,9 +38,9 @@ public class BattleManager : UnitySingleton<BattleManager>
         //初始化敌人位置列表
         enemyPosList= new List<Vector3>()
         {
-            new Vector3(355,-75,0),
-            new Vector3(655,-75,0),
-            new Vector3(55,-75,0),
+            new Vector3(450,-75,0),
+            new Vector3(250,-75,0),
+            new Vector3(650,-75,0),
         };
         //初始化抽牌数
         turnDrawCardNum = 5;
