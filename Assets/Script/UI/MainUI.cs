@@ -34,7 +34,7 @@ public class MainUI : BaseUI
         SceneController.Instance.LoadSceneAsync("GameScene", delegate
         {
             UIManager.Instance.ShowUI(E_UiId.GameMainUI);
-            UIManager.Instance.ShowUI(E_UiId.BattleUI);
+            UIManager.Instance.ShowUI(E_UiId.MapUI);
 
         });
     }

@@ -6,6 +6,7 @@ using System;
 //消息类型
 public enum E_MessageType
 {
+    GameStart,//游戏开始
     BattleStart,//战斗开始
     SaveGame,//游戏存档
     UseCard,//使用卡牌
@@ -48,7 +49,8 @@ public enum E_UiId
     MainUI,
     GameMainUI,
     LoadingUI,
-    BattleUI
+    BattleUI,
+    MapUI
 }
 public class GameDefine
 {
@@ -60,6 +62,8 @@ public class GameDefine
         { E_UiId.MainUI,"UIPrefab/"+"MainUI"},
         { E_UiId.GameMainUI,"UIPrefab/"+"GameMainUI"},
         { E_UiId.BattleUI,"UIPrefab/"+"BattleUI"},
+        { E_UiId.MapUI,"UIPrefab/"+"MapUI"},
+
     };
     public static Type GetUIScriptType(E_UiId uiId)
     {
@@ -81,6 +85,9 @@ public class GameDefine
                 break;
             case E_UiId.BattleUI:
                 scriptType = typeof(BattleUI);
+                break;
+            case E_UiId.MapUI:
+                scriptType = typeof(MapUI);
                 break;
             default:
                 break;
