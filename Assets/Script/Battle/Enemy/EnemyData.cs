@@ -73,6 +73,7 @@ public class EnemyData
         }
     }
 
+    //根据cfg数据表读取敌人数据
     private string ReadEnemyCfgData(string key, int id)
     {
         string data = DataController.Instance.ReadCfg(key, id, DataController.Instance.dicEnemyData);

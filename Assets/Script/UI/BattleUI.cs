@@ -36,11 +36,4 @@ public class BattleUI : BaseUI
         text_Eng.text = BattleManager.Instance.CurrentEnergy + "/" + BattleManager.Instance.MaxEnergy;
     }
 
-
-
-    protected override void OnEnable()
-    {
-        base.OnEnable();
-       BattleManager.Instance.InitBattle();
-    }
 }

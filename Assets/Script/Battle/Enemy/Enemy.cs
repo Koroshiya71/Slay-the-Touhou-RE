@@ -42,7 +42,14 @@ public class Enemy : BaseBattleUnit
         if (other.CompareTag("HandCard")&&HandCardManager.Instance.selectedCard.mCardData.CardTarget==CardTarget.SingleEnemy)
         {
             BattleManager.Instance.selectedTarget = this;
-            selectEffect.SetActive(true);
+        }
+    }
+    protected override void OnTriggerStay2D(Collider2D other)
+    {
+        //卡牌选中时启用选择特效
+        if (other.CompareTag("HandCard") && HandCardManager.Instance.selectedCard.mCardData.CardTarget == CardTarget.SingleEnemy)
+        {
+            BattleManager.Instance.selectedTarget = this;
         }
     }
 
@@ -53,7 +60,22 @@ public class Enemy : BaseBattleUnit
         if (other.CompareTag("HandCard"))
         {
             BattleManager.Instance.selectedTarget = null;
+        }
+    }
+
+    protected void UpdateUIState()
+    {
+        if (BattleManager.Instance.selectedTarget != this)
+        {
             selectEffect.SetActive(false);
         }
+        else
+        {
+            selectEffect.SetActive(true);
+        }
+    }
+    protected void Update()
+    {
+        UpdateUIState();
     }
 }

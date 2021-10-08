@@ -1,0 +1,4 @@
+﻿ID,BattleType,EnemyNum,EnemyID1,EnemyID2,EnemyID3
+//战斗ID,//战斗类型,//敌人数量,//敌人1ID,//敌人2ID,//敌人3ID
+-1,-1,-1,-1,-1,-1
+1,普通战斗,2,1,1,-1

@@ -19,6 +19,8 @@ public class BattleManager : UnitySingleton<BattleManager>
     //每回合抽卡数
     public int turnDrawCardNum = 5;
 
+    //战斗数据总列表
+    public List<BattleData> battleDataList = new List<BattleData>();
     /// <summary>
     /// 敌人相关
     /// </summary>
@@ -38,9 +40,9 @@ public class BattleManager : UnitySingleton<BattleManager>
         //初始化敌人位置列表
         enemyPosList= new List<Vector3>()
         {
-            new Vector3(450,-75,0),
-            new Vector3(250,-75,0),
-            new Vector3(650,-75,0),
+            new Vector3(250,-50,0),
+            new Vector3(125,-50,0),
+            new Vector3(375,-50,0),
         };
         //初始化抽牌数
         turnDrawCardNum = 5;
@@ -49,12 +51,16 @@ public class BattleManager : UnitySingleton<BattleManager>
         //初始化能量
         maxEnergy = 3;
         currentEnergy = maxEnergy;
+
     }
 
 
     //初始化战斗
-    public void InitBattle()
+    public void InitBattle(BattleData battleData)
     {
+        UIManager.Instance.HideSingleUI(E_UiId.MapUI);
+        UIManager.Instance.ShowUI(E_UiId.BattleUI);
+
         currentEnergy = maxEnergy;
         //战斗UI显示时触发战斗开始事件
         EventDispatcher.TriggerEvent(E_MessageType.BattleStart);
@@ -63,7 +69,11 @@ public class BattleManager : UnitySingleton<BattleManager>
         {
             HandCardManager.Instance.GetCardByID(1001);
         }
-        CreateEnemy(1);
+
+        foreach (var enemyID in battleData.EnemyIDList)
+        {
+            CreateEnemy(enemyID);
+        }
     }
 
     //创建敌人
@@ -71,7 +81,7 @@ public class BattleManager : UnitySingleton<BattleManager>
     {
         GameObject enemyGO = Instantiate(enemyPrefab);
         enemyGO.transform.SetParent(GameObject.Find("Enemies").transform);
-        enemyGO.transform.position = enemyPosList[inBattleEnemyList.Count];
+        enemyGO.transform.localPosition = enemyPosList[inBattleEnemyList.Count];
         Enemy newEnemy =enemyGO .GetComponent<Enemy>();
         newEnemy.Init(enemyID);
         inBattleEnemyList.Add(newEnemy);

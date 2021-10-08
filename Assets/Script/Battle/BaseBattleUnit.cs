@@ -62,4 +62,9 @@ public class BaseBattleUnit : MonoBehaviour
     {
         
     }
+
+    protected virtual void OnTriggerStay2D(Collider2D other)
+    {
+        
+    }
 }
