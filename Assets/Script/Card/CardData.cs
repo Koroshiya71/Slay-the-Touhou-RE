@@ -123,7 +123,6 @@ public class CardData
         this.cardName = ReadCfgCardData("Name", cardID);
         this.cardImgRes = ReadCfgCardData("ImgPath", cardID);
         this.cardCost = int.Parse(ReadCfgCardData("Cost", cardID));
-        this.cardDes = ReadCfgCardData("Des",cardID);
         tempStr = ReadCfgCardData("Type", cardID);
         switch (tempStr)
         {
@@ -160,8 +159,17 @@ public class CardData
         int effectNum = int.Parse(ReadCfgCardData("EffectNum", cardID));
         for (int i = 1; i <= effectNum; i++)
         {
-            cardEffectDic.Add(int.Parse(ReadCfgCardData("EffectID"+i, cardID)),
-                int.Parse(ReadCfgCardData("EffectValue" + i, cardID)));
+            int effectID = int.Parse(ReadCfgCardData("EffectID" + i, cardID));
+            int effectValue = int.Parse(ReadCfgCardData("EffectValue" + i, cardID));
+            string effectDes = BattleManager.Instance.cardEffectDataDic[effectID].EffectDes.
+                Replace("value", effectValue.ToString());
+            cardEffectDic.Add(effectID,effectValue);
+            if (i>1)
+            {
+                cardDes += ",";
+            }
+
+            cardDes += effectDes;
         }
     }
 

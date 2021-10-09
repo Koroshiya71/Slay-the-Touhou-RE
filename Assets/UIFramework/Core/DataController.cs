@@ -15,12 +15,17 @@ public class DataController : Singleton<DataController>
 
     //用于存放战斗数据配置表的字典<字段名,<id,字段的值>>
     public Dictionary<string, Dictionary<string, string>> dicBattleData;
+
+    //用于存放卡牌效果配置表的字典<字段名,<id,字段的值>>
+    public Dictionary<string, Dictionary<string, string>> dicCardEffect;
+
     //加载所有的配置表
     public void LoadAllCfg()
     {
        LoadCardDataCfg();
        LoadEnemyDataCfg();
        LoadBattleDataCfg();
+       LoadCardEffectCfg();
     }
     //加载卡牌数据配置表
     private void LoadCardDataCfg()
@@ -38,7 +43,17 @@ public class DataController : Singleton<DataController>
         ExcelData.LoadExcelFormCSV("BattleDataCfg", out dicBattleData);
         for (int i = 1; i <= dicBattleData["ID"].Count; i++)
         {
-            BattleManager.Instance.battleDataList.Add(new BattleData(i));
+            BattleManager.Instance.battleDataDic.Add(i,new BattleData(i));
+        }
+    }
+    //加载卡牌效果配置表
+    private void LoadCardEffectCfg()
+    {
+        ExcelData.LoadExcelFormCSV("CardEffectCfg", out dicCardEffect);
+        foreach (var idDic in dicCardData["ID"])
+        {
+            int id = int.Parse(idDic.Key);
+            BattleManager.Instance.cardEffectDataDic.Add(id,new CardEffectData(id));
         }
     }
     //供外界调用的,用于读取配置表字段值得方法(字段名,ID,存放配置表内容对应的字典)

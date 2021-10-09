@@ -9,13 +9,13 @@ using Random = UnityEngine.Random;
 public class BaseGameScene : MonoBehaviour
 {
     //场景数据
-    private SceneData sceneData;
+    protected SceneData sceneData;
     //图片资源
-    private Image sceneImage;
+    protected Image sceneImage;
     //Button组件
-    private Button gameSceneButton;
+    protected Button gameSceneButton;
     //该场景的战斗数据
-    private BattleData battleData = null;
+    protected BattleData battleData = null;
     //初始化场景
     protected virtual void InitGameScene()
     {
@@ -28,16 +28,23 @@ public class BaseGameScene : MonoBehaviour
         sceneImage.sprite = ResourcesManager.Instance.LoadResources<Sprite>(sceneData.ResourcePath);
         GameSceneManager.Instance.inGameSceneList.Add(this);
 
-        //根据事件类型注册事件
+        //根据事件类型注册点击事件
+        InitClickEvent();
+
+    }
+
+    //根据事件类型注册事件
+    protected virtual void InitClickEvent()
+    {
         switch (sceneData.SceneType)
         {
             case SceneType.NormalCombat:
                 while (true)
                 {
                     battleData =
-                        BattleManager.Instance.battleDataList[
-                            Random.Range(0, BattleManager.Instance.battleDataList.Count)]; 
-                    if (battleData.BattleType==BattleType.Normal)
+                        BattleManager.Instance.battleDataDic[
+                            Random.Range(1, BattleManager.Instance.battleDataDic.Count+1)];
+                    if (battleData.BattleType == BattleType.Normal)
                         break;
                 }
                 gameSceneButton.onClick.AddListener(delegate
@@ -46,9 +53,7 @@ public class BaseGameScene : MonoBehaviour
                 });
                 break;
         }
-
     }
-
     
     void Update()
     {

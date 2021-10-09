@@ -19,8 +19,10 @@ public class BattleManager : UnitySingleton<BattleManager>
     //每回合抽卡数
     public int turnDrawCardNum = 5;
 
-    //战斗数据总列表
-    public List<BattleData> battleDataList = new List<BattleData>();
+    //战斗数据总列表<id,战斗数据>
+    public Dictionary<int, BattleData> battleDataDic = new Dictionary<int, BattleData>();
+    //卡牌效果总列表<id,卡牌效果数据>
+    public Dictionary<int, CardEffectData> cardEffectDataDic = new Dictionary<int, CardEffectData>();
     /// <summary>
     /// 敌人相关
     /// </summary>
