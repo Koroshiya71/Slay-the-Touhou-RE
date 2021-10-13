@@ -52,6 +52,35 @@ public enum CardUseType
     //用于选择的卡牌
     ChooseCard
 }
+public class CardEffectData
+{
+    //效果ID
+    private int effectID;
+    //效果描述
+    private string effectDes;
+    //效果值
+    private int effectValue;
+    /// <summary>
+    /// 属性
+    /// </summary>
+    public int EffectID => effectID;
+    public int EffectValue => effectValue;
+    public string EffectDes => effectDes;
+
+    public CardEffectData(int id,int value)
+    {
+        effectID = id;
+        effectValue = value;
+        effectDes = ReadCardEffectData("EffectDes", id);
+    }
+
+    //根据cfg数据表读取卡牌效果数据
+    private string ReadCardEffectData(string key, int id)
+    {
+        string data = DataController.Instance.ReadCfg(key, id, DataController.Instance.dicCardEffect);
+        return data;
+    }
+}
 
 //卡牌数据类
 public class CardData
@@ -76,8 +105,8 @@ public class CardData
     //卡牌用途
     private CardUseType cardUseType;
 
-    //卡牌效果字典<ID,Value>
-    private Dictionary<int, int> cardEffectDic=new Dictionary<int, int>();
+    //卡牌效果字典<ID,卡牌效果>
+    private Dictionary<int, CardEffectData> cardEffectDic=new Dictionary<int, CardEffectData>();
 
     ///属性
     public int CardID => cardID;
@@ -98,7 +127,7 @@ public class CardData
 
     public CardUseType CardUseType => cardUseType;
 
-    public Dictionary<int, int> CardEffectDic => cardEffectDic;
+    public Dictionary<int, CardEffectData> CardEffectDic => cardEffectDic;
 
     //构造函数
     public CardData(int cardID=1001, string cardName = "斩击", string cardImgRes= "Image/Card/CardImg/斩击", int cardCost=1,
@@ -161,14 +190,15 @@ public class CardData
         {
             int effectID = int.Parse(ReadCfgCardData("EffectID" + i, cardID));
             int effectValue = int.Parse(ReadCfgCardData("EffectValue" + i, cardID));
-            string effectDes = BattleManager.Instance.cardEffectDataDic[effectID].EffectDes.
-                Replace("value", effectValue.ToString());
-            cardEffectDic.Add(effectID,effectValue);
+            
+            cardEffectDic.Add(effectID,new CardEffectData(effectID,effectValue));
             if (i>1)
             {
                 cardDes += ",";
             }
 
+            string effectDes = cardEffectDic[effectID].EffectDes.
+                Replace("value", effectValue.ToString());
             cardDes += effectDes;
         }
     }

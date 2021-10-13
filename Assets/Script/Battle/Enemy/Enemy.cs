@@ -14,7 +14,7 @@ public class Enemy : BaseBattleUnit
     //敌人名称文本
     protected Text text_EnemyName;
 
-
+    
     //初始化数据
     protected override void InitDataOnAwake(int id)
     {

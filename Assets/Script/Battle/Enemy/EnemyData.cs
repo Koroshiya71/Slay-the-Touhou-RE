@@ -21,15 +21,14 @@ public class EnemyData
     private int maxHp;
     //初始护盾值
     private int initShield;
-    //敌人行为字典<ID,Value>
-    private Dictionary<int, int> enemyActionDic = new Dictionary<int, int>();
+    //敌人行为字典<ID,敌人行动对象>
+    private Dictionary<int, ActionData> enemyActionDic = new Dictionary<int, ActionData>();
 
     //敌人行动顺序列表
     private List<string> actionModeList = new List<string>();
 
     //敌人类型
     private EnemyType enemyType;
-
 
     /// <summary>
     /// 属性
@@ -44,7 +43,7 @@ public class EnemyData
 
     public int InitShield => initShield;
 
-    public Dictionary<int, int> EnemyActionDic => enemyActionDic;
+    public Dictionary<int, ActionData> EnemyActionDic => enemyActionDic;
 
     public List<string> ActionModeList => actionModeList;
 
@@ -54,22 +53,32 @@ public class EnemyData
     public EnemyData(int enemyID)
     {
         //用于接收读取结果的临时字符串
-        string tempStr = "";
+        string tempStr = ReadEnemyCfgData("EnemyType", enemyID);
         this.enemyID = enemyID;
         enemyName = ReadEnemyCfgData("Name", enemyID);
         resourcePath = ReadEnemyCfgData("ResourcePath", enemyID);
         maxHp = int.Parse(ReadEnemyCfgData("MaxHp", enemyID));
         initShield = int.Parse(ReadEnemyCfgData("InitShield", enemyID));
-        //根据敌人的行动数添加到行动字典中
+
+        //根据敌人的行动添加到行动字典中
         for (int i = 1; i <= int.Parse(ReadEnemyCfgData("ActNum", enemyID)); i++)
         {
-            enemyActionDic.Add(int.Parse(ReadEnemyCfgData("Act"+i+"ID" , enemyID)),
-                int.Parse(ReadEnemyCfgData("Act"+i+"Value", enemyID)));
+            int actionValue = int.Parse(ReadEnemyCfgData("Act" + i + "Value", enemyID));
+            int actionID = int.Parse(ReadEnemyCfgData("Act" + i + "ID", enemyID));
+            enemyActionDic.Add(actionID,new ActionData(actionID,actionValue));
         }
         //根据敌人的行动逻辑数量添加到行动逻辑列表
         for (int i = 1; i <= int.Parse(ReadEnemyCfgData("ActModeNum", enemyID)); i++)
         {
             actionModeList.Add(ReadEnemyCfgData("ActMode" + i, enemyID));
+        }
+
+        //设置敌人类型
+        switch (tempStr)
+        {
+            case "普通":
+                enemyType = EnemyType.Normal;
+                break;
         }
     }
 

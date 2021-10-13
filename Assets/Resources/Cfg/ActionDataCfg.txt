@@ -1,0 +1,4 @@
+﻿ID,ActionType,ActionEffectDes
+//行动效果ID,//行为类型,//行动效果描述
+-1,-1,-1
+1001,攻击,对玩家造成value点伤害
