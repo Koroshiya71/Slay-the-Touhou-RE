@@ -522,7 +522,7 @@ GameObject:
   - component: {fileID: 7090586979689528765}
   - component: {fileID: 7752527740497923685}
   m_Layer: 5
-  m_Name: Text_Value
+  m_Name: Text_ActionValue
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -544,7 +544,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 20.2, y: -15}
+  m_AnchoredPosition: {x: 11.5, y: -12.5}
   m_SizeDelta: {x: 45.4453, y: 25}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7090586979689528765
@@ -600,6 +600,8 @@ GameObject:
   - component: {fileID: 5037909133867370495}
   - component: {fileID: 1645604812720344885}
   - component: {fileID: 3088871394844518704}
+  - component: {fileID: 9196114601542621794}
+  - component: {fileID: 6841487871118104426}
   m_Layer: 5
   m_Name: Img_Action
   m_TagString: Untagged
@@ -666,6 +668,39 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &9196114601542621794
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4689153481774090709}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 423d47b92d8d3b243b559b2acc841121, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &6841487871118104426
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4689153481774090709}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 0
+    callback:
+      m_PersistentCalls:
+        m_Calls: []
+  - eventID: 1
+    callback:
+      m_PersistentCalls:
+        m_Calls: []
 --- !u!1 &5292957629244060366
 GameObject:
   m_ObjectHideFlags: 0
@@ -875,7 +910,7 @@ GameObject:
   - component: {fileID: 5323320538182414710}
   - component: {fileID: 6628481550300709409}
   m_Layer: 5
-  m_Name: Text_Des
+  m_Name: Text_ActionDes
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
