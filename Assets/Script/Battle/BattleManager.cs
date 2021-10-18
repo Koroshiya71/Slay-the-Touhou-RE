@@ -96,12 +96,14 @@ public class BattleManager : UnitySingleton<BattleManager>
     public IEnumerator TurnEnd()
     {
         HandCardManager.Instance.DisAllCard();
+        EventDispatcher.TriggerEvent(E_MessageType.TurnEnd);
+        yield return new WaitForSeconds(0.5f);
         foreach (var enemy in inBattleEnemyList)
         {
             enemy.TakeAction();
+            //TODO：添加播放动画的功能
         }
         StartCoroutine(TurnStart());
-        yield break;
     }
     //创建敌人
     public void CreateEnemy(int enemyID)
@@ -151,7 +153,11 @@ public class BattleManager : UnitySingleton<BattleManager>
         }
     }
 
-
+    //战斗结束
+    public void BattleEnd()
+    {
+        UIManager.Instance.HideSingleUI(E_UiId.BattleUI);
+    }
 
 
 

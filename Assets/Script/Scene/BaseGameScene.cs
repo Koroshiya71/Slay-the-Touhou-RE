@@ -9,18 +9,24 @@ using Random = UnityEngine.Random;
 public class BaseGameScene : MonoBehaviour
 {
     //场景数据
-    protected SceneData sceneData;
+    public SceneData sceneData;
     //图片资源
     protected Image sceneImage;
+
+    protected Image sceneMask;
     //Button组件
     protected Button gameSceneButton;
     //该场景的战斗数据
     protected BattleData battleData = null;
+    //是否可以选择
+    protected bool isActive=false;
     //初始化场景
     protected virtual void InitGameScene()
     {
         //获取Image和Button组件
         sceneImage = GetComponent<Image>();
+        sceneMask = GameTool.GetTheChildComponent<Image>(gameObject, "Mask");
+        sceneMask.enabled = false;
         gameSceneButton = GetComponent<Button>();
         //初始化场景数据和图片素材
         //新生成的场景数据的下标正好为将该场景加入列表前的场景数
@@ -36,6 +42,11 @@ public class BaseGameScene : MonoBehaviour
     //根据事件类型注册事件
     protected virtual void InitClickEvent()
     {
+        gameSceneButton.onClick.AddListener(delegate
+        {
+            GameSceneManager.Instance.lastIndex = GameSceneManager.Instance.inGameSceneList.IndexOf(this);
+            GameSceneManager.Instance.currentLayer++;
+        });
         switch (sceneData.SceneType)
         {
             case SceneType.NormalCombat:
@@ -54,7 +65,21 @@ public class BaseGameScene : MonoBehaviour
                 break;
         }
     }
-    
+    //改变场景可选状态
+    public void ChangeGameSceneState(bool state)
+    {
+        this.isActive = state;
+        if (!isActive)
+        {
+            gameSceneButton.interactable = false;
+            sceneMask.enabled = true;
+        }
+        else
+        {
+            gameSceneButton.interactable = true;
+            sceneMask.enabled = false;
+        }
+    }
     void Update()
     {
         

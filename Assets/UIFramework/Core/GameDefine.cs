@@ -8,8 +8,8 @@ public enum E_MessageType
 {
     GameStart,//游戏开始
     BattleStart,//战斗开始
-    TurnStart,//战斗开始
-
+    TurnStart,//回合开始
+    TurnEnd,//回合结束
     SaveGame,//游戏存档
     UseCard,//使用卡牌
 }

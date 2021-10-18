@@ -162,14 +162,26 @@ public class Enemy : BaseBattleUnit
     #endregion
 
 
-    #region 行动相关
-
+    #region 行动和状态管理相关
+    //执行行动
     public void TakeAction()
     {
-        foreach (var enemyActionElement in enemyData.EnemyActionDic)
-        {
-            BattleManager.Instance.TriggerActionEffect(enemyActionElement.Value);
-        }
+        BattleManager.Instance.TriggerActionEffect(currentAction);
+    }
+    //更新行动
+    public void UpdateAction()
+    {
+
+    }
+    //死亡方法
+    public override void Die()
+    {
+        //移除队列并销毁
+        BattleManager.Instance.inBattleEnemyList.Remove(this);
+        Destroy(this.gameObject);
+
+        //如果该敌人死亡后敌人数量为0，触发战斗结束方法
+        BattleManager.Instance.BattleEnd();
     }
 
     #endregion

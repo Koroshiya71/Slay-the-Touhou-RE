@@ -8,7 +8,10 @@ public class GameSceneManager : UnitySingleton<GameSceneManager>
 {
     //各种场景的最大数量
     public int maxSceneNum = 20;
-
+    //当前处于第几层
+    public int currentLayer = 0;
+    //上次点击的是该层第几号场景
+    public int lastIndex = 0;
     //场景预制体
     private GameObject gameScenePrefab;
     //父物体
@@ -33,7 +36,36 @@ public class GameSceneManager : UnitySingleton<GameSceneManager>
             newSceneGO.transform.position = new Vector2(220 + i % 6 * 300, 100 + i / 6 * 200);
 
         }
+        //从第一层开始
+        currentLayer = 1;
 
+        UpdateGameSceneState();
+    }
+
+    //更新场景状态(是否可选)
+    public void UpdateGameSceneState()
+    {
+        foreach (var gameScene in inGameSceneList)
+        {
+            //根据当前层数更新交互状态
+            if (gameScene.sceneData.Layer==currentLayer)
+            {
+                //如果是第一层，则全部都可交互
+                if (currentLayer==1)
+                {
+                    gameScene.ChangeGameSceneState(true);
+                }
+                //如果该场景的地址与上一个点击过的地址%6后的差的绝对值小于等于1则可以交互
+                if (Mathf.Abs((inGameSceneList.IndexOf(gameScene)%6)-(lastIndex%6))<=1)
+                {
+                    gameScene.ChangeGameSceneState(true);
+                }
+
+                continue;
+            }
+            //不满足上面条件的则无法交互
+            gameScene.ChangeGameSceneState(false);
+        }
     }
     void Start()
     {
