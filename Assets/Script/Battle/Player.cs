@@ -4,20 +4,12 @@ using UnityEngine;
 
 public class Player : BaseBattleUnit
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    //µ¥Àý
+    public static Player Instance;
 
     protected override void Awake()
     {
         Init();
+        Instance = this;
     }
 }

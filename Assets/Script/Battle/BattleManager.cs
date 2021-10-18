@@ -9,6 +9,7 @@ public class BattleManager : UnitySingleton<BattleManager>
     //当前能量值
     private int currentEnergy=3;
     public int CurrentEnergy => currentEnergy;
+
     //能量上限
     private int maxEnergy=3;
     public int MaxEnergy => maxEnergy;
@@ -21,8 +22,6 @@ public class BattleManager : UnitySingleton<BattleManager>
 
     //战斗数据总字典<id,战斗数据>
     public Dictionary<int, BattleData> battleDataDic = new Dictionary<int, BattleData>();
-    
-    
 
     /// <summary>
     /// 敌人相关
@@ -64,21 +63,46 @@ public class BattleManager : UnitySingleton<BattleManager>
         UIManager.Instance.HideSingleUI(E_UiId.MapUI);
         UIManager.Instance.ShowUI(E_UiId.BattleUI);
 
-        currentEnergy = maxEnergy;
         //战斗UI显示时触发战斗开始事件
         EventDispatcher.TriggerEvent(E_MessageType.BattleStart);
-
-        for (int i = 0; i < turnDrawCardNum; i++)
-        {
-            HandCardManager.Instance.GetCardByID(1001);
-        }
 
         foreach (var enemyID in battleData.EnemyIDList)
         {
             CreateEnemy(enemyID);
         }
-    }
 
+        //开始回合
+        StartCoroutine(TurnStart());
+    }
+    //回合开始
+    public IEnumerator TurnStart()
+    {
+        EventDispatcher.TriggerEvent(E_MessageType.TurnStart);
+        yield return new WaitForSeconds(0.5f);
+        //初始化能量
+        currentEnergy = maxEnergy;
+        //抽牌
+        for (int i = 0; i < turnDrawCardNum; i++)
+        {
+            HandCardManager.Instance.GetCardByID(1001);
+        }
+    }
+    //回合结束按钮点击回调
+    public void OnTurnEndButtonDown()
+    {
+        StartCoroutine(TurnEnd());
+    }
+    //回合结束携程
+    public IEnumerator TurnEnd()
+    {
+        HandCardManager.Instance.DisAllCard();
+        foreach (var enemy in inBattleEnemyList)
+        {
+            enemy.TakeAction();
+        }
+        StartCoroutine(TurnStart());
+        yield break;
+    }
     //创建敌人
     public void CreateEnemy(int enemyID)
     {
@@ -89,7 +113,18 @@ public class BattleManager : UnitySingleton<BattleManager>
         newEnemy.Init(enemyID);
         inBattleEnemyList.Add(newEnemy);
     }
-
+    //触发敌人行动效果
+    public void TriggerActionEffect(ActionData actData)
+    {
+        switch (actData.ActionID)
+        {
+            //对玩家造成value点伤害
+            case 1001:
+                Player.Instance.TakeDamage(actData.ActionValue);
+                break;
+        }
+    }
+    
     //设置费用
     public void EditEnergy(int newEnergy)
     {
@@ -115,6 +150,9 @@ public class BattleManager : UnitySingleton<BattleManager>
                 break;
         }
     }
+
+
+
 
 
     private void Awake()

@@ -54,7 +54,18 @@ public class HandCardManager : UnitySingleton<HandCardManager>
             handCard.GetComponent<HandCard>().SaveOriginalPos();
         }
     }
-    //
+    //丢弃所有手牌
+    public void DisAllCard()
+    {
+        for (int i = 0; i < handCardGoList.Count; i++)
+        {
+            var handCard = handCardGoList[i];
+            Destroy(handCard);
+        }
+        //清空手牌列表
+        handCardGoList = new List<GameObject>();
+        currentCardNum = 0;
+    }
     //调整卡牌位置和旋转
     public void MoveAndRotateCard()
     {

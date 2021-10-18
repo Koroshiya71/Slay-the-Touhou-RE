@@ -15,8 +15,10 @@ public class Enemy : BaseBattleUnit
     /// </summary>
     //敌人数据
     public EnemyData enemyData;
+
     //敌人图片
     protected Image img_EnemyOutLook;
+
     //敌人名称文本
     protected Text text_EnemyName;
 
@@ -25,18 +27,24 @@ public class Enemy : BaseBattleUnit
     /// </summary>
     //敌人意图Image
     protected Image img_EnemyAction;
+
     //敌人意图描述文本
     protected Text text_ActionDes;
+
     //敌人行动数值文本
     protected Text text_ActionValue;
+
     //当前即将执行的行动
     protected ActionData currentAction;
+
     //启用的行为模式
     protected string activeActionMode;
+
     //当前正在执行行为列表中的第几个行为
     protected int currentActionNo;
 
     #region 初始化
+
     //初始化数据
     protected override void InitDataOnAwake(int id)
     {
@@ -48,10 +56,11 @@ public class Enemy : BaseBattleUnit
         activeActionMode = enemyData.ActionModeList[Random.Range(0, enemyData.ActionModeList.Count)];
         currentActionNo = 0;
         //获取行动列表中的第一个行为
-        currentAction = enemyData.EnemyActionDic.ElementAt(Convert.ToInt32(activeActionMode[currentActionNo].ToString())-1).Value;
+        currentAction = enemyData.EnemyActionDic
+            .ElementAt(Convert.ToInt32(activeActionMode[currentActionNo].ToString()) - 1).Value;
         currentActionNo++;
-
     }
+
     //初始化界面
     protected override void InitUIOnAwake()
     {
@@ -79,14 +88,11 @@ public class Enemy : BaseBattleUnit
                 text_ActionValue.text = currentAction.ActionValue.ToString();
                 text_ActionValue.enabled = true;
                 break;
-
         }
 
         text_ActionDes.text = currentAction.ActionDes.Replace("value", currentAction.ActionValue.ToString());
         text_ActionDes.enabled = false;
-
     }
-
 
     #endregion
 
@@ -96,15 +102,18 @@ public class Enemy : BaseBattleUnit
     protected override void OnTriggerEnter2D(Collider2D other)
     {
         //卡牌选中时启用选择特效
-        if (other.CompareTag("HandCard") && HandCardManager.Instance.selectedCard.mCardData.CardTarget == CardTarget.SingleEnemy)
+        if (other.CompareTag("HandCard") &&
+            HandCardManager.Instance.selectedCard.mCardData.CardTarget == CardTarget.SingleEnemy)
         {
             BattleManager.Instance.selectedTarget = this;
         }
     }
+
     protected override void OnTriggerStay2D(Collider2D other)
     {
         //卡牌选中时启用选择特效
-        if (other.CompareTag("HandCard") && HandCardManager.Instance.selectedCard.mCardData.CardTarget == CardTarget.SingleEnemy)
+        if (other.CompareTag("HandCard") &&
+            HandCardManager.Instance.selectedCard.mCardData.CardTarget == CardTarget.SingleEnemy)
         {
             BattleManager.Instance.selectedTarget = this;
         }
@@ -120,11 +129,11 @@ public class Enemy : BaseBattleUnit
         }
     }
 
-
     #endregion
 
 
     #region UI管理
+
     protected void UpdateUIState()
     {
         if (BattleManager.Instance.selectedTarget != this)
@@ -136,12 +145,14 @@ public class Enemy : BaseBattleUnit
             selectEffect.SetActive(true);
         }
     }
+
     //显示行动描述
     public void ShowActionDes()
     {
         text_ActionDes.text = currentAction.ActionDes.Replace("value", currentAction.ActionValue.ToString());
         text_ActionDes.enabled = true;
     }
+
     //隐藏行动描述
     public void HideActionDes()
     {
@@ -150,10 +161,21 @@ public class Enemy : BaseBattleUnit
 
     #endregion
 
+
+    #region 行动相关
+
+    public void TakeAction()
+    {
+        foreach (var enemyActionElement in enemyData.EnemyActionDic)
+        {
+            BattleManager.Instance.TriggerActionEffect(enemyActionElement.Value);
+        }
+    }
+
+    #endregion
+
     protected void Update()
     {
         UpdateUIState();
     }
-
-   
 }

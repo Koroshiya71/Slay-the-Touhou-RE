@@ -15,9 +15,7 @@ public class ActionImg : MonoBehaviour,IPointerEnterHandler,IPointerExitHandler
     {
         //获取所属的敌人对象，并初始禁用这些文字的显示
         thisEnemy=GetComponentInParent<Enemy>();
-        
     }
-
 
     public void OnPointerEnter(PointerEventData eventData)
     {
