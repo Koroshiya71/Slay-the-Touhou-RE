@@ -176,6 +176,7 @@ GameObject:
   - component: {fileID: 4559594307196703198}
   - component: {fileID: 3083930284292238311}
   - component: {fileID: 1376955742808030485}
+  - component: {fileID: 2866397888423907500}
   m_Layer: 0
   m_Name: UnitySingletonObj
   m_TagString: Untagged
@@ -270,6 +271,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxSceneNum: 20
+  currentLayer: 0
+  lastIndex: 0
+  inGameSceneList: []
+--- !u!114 &2866397888423907500
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4927724440062425714}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67de658bd5b87a84db43a7df5401579d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4927724440435983436
 GameObject:
   m_ObjectHideFlags: 0

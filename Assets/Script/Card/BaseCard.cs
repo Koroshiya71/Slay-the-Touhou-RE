@@ -29,6 +29,7 @@ public class BaseCard : MonoBehaviour
 
     //用于控制事件交互的CanvasGroup
     protected CanvasGroup canvasGroup;
+
     //初始化卡牌
     public virtual void InitCard(int cardID)
     {
@@ -37,7 +38,23 @@ public class BaseCard : MonoBehaviour
         //获取各种UI、脚本、组件
         canvasGroup = GetComponent<CanvasGroup>();
         img_Main = GameTool.GetTheChildComponent<Image>(gameObject, "Card_Main");
-        img_Main.sprite = ResourcesManager.Instance.LoadResources<Sprite>(cardData.CardImgRes);
+
+        //如果包含下划线，则说明Sprite来自图标组组
+        if (cardData.CardImgRes.Contains("_"))
+        {
+            string path = cardData.CardImgRes.Split('_')[0];
+            Debug.Log(path);
+            var sprites = Resources.LoadAll<Sprite>(path);
+            Debug.Log(sprites.Length);
+            var index = int.Parse(cardData.CardImgRes.Split('_')[1]);
+            Debug.Log(index);
+            img_Main.sprite = sprites[index];
+        }
+        else
+        {
+            img_Main.sprite = ResourcesManager.Instance.LoadResources<Sprite>(cardData.CardImgRes);
+
+        }
         img_OutLine = GameTool.GetTheChildComponent<Image>(gameObject, "Card_OutLine");
         img_OutLine.sprite = GetCardOutLine();
         text_CardEffect = GameTool.GetTheChildComponent<Text>(gameObject, "Text_CardEffect");
@@ -78,6 +95,55 @@ public class BaseCard : MonoBehaviour
         }
     }
 
+    //初始化卡牌
+    public virtual void InitCard(CardData data)
+    {
+        cardData = new CardData(data);
+
+        this.cardID = data.CardID;
+        //获取各种UI、脚本、组件
+        canvasGroup = GetComponent<CanvasGroup>();
+        img_Main = GameTool.GetTheChildComponent<Image>(gameObject, "Card_Main");
+        img_Main.sprite = ResourcesManager.Instance.LoadResources<Sprite>(cardData.CardImgRes);
+        img_OutLine = GameTool.GetTheChildComponent<Image>(gameObject, "Card_OutLine");
+        img_OutLine.sprite = GetCardOutLine();
+        text_CardEffect = GameTool.GetTheChildComponent<Text>(gameObject, "Text_CardEffect");
+        text_CardEffect.text = cardData.CardDes;
+        cardAnimator = GetComponent<Animator>();
+        text_CardName = GameTool.GetTheChildComponent<Text>(gameObject, "Text_CardName");
+        text_CardName.text = cardData.CardName;
+
+        if (cardData.CardType != CardType.SpellCard)
+        {
+            if (cardID >= 1000 && cardID < 2000)
+            {
+                switch (cardData.CardType)
+                {
+                    case CardType.TiShu:
+                        GameTool.GetTheChildComponent<Text>(gameObject, "Text_CardType").
+                            text = "妖梦~" + "体术";
+                        break;
+                    case CardType.JiNeng:
+                        GameTool.GetTheChildComponent<Text>(gameObject, "Text_CardType").
+                            text = "妖梦~" + "技能";
+                        break;
+                    case CardType.FaShu:
+                        GameTool.GetTheChildComponent<Text>(gameObject, "Text_CardType").
+                            text = "妖梦~" + "法术";
+                        break;
+                    case CardType.FangYu:
+                        GameTool.GetTheChildComponent<Text>(gameObject, "Text_CardType").
+                            text = "妖梦~" + "防御";
+                        break;
+                    case CardType.DanMu:
+                        GameTool.GetTheChildComponent<Text>(gameObject, "Text_CardType").
+                            text = "妖梦~" + "弹幕";
+                        break;
+                }
+
+            }
+        }
+    }
     //获取卡牌外框
     protected virtual Sprite GetCardOutLine()
     {

@@ -143,7 +143,7 @@ public class HandCardManager : UnitySingleton<HandCardManager>
     {
         if (Input.GetKeyDown(KeyCode.G))
         {
-            GetCardByID(1001);
+            GetCardByID(1002);
         }
     }
     

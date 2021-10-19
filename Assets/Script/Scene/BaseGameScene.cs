@@ -45,7 +45,6 @@ public class BaseGameScene : MonoBehaviour
         gameSceneButton.onClick.AddListener(delegate
         {
             GameSceneManager.Instance.lastIndex = GameSceneManager.Instance.inGameSceneList.IndexOf(this);
-            GameSceneManager.Instance.currentLayer++;
         });
         switch (sceneData.SceneType)
         {

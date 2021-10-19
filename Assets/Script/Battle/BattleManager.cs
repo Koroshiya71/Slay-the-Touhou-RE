@@ -95,6 +95,7 @@ public class BattleManager : UnitySingleton<BattleManager>
     //回合结束携程
     public IEnumerator TurnEnd()
     {
+        
         HandCardManager.Instance.DisAllCard();
         EventDispatcher.TriggerEvent(E_MessageType.TurnEnd);
         yield return new WaitForSeconds(0.5f);
@@ -147,7 +148,14 @@ public class BattleManager : UnitySingleton<BattleManager>
             case 1001:
                 if (target!=null)
                 {
-                    selectedTarget.TakeDamage(effectValue);
+                    target.TakeDamage(effectValue);
+                }
+                break;
+            //获得护甲
+            case 1002:
+                if (target!=null)
+                {
+                    target.GetShield(effectValue);
                 }
                 break;
         }
@@ -156,7 +164,15 @@ public class BattleManager : UnitySingleton<BattleManager>
     //战斗结束
     public void BattleEnd()
     {
+        //当前所在层数+1
+        GameSceneManager.Instance.currentLayer++;
+        //弃掉所有手牌
+        HandCardManager.Instance.DisAllCard();
+        //隐藏战斗UI
         UIManager.Instance.HideSingleUI(E_UiId.BattleUI);
+        //显示地图界面
+        UIManager.Instance.ShowUI(E_UiId.MapUI);
+        GameSceneManager.Instance.UpdateGameSceneState();
     }
 
 

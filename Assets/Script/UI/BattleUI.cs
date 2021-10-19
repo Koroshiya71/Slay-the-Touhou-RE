@@ -50,14 +50,23 @@ public class BattleUI : BaseUI
         {
             ShowTurnStartTxt();
             text_TurnChange.text = "玩家回合";
+            UpdateUI();
+            ActiveTurnEndBtn(true);
             Invoke(nameof(HideTurnStartTxt),0.5f);
+            
         });
         EventDispatcher.AddListener(E_MessageType.TurnEnd, delegate
         {
             ShowTurnStartTxt();
             text_TurnChange.text = "敌人回合";
             Invoke(nameof(HideTurnStartTxt), 0.5f);
+            ActiveTurnEndBtn(false);
         });
+    }
+    //启用/禁用回合结束按钮
+    public void ActiveTurnEndBtn(bool active)
+    {
+        btn_TurnEnd.interactable = active;
     }
 
     //更新战斗UI

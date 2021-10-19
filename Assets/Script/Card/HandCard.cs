@@ -156,6 +156,7 @@ public class HandCard : BaseCard
             switch (cardData.CardTarget)
             {
                 case CardTarget.MyPlayer:
+                    target = Player.Instance;
                     break;
                 case CardTarget.SingleEnemy:
                     break;

@@ -54,6 +54,11 @@ public class BaseBattleUnit : MonoBehaviour
             Die();
         }
     }
+    //获得护甲
+    public virtual void GetShield(int shield)
+    {
+        currentShield += shield;
+    }
     //生命值归零时的死亡方法
     public virtual void Die()
     {

@@ -181,7 +181,10 @@ public class Enemy : BaseBattleUnit
         Destroy(this.gameObject);
 
         //如果该敌人死亡后敌人数量为0，触发战斗结束方法
-        BattleManager.Instance.BattleEnd();
+        if (BattleManager.Instance.inBattleEnemyList.Count==0)
+        {
+            BattleManager.Instance.BattleEnd();
+        }
     }
 
     #endregion

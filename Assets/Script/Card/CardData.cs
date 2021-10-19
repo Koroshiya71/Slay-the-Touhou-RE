@@ -36,7 +36,7 @@ public enum CardTarget
 {
     //需要单体敌人作为目标
     SingleEnemy,
-    //不需要目标
+    //玩家自身
     MyPlayer
 }
 
@@ -108,6 +108,9 @@ public class CardData
     //卡牌效果字典<ID,卡牌效果>
     private Dictionary<int, CardEffectData> cardEffectDic=new Dictionary<int, CardEffectData>();
 
+    //卡牌数据是否有被修改过
+    private bool hasModified=false;
+
     ///属性
     public int CardID => cardID;
 
@@ -129,6 +132,7 @@ public class CardData
 
     public Dictionary<int, CardEffectData> CardEffectDic => cardEffectDic;
 
+    public bool HasModified => hasModified;
     //构造函数
     public CardData(int cardID=1001, string cardName = "斩击", string cardImgRes= "Image/Card/CardImg/斩击", int cardCost=1,
         string cardDes = "造成6点伤害", CardType cardType = CardType.TiShu, CardRare cardRare = CardRare.Normal, CardTarget cardTarget = CardTarget.SingleEnemy, 
@@ -147,6 +151,7 @@ public class CardData
 
     public CardData(int cardID)
     {
+        hasModified = false;
         string tempStr = "";
         this.cardID = cardID;
         this.cardName = ReadCfgCardData("Name", cardID);
@@ -157,6 +162,9 @@ public class CardData
         {
             case "体术":
                 cardType = CardType.TiShu;
+                break;
+            case "防御":
+                cardType = CardType.FangYu;
                 break;
             default:
                 cardType = CardType.TiShu;
@@ -177,6 +185,9 @@ public class CardData
         {
             case "单体敌人":
                 cardTarget = CardTarget.SingleEnemy;
+                break;
+            case "玩家":
+                cardTarget = cardTarget = CardTarget.MyPlayer;
                 break;
             default:
                 cardTarget = CardTarget.SingleEnemy;
@@ -202,7 +213,25 @@ public class CardData
             cardDes += effectDes;
         }
     }
-
+    //克隆方法
+    public CardData(CardData data)
+    {
+        hasModified = false;
+        this.cardID = data.CardID;
+        this.cardName = data.CardName;
+        this.cardImgRes = data.CardImgRes;
+        this.cardCost = data.CardCost;
+        this.cardDes = data.CardDes;
+        this.cardType = data.CardType;
+        this.cardRare = data.CardRare;
+        this.cardTarget = data.cardTarget;
+        this.cardUseType = data.cardUseType;
+        this.cardEffectDic = new Dictionary<int, CardEffectData>();
+        foreach (var effectElement in data.CardEffectDic)
+        {
+            cardEffectDic.Add(effectElement.Key,effectElement.Value);
+        }
+    }
     private string ReadCfgCardData(string key,int id)
     {
         string data= DataController.Instance.ReadCfg(key, id, DataController.Instance.dicCardData);
