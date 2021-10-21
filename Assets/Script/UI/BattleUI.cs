@@ -73,6 +73,7 @@ public class BattleUI : BaseUI
     public void UpdateUI()
     {
         text_Eng.text = BattleManager.Instance.CurrentEnergy + "/" + BattleManager.Instance.MaxEnergy;
+
     }
 
 }

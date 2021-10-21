@@ -168,7 +168,11 @@ public class HandCard : BaseCard
         {
             handCardList[i].GetComponent<HandCard>().cardAnimator.SetBool("Daging", false);
         }
+        //ÆúÅÆ´¦Àí
+        DeskManager.Instance.disCardDeskList.Add(this.cardData);
         HandCardManager.Instance.RemoveCard(this.gameObject);
+
+
         HandCardManager.Instance.selectedCard = null;
         EventDispatcher.TriggerEvent(E_MessageType.UseCard);
     }

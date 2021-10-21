@@ -8,15 +8,15 @@ public class BaseBattleUnit : MonoBehaviour
 {
     //生命值相关
     protected int maxHp = 50;
-
     protected int currentHp = 50;
+    protected Slider slider_Hp;
+    protected Text text_Hp;
 
     //护盾值相关
     protected int currentShield = 0;
-    private Slider slider_Hp;
-
-    private Text text_Hp;
-
+    protected Image img_Shield;
+    protected Text text_Shield;
+    
     //选中特效
     protected GameObject selectEffect;
 
@@ -46,18 +46,38 @@ public class BaseBattleUnit : MonoBehaviour
         damage -= currentShield;
 
         currentHp -= damage;
-        slider_Hp.value = (float) currentHp / maxHp;
-        text_Hp.text = currentHp + " / " + maxHp;
-
+        
+        UpdateUI();
         if (currentHp<=0)
         {
             Die();
+        }
+    }
+    //更新UI
+    public virtual void UpdateUI()
+    {
+        //更新血条UI
+        slider_Hp.value = (float)currentHp / maxHp;
+        text_Hp.text = currentHp + " / " + maxHp;
+        //如果初始护盾值为0则取消相关UI的显示
+        if (currentShield == 0)
+        {
+            img_Shield.enabled = false;
+            text_Shield.enabled = false;
+        }
+        //否则就显示对应的护盾值
+        else
+        {
+            img_Shield.enabled = true;
+            text_Shield.enabled = true;
+            text_Shield.text = currentShield.ToString();
         }
     }
     //获得护甲
     public virtual void GetShield(int shield)
     {
         currentShield += shield;
+        UpdateUI();
     }
     //生命值归零时的死亡方法
     public virtual void Die()
@@ -76,6 +96,23 @@ public class BaseBattleUnit : MonoBehaviour
         text_Hp = GameTool.GetTheChildComponent<Text>(gameObject, "Text_Hp");
         currentHp = maxHp;
         text_Hp.text = currentHp + " / " + maxHp;
+
+        //初始化护盾值和护盾UI
+        img_Shield = GameTool.GetTheChildComponent<Image>(gameObject, "Img_Shield");
+
+        text_Shield = GameTool.GetTheChildComponent<Text>(gameObject, "Text_Shield");
+        //如果初始护盾值为0则取消相关UI的显示
+        if (currentShield==0)
+        {
+            img_Shield.enabled = false;
+            text_Shield.enabled = false;
+        }
+        //否则就显示对应的护盾值
+        else
+        {
+            img_Shield.enabled = true;
+            text_Shield.text = currentShield.ToString();
+        }
     }
 
     //初始化数据

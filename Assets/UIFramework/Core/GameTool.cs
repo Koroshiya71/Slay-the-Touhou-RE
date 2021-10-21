@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System;
+using System.Collections.Generic;
+using Random = Unity.Mathematics.Random;
+
 //工具类,把一些常用到的方法放在这个类里面
 //为了方便外界调用,把里面的方法都设置为静态的
 public class GameTool : MonoBehaviour
@@ -117,5 +120,16 @@ public class GameTool : MonoBehaviour
         childTrans.parent = parentTrans;
         childTrans.localPosition = Vector3.zero;
         childTrans.localScale = Vector3.one;
+    }
+    //打乱列表
+    public static List<T> RandomSort<T>(List<T> list)
+    {
+        var random = new System.Random();
+        var newList = new List<T>();
+        foreach (var item in list)
+        {
+            newList.Insert(random.Next(newList.Count), item);
+        }
+        return newList;
     }
 }

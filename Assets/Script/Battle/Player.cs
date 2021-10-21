@@ -12,4 +12,5 @@ public class Player : BaseBattleUnit
         Init();
         Instance = this;
     }
+
 }

@@ -54,12 +54,34 @@ public class HandCardManager : UnitySingleton<HandCardManager>
             handCard.GetComponent<HandCard>().SaveOriginalPos();
         }
     }
+    //根据卡牌数据获取卡牌到手牌
+    public void GetCardByData(CardData data)
+    {
+        //如果手牌数大于等于手牌上限则跳出
+        if (currentCardNum >= maxCardNum)
+        {
+            return;
+        }
+        GameObject newCardGo = Instantiate(handCardPrefab, handCardGo.transform, false);
+        newCardGo.transform.localScale = new Vector3(1, 1, 1);
+        HandCard newCard = newCardGo.GetComponent<HandCard>();
+        newCard.InitCard(data);
+        handCardGoList.Add(newCardGo);
+        currentCardNum++;
+        MoveAndRotateCard();
+        foreach (var handCard in handCardGoList)
+        {
+            handCard.GetComponent<HandCard>().SaveOriginalPos();
+        }
+    }
     //丢弃所有手牌
     public void DisAllCard()
     {
         for (int i = 0; i < handCardGoList.Count; i++)
         {
             var handCard = handCardGoList[i];
+            //将卡牌数据加入弃牌堆
+            DeskManager.Instance.disCardDeskList.Add(handCard.GetComponent<HandCard>().mCardData);
             Destroy(handCard);
         }
         //清空手牌列表

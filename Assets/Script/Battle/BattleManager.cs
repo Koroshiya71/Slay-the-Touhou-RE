@@ -84,7 +84,7 @@ public class BattleManager : UnitySingleton<BattleManager>
         //抽牌
         for (int i = 0; i < turnDrawCardNum; i++)
         {
-            HandCardManager.Instance.GetCardByID(1001);
+            DeskManager.Instance.DrawCard();
         }
     }
     //回合结束按钮点击回调
@@ -166,8 +166,9 @@ public class BattleManager : UnitySingleton<BattleManager>
     {
         //当前所在层数+1
         GameSceneManager.Instance.currentLayer++;
-        //弃掉所有手牌
+        //弃掉所有手牌并重置牌堆
         HandCardManager.Instance.DisAllCard();
+        DeskManager.Instance.ResetDesks();
         //隐藏战斗UI
         UIManager.Instance.HideSingleUI(E_UiId.BattleUI);
         //显示地图界面

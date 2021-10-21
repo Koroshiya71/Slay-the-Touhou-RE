@@ -43,11 +43,8 @@ public class BaseCard : MonoBehaviour
         if (cardData.CardImgRes.Contains("_"))
         {
             string path = cardData.CardImgRes.Split('_')[0];
-            Debug.Log(path);
             var sprites = Resources.LoadAll<Sprite>(path);
-            Debug.Log(sprites.Length);
             var index = int.Parse(cardData.CardImgRes.Split('_')[1]);
-            Debug.Log(index);
             img_Main.sprite = sprites[index];
         }
         else
