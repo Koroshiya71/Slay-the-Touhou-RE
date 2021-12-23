@@ -25,6 +25,8 @@ public class BaseBattleUnit : MonoBehaviour
     {
         InitDataOnAwake(id);
         InitUIOnAwake();
+        
+        InitEventOnAwake();
     }
 
     protected virtual void Awake()
@@ -121,7 +123,7 @@ public class BaseBattleUnit : MonoBehaviour
     protected virtual void InitEventOnAwake()
     {
         EventDispatcher.AddListener(E_MessageType.TurnStart,delegate{
-            if(!BattleManager.Instance.isFirstTurn)
+            if(!BattleManager.Instance.isInit)
             {
                 currentShield=0;
                 UpdateUI();

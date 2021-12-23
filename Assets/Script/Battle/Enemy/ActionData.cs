@@ -5,28 +5,28 @@ using UnityEngine;
 
 public enum ActionType
 {
-    Attack, //¹¥»÷
-    AttackAndWeaken, //¹¥»÷²¢Ï÷ÈõÍæ¼Ò
-    AttackAndBuff, //¹¥»÷²¢Ìá¹©Ç¿»¯
-    Buff, //Ç¿»¯»ò»Ø¸´
-    Weaken, //Ï÷Èõ
-    Shield //»ñÈ¡»¤¼×
+    Attack, //æ”»å‡»
+    AttackAndWeaken, //æ”»å‡»å¹¶å‰Šå¼±ç©å®¶
+    AttackAndBuff, //æ”»å‡»å¹¶æä¾›å¼ºåŒ–
+    Buff, //å¼ºåŒ–æˆ–å›å¤
+    Weaken, //å‰Šå¼±
+    Shield //è·å–æŠ¤ç”²
 }
 
 public class ActionData
 {
-    //ĞĞÎªID
+    //è¡Œä¸ºID
     private int actionID;
 
-    //ĞĞÎªÀàĞÍ
+    //è¡Œä¸ºç±»å‹
     private ActionType actionType;
-    //ĞĞÎªÃèÊö
+    //è¡Œä¸ºæè¿°
     private string actionDes;
-    //ĞĞ¶¯Ğ§¹ûÖµ
+    //è¡ŒåŠ¨æ•ˆæœå€¼
     private int actionValue;
 
     /// <summary>
-    /// ÊôĞÔ
+    /// å±æ€§
     /// </summary>
     public int ActionValue => actionValue;
     public string ActionDes => actionDes;
@@ -39,9 +39,9 @@ public class ActionData
     {
         get => actionType;
     }
-    
-    //¹¹Ôìº¯Êı(ĞĞ¶¯ID£¬ĞĞ¶¯Öµ)
-    public ActionData(int id,int value)
+
+    //æ„é€ å‡½æ•°(è¡ŒåŠ¨IDï¼Œè¡ŒåŠ¨å€¼)
+    public ActionData(int id, int value)
     {
         actionID = id;
         actionDes = ReadActionCfgData("ActionEffectDes", id);
@@ -49,13 +49,16 @@ public class ActionData
         string tempStr = ReadActionCfgData("ActionType", id);
         switch (tempStr)
         {
-            case "¹¥»÷":
+            case "æ”»å‡»":
                 actionType = ActionType.Attack;
+                break;
+            case "å¼ºåŒ–":
+                actionType = ActionType.Buff;
                 break;
         }
     }
 
-    //¸ù¾İcfgÊı¾İ±í¶ÁÈ¡µĞÈËĞĞ¶¯Êı¾İ
+    //æ ¹æ®cfgæ•°æ®è¡¨è¯»å–æ•Œäººè¡ŒåŠ¨æ•°æ®
     private string ReadActionCfgData(string key, int id)
     {
         string data = DataController.Instance.ReadCfg(key, id, DataController.Instance.dicActionData);

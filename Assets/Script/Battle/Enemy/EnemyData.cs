@@ -2,36 +2,35 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-//µĞÈËÀàĞÍ
+//æ•Œäººç±»å‹
 public enum EnemyType
 {
-    Normal,//ÆÕÍ¨µĞÈË
-    Elite,//¾«Ó¢µĞÈË
-    Boss,//BossµĞÈË
+    Normal,//æ™®é€šæ•Œäºº
+    Elite,//ç²¾è‹±æ•Œäºº
+    Boss,//Bossæ•Œäºº
 }
 public class EnemyData
 {
-    //µĞÈËID
+    //æ•ŒäººID
     private int enemyID;
-    //µĞÈËÃû³Æ
+    //æ•Œäººåç§°
     private string enemyName;
-    //ËØ²ÄÂ·¾¶
+    //ç´ æè·¯å¾„
     private string resourcePath;
-    //×î´óÉúÃüÖµ
+    //æœ€å¤§ç”Ÿå‘½å€¼
     private int maxHp;
-    //³õÊ¼»¤¶ÜÖµ
+    //åˆå§‹æŠ¤ç›¾å€¼
     private int initShield;
-    //µĞÈËĞĞÎª×Öµä<ID,µĞÈËĞĞ¶¯¶ÔÏó>
+    //æ•Œäººè¡Œä¸ºå­—å…¸<ID,æ•Œäººè¡ŒåŠ¨å¯¹è±¡>
     private Dictionary<int, ActionData> enemyActionDic = new Dictionary<int, ActionData>();
-
-    //µĞÈËĞĞ¶¯Ë³ĞòÁĞ±í
+    //æ•Œäººè¡ŒåŠ¨é¡ºåºåˆ—è¡¨
     private List<string> actionModeList = new List<string>();
 
-    //µĞÈËÀàĞÍ
+    //æ•Œäººç±»å‹
     private EnemyType enemyType;
 
     /// <summary>
-    /// ÊôĞÔ
+    /// å±æ€§
     /// </summary>
     public int EnemyID => enemyID;
 
@@ -49,40 +48,41 @@ public class EnemyData
 
     public EnemyType EnemyType => enemyType;
 
-    //¸ù¾İµĞÈËIDµÄ¹¹Ôìº¯Êı
+    //æ ¹æ®æ•ŒäººIDçš„æ„é€ å‡½æ•°
     public EnemyData(int enemyID)
     {
-        //ÓÃÓÚ½ÓÊÕ¶ÁÈ¡½á¹ûµÄÁÙÊ±×Ö·û´®
+        
+        //ç”¨äºæ¥æ”¶è¯»å–ç»“æœçš„ä¸´æ—¶å­—ç¬¦ä¸²
         string tempStr = ReadEnemyCfgData("EnemyType", enemyID);
         this.enemyID = enemyID;
         enemyName = ReadEnemyCfgData("Name", enemyID);
         resourcePath = ReadEnemyCfgData("ResourcePath", enemyID);
         maxHp = int.Parse(ReadEnemyCfgData("MaxHp", enemyID));
         initShield = int.Parse(ReadEnemyCfgData("InitShield", enemyID));
-
-        //¸ù¾İµĞÈËµÄĞĞ¶¯Ìí¼Óµ½ĞĞ¶¯×ÖµäÖĞ
+        
+        //æ ¹æ®æ•Œäººçš„è¡ŒåŠ¨æ·»åŠ åˆ°è¡ŒåŠ¨å­—å…¸ä¸­
         for (int i = 1; i <= int.Parse(ReadEnemyCfgData("ActNum", enemyID)); i++)
         {
             int actionValue = int.Parse(ReadEnemyCfgData("Act" + i + "Value", enemyID));
             int actionID = int.Parse(ReadEnemyCfgData("Act" + i + "ID", enemyID));
             enemyActionDic.Add(actionID,new ActionData(actionID,actionValue));
         }
-        //¸ù¾İµĞÈËµÄĞĞ¶¯Âß¼­ÊıÁ¿Ìí¼Óµ½ĞĞ¶¯Âß¼­ÁĞ±í
+        //æ ¹æ®æ•Œäººçš„è¡ŒåŠ¨é€»è¾‘æ•°é‡æ·»åŠ åˆ°è¡ŒåŠ¨é€»è¾‘åˆ—è¡¨
         for (int i = 1; i <= int.Parse(ReadEnemyCfgData("ActModeNum", enemyID)); i++)
         {
             actionModeList.Add(ReadEnemyCfgData("ActMode" + i, enemyID));
         }
 
-        //ÉèÖÃµĞÈËÀàĞÍ
+        //è®¾ç½®æ•Œäººç±»å‹
         switch (tempStr)
         {
-            case "ÆÕÍ¨":
+            case "æ™®é€š":
                 enemyType = EnemyType.Normal;
                 break;
         }
     }
 
-    //¸ù¾İcfgÊı¾İ±í¶ÁÈ¡µĞÈËÊı¾İ
+    //æ ¹æ®cfgæ•°æ®è¡¨è¯»å–æ•Œäººæ•°æ®
     private string ReadEnemyCfgData(string key, int id)
     {
         string data = DataController.Instance.ReadCfg(key, id, DataController.Instance.dicEnemyData);

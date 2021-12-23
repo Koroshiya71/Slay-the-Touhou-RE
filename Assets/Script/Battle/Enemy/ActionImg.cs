@@ -7,13 +7,13 @@ using UnityEngine.EventSystems;
 
 public class ActionImg : MonoBehaviour,IPointerEnterHandler,IPointerExitHandler
 {
-    //ËùÊôµÄEnemy¶ÔÏó
+    //æ‰€å±çš„Enemyå¯¹è±¡
     private Enemy thisEnemy;
-    //ÊÂ¼ş´¥·¢Æ÷
+    //äº‹ä»¶è§¦å‘å™¨
     private EventTrigger eventTrigger;
     private void Awake()
     {
-        //»ñÈ¡ËùÊôµÄµĞÈË¶ÔÏó£¬²¢³õÊ¼½ûÓÃÕâĞ©ÎÄ×ÖµÄÏÔÊ¾
+        //è·å–æ‰€å±çš„æ•Œäººå¯¹è±¡ï¼Œå¹¶åˆå§‹ç¦ç”¨è¿™äº›æ–‡å­—çš„æ˜¾ç¤º
         thisEnemy=GetComponentInParent<Enemy>();
     }
 

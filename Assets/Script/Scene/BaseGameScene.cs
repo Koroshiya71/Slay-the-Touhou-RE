@@ -8,38 +8,38 @@ using Random = UnityEngine.Random;
 
 public class BaseGameScene : MonoBehaviour
 {
-    //³¡¾°Êı¾İ
+    //åœºæ™¯æ•°æ®
     public SceneData sceneData;
-    //Í¼Æ¬×ÊÔ´
+    //å›¾ç‰‡èµ„æº
     protected Image sceneImage;
 
     protected Image sceneMask;
-    //Button×é¼ş
+    //Buttonç»„ä»¶
     protected Button gameSceneButton;
-    //¸Ã³¡¾°µÄÕ½¶·Êı¾İ
+    //è¯¥åœºæ™¯çš„æˆ˜æ–—æ•°æ®
     protected BattleData battleData = null;
-    //ÊÇ·ñ¿ÉÒÔÑ¡Ôñ
+    //æ˜¯å¦å¯ä»¥é€‰æ‹©
     protected bool isActive=false;
-    //³õÊ¼»¯³¡¾°
+    //åˆå§‹åŒ–åœºæ™¯
     protected virtual void InitGameScene()
     {
-        //»ñÈ¡ImageºÍButton×é¼ş
+        //è·å–Imageå’ŒButtonç»„ä»¶
         sceneImage = GetComponent<Image>();
         sceneMask = GameTool.GetTheChildComponent<Image>(gameObject, "Mask");
         sceneMask.enabled = false;
         gameSceneButton = GetComponent<Button>();
-        //³õÊ¼»¯³¡¾°Êı¾İºÍÍ¼Æ¬ËØ²Ä
-        //ĞÂÉú³ÉµÄ³¡¾°Êı¾İµÄÏÂ±êÕıºÃÎª½«¸Ã³¡¾°¼ÓÈëÁĞ±íÇ°µÄ³¡¾°Êı
+        //åˆå§‹åŒ–åœºæ™¯æ•°æ®å’Œå›¾ç‰‡ç´ æ
+        //æ–°ç”Ÿæˆçš„åœºæ™¯æ•°æ®çš„ä¸‹æ ‡æ­£å¥½ä¸ºå°†è¯¥åœºæ™¯åŠ å…¥åˆ—è¡¨å‰çš„åœºæ™¯æ•°
         sceneData = new SceneData(GameSceneManager.Instance.inGameSceneList.Count);
         sceneImage.sprite = ResourcesManager.Instance.LoadResources<Sprite>(sceneData.ResourcePath);
         GameSceneManager.Instance.inGameSceneList.Add(this);
 
-        //¸ù¾İÊÂ¼şÀàĞÍ×¢²áµã»÷ÊÂ¼ş
+        //æ ¹æ®äº‹ä»¶ç±»å‹æ³¨å†Œç‚¹å‡»äº‹ä»¶
         InitClickEvent();
 
     }
 
-    //¸ù¾İÊÂ¼şÀàĞÍ×¢²áÊÂ¼ş
+    //æ ¹æ®äº‹ä»¶ç±»å‹æ³¨å†Œäº‹ä»¶
     protected virtual void InitClickEvent()
     {
         gameSceneButton.onClick.AddListener(delegate
@@ -64,7 +64,7 @@ public class BaseGameScene : MonoBehaviour
                 break;
         }
     }
-    //¸Ä±ä³¡¾°¿ÉÑ¡×´Ì¬
+    //æ”¹å˜åœºæ™¯å¯é€‰çŠ¶æ€
     public void ChangeGameSceneState(bool state)
     {
         this.isActive = state;

@@ -7,23 +7,23 @@ using UnityEngine;
 public class DeskManager : UnitySingleton<DeskManager>
 {
     /// <summary>
-    /// ÓÃÒÔ¹ÜÀí¸÷ÖÖÅÆ¿âµÄ¹ÜÀíÆ÷
+    /// ç”¨ä»¥ç®¡ç†å„ç§ç‰Œåº“çš„ç®¡ç†å™¨
     /// </summary>
 
 
-    //ÅÆ¿âÁĞ±í¶ÔÏó<¿¨ÅÆÊı¾İ>
+    //ç‰Œåº“åˆ—è¡¨å¯¹è±¡<å¡ç‰Œæ•°æ®>
     public List<CardData> deskCardList = new List<CardData>();
     
-    //³éÅÆ¶ÑÁĞ±í¶ÔÏó<¿¨ÅÆÊı¾İ>
+    //æŠ½ç‰Œå †åˆ—è¡¨å¯¹è±¡<å¡ç‰Œæ•°æ®>
     public List<CardData> drawCardDeskList = new List<CardData>();
-    //ÆúÅÆ¶ÑÁĞ±í¶ÔÏó<¿¨ÅÆÊı¾İ>
+    //å¼ƒç‰Œå †åˆ—è¡¨å¯¹è±¡<å¡ç‰Œæ•°æ®>
     public List<CardData> disCardDeskList = new List<CardData>();
 
 
-    //±¾³¡Õ½¶·ÊÇ·ñÒÑ¾­³õÊ¼»¯¹ı³éÅÆ¶Ñ
-    private bool hasInitDrawCardDesk = false;
+    //æœ¬åœºæˆ˜æ–—æ˜¯å¦å·²ç»åˆå§‹åŒ–è¿‡æŠ½ç‰Œå †
+    public bool hasInitDrawCardDesk = false;
 
-    //³õÊ¼»¯ÅÆ¿â¹ÜÀíÆ÷
+    //åˆå§‹åŒ–ç‰Œåº“ç®¡ç†å™¨
     public void InitDeskManager()
     {
         string[] baseDesk;
@@ -42,21 +42,21 @@ public class DeskManager : UnitySingleton<DeskManager>
             deskCardList.Add(new CardData(int.Parse(cardIDStr)));
         }
     }
-    //³õÊ¼»¯³éÅÆ¶Ñ
+    //åˆå§‹åŒ–æŠ½ç‰Œå †
     public void InitDrawCardDesk()
     {
-        //Èç¹ûÆúÅÆ¶ÑÎª¿ÕÇÒ´ÓÎ´³õÊ¼»¯¹ı³éÅÆ¶Ñ£¬Ôò´ÓÅÆ¿â½øĞĞµÚÒ»´Î³õÊ¼»¯
+        //å¦‚æœå¼ƒç‰Œå †ä¸ºç©ºä¸”ä»æœªåˆå§‹åŒ–è¿‡æŠ½ç‰Œå †ï¼Œåˆ™ä»ç‰Œåº“è¿›è¡Œç¬¬ä¸€æ¬¡åˆå§‹åŒ–
         if (disCardDeskList.Count==0&&!hasInitDrawCardDesk)
         {
             hasInitDrawCardDesk = true;
 
-            //½«ÅÆ¿âÖĞËùÓĞ¿¨ÅÆ¼ÓÈë³éÅÆ¶Ñ
+            //å°†ç‰Œåº“ä¸­æ‰€æœ‰å¡ç‰ŒåŠ å…¥æŠ½ç‰Œå †
             foreach (var cardData in deskCardList)
             {
                 drawCardDeskList.Add(cardData);
             }
         }
-        //Èç¹û³éÅÆ¶ÑÖĞµÄ¿¨ÅÆÊıÁ¿²»Îª0,Ôò½«ËùÓĞÆúÅÆ¶ÑÖĞµÄ¿¨ÅÆ¼ÓÈë³éÅÆ¶Ñ
+        //å¦‚æœæŠ½ç‰Œå †ä¸­çš„å¡ç‰Œæ•°é‡ä¸ä¸º0,åˆ™å°†æ‰€æœ‰å¼ƒç‰Œå †ä¸­çš„å¡ç‰ŒåŠ å…¥æŠ½ç‰Œå †
         else if (disCardDeskList.Count>1)
         {
             for (int i = 0; i < disCardDeskList.Count; i++)
@@ -65,34 +65,35 @@ public class DeskManager : UnitySingleton<DeskManager>
                 disCardDeskList.Remove(disCardDeskList[i]);
             }
         }
-        //Ï´ÅÆ
+        //æ´—ç‰Œ
         drawCardDeskList = GameTool.RandomSort(drawCardDeskList);
     }
 
-    //ÖØÖÃ¸÷¸öÅÆ¶Ñ
+    //é‡ç½®å„ä¸ªç‰Œå †
     public void ResetDesks()
     {
-        //Çå¿Õ³éÅÆ¶ÑºÍÆúÅÆ¶Ñ
-        drawCardDeskList = new List<CardData>();
-        disCardDeskList = new List<CardData>();
+        //æ¸…ç©ºæŠ½ç‰Œå †å’Œå¼ƒç‰Œå †
+        drawCardDeskList.Clear();
+        disCardDeskList.Clear();
 
-        //ÖØÖÃ³éÅÆ¶Ñ×´Ì¬ÎªÎ´³õÊ¼»¯
+        //é‡ç½®æŠ½ç‰Œå †çŠ¶æ€ä¸ºæœªåˆå§‹åŒ–
         hasInitDrawCardDesk = false;
     }
-    //³éÅÆÂÖ×ª·½·¨
+    //æŠ½ç‰Œè½®è½¬æ–¹æ³•
     public void DrawCard()
     {
         if (drawCardDeskList.Count==0)
         {
             InitDrawCardDesk();
+
         }
-        //³éÈ¡³éÅÆ¶ÑµÄµÚÒ»ÕÅÅÆ£¬Èç¹û¸ÃÅÆÃ»ÓĞ±»ĞŞ¸Ä¹ıÔòÖ±½Ó¸ù¾İID³õÊ¼»¯¿¨ÅÆ
+        //æŠ½å–æŠ½ç‰Œå †çš„ç¬¬ä¸€å¼ ç‰Œï¼Œå¦‚æœè¯¥ç‰Œæ²¡æœ‰è¢«ä¿®æ”¹è¿‡åˆ™ç›´æ¥æ ¹æ®IDåˆå§‹åŒ–å¡ç‰Œ
         CardData data = drawCardDeskList[0];
         if (data.HasModified)
         {
             HandCardManager.Instance.GetCardByData(data);
         }
-        //·ñÔòÔò¸ù¾İ¿¨ÅÆÊı¾İ³õÊ¼»¯
+        //å¦åˆ™åˆ™æ ¹æ®å¡ç‰Œæ•°æ®åˆå§‹åŒ–
         else
         {
             HandCardManager.Instance.GetCardByID(data.CardID);

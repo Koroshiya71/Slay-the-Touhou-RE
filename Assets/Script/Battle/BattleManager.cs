@@ -24,7 +24,7 @@ public class BattleManager : UnitySingleton<BattleManager>
     public Dictionary<int, BattleData> battleDataDic = new Dictionary<int, BattleData>();
 
     //是否是本场战斗的第一回合
-    public bool isFirstTurn = false;
+    public bool isInit = true;
     /// <summary>
     /// 敌人相关
     /// </summary>
@@ -62,9 +62,11 @@ public class BattleManager : UnitySingleton<BattleManager>
     //初始化战斗
     public void InitBattle(BattleData battleData)
     {
+        //显示相应UI
         UIManager.Instance.HideSingleUI(E_UiId.MapUI);
         UIManager.Instance.ShowUI(E_UiId.BattleUI);
-
+        //初始化牌库
+        DeskManager.Instance.ResetDesks();
         //战斗UI显示时触发战斗开始事件
         EventDispatcher.TriggerEvent(E_MessageType.BattleStart);
 
@@ -72,7 +74,8 @@ public class BattleManager : UnitySingleton<BattleManager>
         {
             CreateEnemy(enemyID);
         }
-        isFirstTurn=true;
+        //初始化
+        isInit = false;
         //开始回合
         StartCoroutine(TurnStart());
     }
@@ -97,15 +100,18 @@ public class BattleManager : UnitySingleton<BattleManager>
     //回合结束携程
     public IEnumerator TurnEnd()
     {
-
         HandCardManager.Instance.DisAllCard();
         EventDispatcher.TriggerEvent(E_MessageType.TurnEnd);
-        yield return new WaitForSeconds(0.5f);
+
         foreach (var enemy in inBattleEnemyList)
         {
+            //每个敌人行动间隔一段时间
+            //TODO：跟进每个敌人的动画时间决定这个间隔
+            yield return new WaitForSeconds(0.5f);
             enemy.TakeAction();
             //TODO：添加播放动画的功能
         }
+        yield return new WaitForSeconds(0.5f);
         StartCoroutine(TurnStart());
     }
     //创建敌人
@@ -121,11 +127,17 @@ public class BattleManager : UnitySingleton<BattleManager>
     //触发敌人行动效果
     public void TriggerActionEffect(ActionData actData)
     {
+        
         switch (actData.ActionID)
         {
+            
             //对玩家造成value点伤害
             case 1001:
                 Player.Instance.TakeDamage(actData.ActionValue);
+                break;
+            //自身获得value层灵体
+            case 1002:
+                
                 break;
         }
     }
@@ -134,6 +146,7 @@ public class BattleManager : UnitySingleton<BattleManager>
     public void EditEnergy(int newEnergy)
     {
         currentEnergy = newEnergy;
+        
     }
 
     //根据卡牌效果ID和效果值触发效果
@@ -167,12 +180,13 @@ public class BattleManager : UnitySingleton<BattleManager>
     public void BattleEnd()
     {
         //重置回合数
-        isFirstTurn=false;
+        isInit = true;
         //当前所在层数+1
         GameSceneManager.Instance.currentLayer++;
         //弃掉所有手牌并重置牌堆
         HandCardManager.Instance.DisAllCard();
         DeskManager.Instance.ResetDesks();
+
         //隐藏战斗UI
         UIManager.Instance.HideSingleUI(E_UiId.BattleUI);
         //显示地图界面

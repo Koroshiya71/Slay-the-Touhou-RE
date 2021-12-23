@@ -4,64 +4,66 @@ using System.Collections.Generic;
 using JetBrains.Annotations;
 using UnityEngine;
 
-//¿¨ÅÆÀàĞÍ
+//å¡ç‰Œç±»å‹
 public enum CardType
 {
-    //ÌåÊõ
+    //ä½“æœ¯
     TiShu,
-    //µ¯Ä»
+    //å¼¹å¹•
     DanMu,
-    //·¨Êõ
+    //æ³•æœ¯
     FaShu,
-    //·ÀÓù
+    //é˜²å¾¡
     FangYu,
-    //¼¼ÄÜ
+    //æŠ€èƒ½
     JiNeng,
-    //·û¿¨
+    //ç¬¦å¡
     SpellCard
 }
-//¿¨ÅÆÏ¡ÓĞ¶È
+//å¡ç‰Œç¨€æœ‰åº¦
 public enum CardRare
 {
-    //ÆÕÍ¨
+    
+    //æ™®é€š
     Normal,
-    //Ï¡ÓĞ
+    //ç¨€æœ‰
     Rare,
-    //Ê·Ê«
+    //å²è¯—
     Epic
 }
 
-//¿¨ÅÆÊ¹ÓÃ·½Ê½
+//å¡ç‰Œä½¿ç”¨æ–¹å¼
 public enum CardTarget
 {
-    //ĞèÒªµ¥ÌåµĞÈË×÷ÎªÄ¿±ê
+    //éœ€è¦å•ä½“æ•Œäººä½œä¸ºç›®æ ‡
     SingleEnemy,
-    //Íæ¼Ò×ÔÉí
+    //ç©å®¶è‡ªèº«
     MyPlayer
 }
 
-//¿¨ÅÆµÄÓÃÍ¾
+//å¡ç‰Œçš„ç”¨é€”
 public enum CardUseType
 {
-    //ÆÕÍ¨¿¨ÅÆ
+    //æ™®é€šå¡ç‰Œ
     NormalCard,
-    //·û¿¨
+    //ç¬¦å¡
     SpellCard,
-    //½öÓÃÓÚÕ¹Ê¾µÄ¿¨ÅÆ
+    //ä»…ç”¨äºå±•ç¤ºçš„å¡ç‰Œ
     OnlyDisplayCard,
-    //ÓÃÓÚÑ¡ÔñµÄ¿¨ÅÆ
+    //ç”¨äºé€‰æ‹©çš„å¡ç‰Œ
     ChooseCard
 }
 public class CardEffectData
 {
-    //Ğ§¹ûID
+    //æ•ˆæœID
     private int effectID;
-    //Ğ§¹ûÃèÊö
+    
+    //æ•ˆæœæè¿°
     private string effectDes;
-    //Ğ§¹ûÖµ
+    //æ•ˆæœå€¼
     private int effectValue;
     /// <summary>
-    /// ÊôĞÔ
+    /// å±æ€§
     /// </summary>
     public int EffectID => effectID;
     public int EffectValue => effectValue;
@@ -74,7 +76,7 @@ public class CardEffectData
         effectDes = ReadCardEffectData("EffectDes", id);
     }
 
-    //¸ù¾İcfgÊı¾İ±í¶ÁÈ¡¿¨ÅÆĞ§¹ûÊı¾İ
+    //æ ¹æ®cfgæ•°æ®è¡¨è¯»å–å¡ç‰Œæ•ˆæœæ•°æ®
     private string ReadCardEffectData(string key, int id)
     {
         string data = DataController.Instance.ReadCfg(key, id, DataController.Instance.dicCardEffect);
@@ -82,36 +84,36 @@ public class CardEffectData
     }
 }
 
-//¿¨ÅÆÊı¾İÀà
+//å¡ç‰Œæ•°æ®ç±»
 public class CardData
 {
-    //¿¨ÅÆID
+    //å¡ç‰ŒID
     private int cardID;
-    //¿¨ÅÆÃû³Æ
+    //å¡ç‰Œåç§°
     private string cardName;
-    //¿¨Í¼Â·¾¶
+    //å¡å›¾è·¯å¾„
     private string cardImgRes;
-    //¿¨ÅÆ·ÑÓÃ
+    //å¡ç‰Œè´¹ç”¨
     private int cardCost;
-    //¿¨ÅÆÃèÊö
+    //å¡ç‰Œæè¿°
     private string cardDes;
-    //¿¨ÅÆÀàĞÍ
+    //å¡ç‰Œç±»å‹
     private CardType cardType;
-    //¿¨ÅÆÏ¡ÓĞ¶È
+    //å¡ç‰Œç¨€æœ‰åº¦
     private CardRare cardRare;
 
-    //¿¨ÅÆÄ¿±ê
+    //å¡ç‰Œç›®æ ‡
     private CardTarget cardTarget;
-    //¿¨ÅÆÓÃÍ¾
+    //å¡ç‰Œç”¨é€”
     private CardUseType cardUseType;
 
-    //¿¨ÅÆĞ§¹û×Öµä<ID,¿¨ÅÆĞ§¹û>
+    //å¡ç‰Œæ•ˆæœå­—å…¸<ID,å¡ç‰Œæ•ˆæœ>
     private Dictionary<int, CardEffectData> cardEffectDic=new Dictionary<int, CardEffectData>();
 
-    //¿¨ÅÆÊı¾İÊÇ·ñÓĞ±»ĞŞ¸Ä¹ı
+    //å¡ç‰Œæ•°æ®æ˜¯å¦æœ‰è¢«ä¿®æ”¹è¿‡
     private bool hasModified=false;
 
-    ///ÊôĞÔ
+    ///å±æ€§
     public int CardID => cardID;
 
     public string CardName => cardName;
@@ -133,9 +135,9 @@ public class CardData
     public Dictionary<int, CardEffectData> CardEffectDic => cardEffectDic;
 
     public bool HasModified => hasModified;
-    //¹¹Ôìº¯Êı
-    public CardData(int cardID=1001, string cardName = "Õ¶»÷", string cardImgRes= "Image/Card/CardImg/Õ¶»÷", int cardCost=1,
-        string cardDes = "Ôì³É6µãÉËº¦", CardType cardType = CardType.TiShu, CardRare cardRare = CardRare.Normal, CardTarget cardTarget = CardTarget.SingleEnemy, 
+    //æ„é€ å‡½æ•°
+    public CardData(int cardID=1001, string cardName = "æ–©å‡»", string cardImgRes= "Image/Card/CardImg/æ–©å‡»", int cardCost=1,
+        string cardDes = "é€ æˆ6ç‚¹ä¼¤å®³", CardType cardType = CardType.TiShu, CardRare cardRare = CardRare.Normal, CardTarget cardTarget = CardTarget.SingleEnemy, 
         CardUseType cardUseType=CardUseType.NormalCard)
     {
         this.cardID = cardID;
@@ -160,10 +162,10 @@ public class CardData
         tempStr = ReadCfgCardData("Type", cardID);
         switch (tempStr)
         {
-            case "ÌåÊõ":
+            case "ä½“æœ¯":
                 cardType = CardType.TiShu;
                 break;
-            case "·ÀÓù":
+            case "é˜²å¾¡":
                 cardType = CardType.FangYu;
                 break;
             default:
@@ -173,7 +175,7 @@ public class CardData
         tempStr= ReadCfgCardData("Rare", cardID);
         switch (tempStr)
         {
-            case "ÆÕÍ¨":
+            case "æ™®é€š":
                 cardRare = CardRare.Normal;
                 break;
             default:
@@ -183,10 +185,10 @@ public class CardData
         tempStr = ReadCfgCardData("Target", cardID);
         switch (tempStr)
         {
-            case "µ¥ÌåµĞÈË":
+            case "å•ä½“æ•Œäºº":
                 cardTarget = CardTarget.SingleEnemy;
                 break;
-            case "Íæ¼Ò":
+            case "ç©å®¶":
                 cardTarget = cardTarget = CardTarget.MyPlayer;
                 break;
             default:
@@ -213,7 +215,7 @@ public class CardData
             cardDes += effectDes;
         }
     }
-    //¿ËÂ¡·½·¨
+    //å…‹éš†æ–¹æ³•
     public CardData(CardData data)
     {
         hasModified = false;

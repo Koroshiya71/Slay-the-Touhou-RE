@@ -15,10 +15,10 @@ public class BattleUI : BaseUI
         text_Eng = GameTool.GetTheChildComponent<Text>(gameObject, "Text_Eng");
         btn_TurnEnd= GameTool.GetTheChildComponent<Button>(gameObject, "Btn_TurnEnd");
         text_TurnChange = GameTool.GetTheChildComponent<Text>(gameObject, "Text_TurnStart");
-        //Ìí¼Ó»Øµ÷
+        //æ·»åŠ å›è°ƒ
         btn_TurnEnd.onClick.AddListener(BattleManager.Instance.OnTurnEndButtonDown);
 
-        //È¡Ïû»ØºÏ¿ªÊ¼ÎÄ±¾µÄÏÔÊ¾
+        //å–æ¶ˆå›åˆå¼€å§‹æ–‡æœ¬çš„æ˜¾ç¤º
         text_TurnChange.enabled = false;
     }
 
@@ -30,7 +30,7 @@ public class BattleUI : BaseUI
     }
 
 
-    // ÏÔÊ¾ºÍÒş²Ø»ØºÏ¿ªÊ¼ÎÄ±¾
+    // æ˜¾ç¤ºå’Œéšè—å›åˆå¼€å§‹æ–‡æœ¬
     private void ShowTurnStartTxt()
     {
         text_TurnChange.enabled = true;
@@ -41,7 +41,7 @@ public class BattleUI : BaseUI
     {
         text_TurnChange.enabled = false;
     }
-    //Ìí¼ÓÊÂ¼ş¼àÌı
+    //æ·»åŠ äº‹ä»¶ç›‘å¬
     public override void AddMessageListener()
     {
         EventDispatcher.AddListener(E_MessageType.UseCard, UpdateUI);
@@ -49,7 +49,7 @@ public class BattleUI : BaseUI
         EventDispatcher.AddListener(E_MessageType.TurnStart, delegate
         {
             ShowTurnStartTxt();
-            text_TurnChange.text = "Íæ¼Ò»ØºÏ";
+            text_TurnChange.text = "ç©å®¶å›åˆ";
             UpdateUI();
             ActiveTurnEndBtn(true);
             Invoke(nameof(HideTurnStartTxt),0.5f);
@@ -58,18 +58,18 @@ public class BattleUI : BaseUI
         EventDispatcher.AddListener(E_MessageType.TurnEnd, delegate
         {
             ShowTurnStartTxt();
-            text_TurnChange.text = "µĞÈË»ØºÏ";
+            text_TurnChange.text = "æ•Œäººå›åˆ";
             Invoke(nameof(HideTurnStartTxt), 0.5f);
             ActiveTurnEndBtn(false);
         });
     }
-    //ÆôÓÃ/½ûÓÃ»ØºÏ½áÊø°´Å¥
+    //å¯ç”¨/ç¦ç”¨å›åˆç»“æŸæŒ‰é’®
     public void ActiveTurnEndBtn(bool active)
     {
         btn_TurnEnd.interactable = active;
     }
 
-    //¸üĞÂÕ½¶·UI
+    //æ›´æ–°æˆ˜æ–—UI
     public void UpdateUI()
     {
         text_Eng.text = BattleManager.Instance.CurrentEnergy + "/" + BattleManager.Instance.MaxEnergy;

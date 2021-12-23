@@ -11,69 +11,69 @@ using Random = UnityEngine.Random;
 public class Enemy : BaseBattleUnit
 {
     /// <summary>
-    /// »ù±¾Êı¾İºÍUI
+    /// åŸºæœ¬æ•°æ®å’ŒUI
     /// </summary>
-    //µĞÈËÊı¾İ
+    //æ•Œäººæ•°æ®
     public EnemyData enemyData;
 
-    //µĞÈËÍ¼Æ¬
+    //æ•Œäººå›¾ç‰‡
     protected Image img_EnemyOutLook;
 
-    //µĞÈËÃû³ÆÎÄ±¾
+    //æ•Œäººåç§°æ–‡æœ¬
     protected Text text_EnemyName;
 
     /// <summary>
-    /// µĞÈËĞĞ¶¯Ïà¹Ø
+    /// æ•Œäººè¡ŒåŠ¨ç›¸å…³
     /// </summary>
-    //µĞÈËÒâÍ¼Image
+    //æ•Œäººæ„å›¾Image
     protected Image img_EnemyAction;
 
-    //µĞÈËÒâÍ¼ÃèÊöÎÄ±¾
+    //æ•Œäººæ„å›¾æè¿°æ–‡æœ¬
     protected Text text_ActionDes;
 
-    //µĞÈËĞĞ¶¯ÊıÖµÎÄ±¾
+    //æ•Œäººè¡ŒåŠ¨æ•°å€¼æ–‡æœ¬
     protected Text text_ActionValue;
 
-    //µ±Ç°¼´½«Ö´ĞĞµÄĞĞ¶¯
+    //å½“å‰å³å°†æ‰§è¡Œçš„è¡ŒåŠ¨
     protected ActionData currentAction;
 
-    //ÆôÓÃµÄĞĞÎªÄ£Ê½
+    //å¯ç”¨çš„è¡Œä¸ºæ¨¡å¼
     protected string activeActionMode;
 
-    //µ±Ç°ÕıÔÚÖ´ĞĞĞĞÎªÁĞ±íÖĞµÄµÚ¼¸¸öĞĞÎª
+    //å½“å‰æ­£åœ¨æ‰§è¡Œè¡Œä¸ºåˆ—è¡¨ä¸­çš„ç¬¬å‡ ä¸ªè¡Œä¸º
     protected int currentActionNo;
 
-    #region ³õÊ¼»¯
+    #region åˆå§‹åŒ–
 
-    //³õÊ¼»¯Êı¾İ
+    //åˆå§‹åŒ–æ•°æ®
     protected override void InitDataOnAwake(int id)
     {
         enemyData = new EnemyData(id);
         maxHp = enemyData.MAXHp;
         currentHp = maxHp;
 
-        //´ÓĞĞ¶¯Ä£Ê½ÁĞ±íÖĞËæ»úÑ¡ÔñÒ»¸öĞĞ¶¯Ä£Ê½
+        //ä»è¡ŒåŠ¨æ¨¡å¼åˆ—è¡¨ä¸­éšæœºé€‰æ‹©ä¸€ä¸ªè¡ŒåŠ¨æ¨¡å¼
         activeActionMode = enemyData.ActionModeList[Random.Range(0, enemyData.ActionModeList.Count)];
         currentActionNo = 0;
-        //»ñÈ¡ĞĞ¶¯ÁĞ±íÖĞµÄµÚÒ»¸öĞĞÎª
+        //è·å–è¡ŒåŠ¨åˆ—è¡¨ä¸­çš„ç¬¬ä¸€ä¸ªè¡Œä¸º
         currentAction = enemyData.EnemyActionDic
             .ElementAt(Convert.ToInt32(activeActionMode[currentActionNo].ToString()) - 1).Value;
         currentActionNo++;
     }
 
-    //³õÊ¼»¯½çÃæ
+    //åˆå§‹åŒ–ç•Œé¢
     protected override void InitUIOnAwake()
     {
         base.InitUIOnAwake();
 
-        //»ñÈ¡µĞÈËÍ¼Æ¬ºÍÃû³ÆÎÄ±¾²¢¸³Öµ
+        //è·å–æ•Œäººå›¾ç‰‡å’Œåç§°æ–‡æœ¬å¹¶èµ‹å€¼
         img_EnemyOutLook = GameTool.GetTheChildComponent<Image>(gameObject, "Enemy_OutLook");
         img_EnemyOutLook.sprite = ResourcesManager.Instance.LoadResources<Sprite>(enemyData.ResourcePath);
 
         text_EnemyName = GameTool.GetTheChildComponent<Text>(gameObject, "Text_Name");
         text_EnemyName.text = enemyData.EnemyName;
 
-        //»ñÈ¡µĞÈËĞĞ¶¯ÌáÊ¾Í¼Æ¬ºÍÎÄ±¾
+        //è·å–æ•Œäººè¡ŒåŠ¨æç¤ºå›¾ç‰‡å’Œæ–‡æœ¬
         img_EnemyAction = GameTool.GetTheChildComponent<Image>(gameObject, "Img_Action");
 
         text_ActionDes = GameTool.GetTheChildComponent<Text>(gameObject, "Text_ActionDes");
@@ -88,6 +88,11 @@ public class Enemy : BaseBattleUnit
                 text_ActionValue.text = currentAction.ActionValue.ToString();
                 text_ActionValue.enabled = true;
                 break;
+            case ActionType.Buff:
+                img_EnemyAction.sprite =
+                        ResourcesManager.Instance.LoadResources<Sprite>("Image/" + "UIImage/" + "EnemyAction/" + "Buff");
+                text_ActionValue.enabled = false;
+                break;
         }
 
         text_ActionDes.text = currentAction.ActionDes.Replace("value", currentAction.ActionValue.ToString());
@@ -97,11 +102,11 @@ public class Enemy : BaseBattleUnit
     #endregion
 
 
-    #region ´¥·¢Æ÷ÊÂ¼ş
+    #region è§¦å‘å™¨äº‹ä»¶
 
     protected override void OnTriggerEnter2D(Collider2D other)
     {
-        //¿¨ÅÆÑ¡ÖĞÊ±ÆôÓÃÑ¡ÔñÌØĞ§
+        //å¡ç‰Œé€‰ä¸­æ—¶å¯ç”¨é€‰æ‹©ç‰¹æ•ˆ
         if (other.CompareTag("HandCard") &&
             HandCardManager.Instance.selectedCard.mCardData.CardTarget == CardTarget.SingleEnemy)
         {
@@ -111,7 +116,7 @@ public class Enemy : BaseBattleUnit
 
     protected override void OnTriggerStay2D(Collider2D other)
     {
-        //¿¨ÅÆÑ¡ÖĞÊ±ÆôÓÃÑ¡ÔñÌØĞ§
+        //å¡ç‰Œé€‰ä¸­æ—¶å¯ç”¨é€‰æ‹©ç‰¹æ•ˆ
         if (other.CompareTag("HandCard") &&
             HandCardManager.Instance.selectedCard.mCardData.CardTarget == CardTarget.SingleEnemy)
         {
@@ -121,7 +126,7 @@ public class Enemy : BaseBattleUnit
 
     protected override void OnTriggerExit2D(Collider2D other)
     {
-        //¿¨ÅÆÀë¿ªÊ±½ûÓÃÑ¡ÔñÌØĞ§
+        //å¡ç‰Œç¦»å¼€æ—¶ç¦ç”¨é€‰æ‹©ç‰¹æ•ˆ
 
         if (other.CompareTag("HandCard"))
         {
@@ -132,7 +137,7 @@ public class Enemy : BaseBattleUnit
     #endregion
 
 
-    #region UI¹ÜÀí
+    #region UIç®¡ç†
 
     protected void UpdateUIState()
     {
@@ -146,14 +151,14 @@ public class Enemy : BaseBattleUnit
         }
     }
 
-    //ÏÔÊ¾ĞĞ¶¯ÃèÊö
+    //æ˜¾ç¤ºè¡ŒåŠ¨æè¿°
     public void ShowActionDes()
     {
         text_ActionDes.text = currentAction.ActionDes.Replace("value", currentAction.ActionValue.ToString());
         text_ActionDes.enabled = true;
     }
 
-    //Òş²ØĞĞ¶¯ÃèÊö
+    //éšè—è¡ŒåŠ¨æè¿°
     public void HideActionDes()
     {
         text_ActionDes.enabled = false;
@@ -162,26 +167,26 @@ public class Enemy : BaseBattleUnit
     #endregion
 
 
-    #region ĞĞ¶¯ºÍ×´Ì¬¹ÜÀíÏà¹Ø
-    //Ö´ĞĞĞĞ¶¯
+    #region è¡ŒåŠ¨å’ŒçŠ¶æ€ç®¡ç†ç›¸å…³
+    //æ‰§è¡Œè¡ŒåŠ¨
     public void TakeAction()
     {
         BattleManager.Instance.TriggerActionEffect(currentAction);
     }
-    //¸üĞÂĞĞ¶¯
+    //æ›´æ–°è¡ŒåŠ¨
     public void UpdateAction()
     {
 
     }
-    //ËÀÍö·½·¨
+    //æ­»äº¡æ–¹æ³•
     public override void Die()
     {
-        //ÒÆ³ı¶ÓÁĞ²¢Ïú»Ù
+        //ç§»é™¤é˜Ÿåˆ—å¹¶é”€æ¯
         BattleManager.Instance.inBattleEnemyList.Remove(this);
         Destroy(this.gameObject);
 
-        //Èç¹û¸ÃµĞÈËËÀÍöºóµĞÈËÊıÁ¿Îª0£¬´¥·¢Õ½¶·½áÊø·½·¨
-        if (BattleManager.Instance.inBattleEnemyList.Count==0)
+        //å¦‚æœè¯¥æ•Œäººæ­»äº¡åæ•Œäººæ•°é‡ä¸º0ï¼Œè§¦å‘æˆ˜æ–—ç»“æŸæ–¹æ³•
+        if (BattleManager.Instance.inBattleEnemyList.Count == 0)
         {
             BattleManager.Instance.BattleEnd();
         }

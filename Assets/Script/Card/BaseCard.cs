@@ -8,38 +8,38 @@ using UnityEngine.UI;
 
 public class BaseCard : MonoBehaviour
 {
-    //¿¨ÅÆÊı¾İ
+    //å¡ç‰Œæ•°æ®
     protected CardData cardData=new CardData();
     public CardData mCardData => cardData;
-    //¿¨ÅÆID
+    //å¡ç‰ŒID
     public int cardID=1001;
-    //¿¨Í¼
+    //å¡å›¾
     protected Image img_Main;
-    //¿¨ÅÆÃû³Æ
+    //å¡ç‰Œåç§°
     protected Text text_CardName;
-    //¿¨ÅÆÍâ±ß¿ò
+    //å¡ç‰Œå¤–è¾¹æ¡†
     protected Image img_OutLine;
     
-    //¿¨ÅÆĞ§¹ûÃèÊöÎÄ±¾
+    //å¡ç‰Œæ•ˆæœæè¿°æ–‡æœ¬
     protected Text text_CardEffect;
-    //ÊÂ¼ş´¥·¢Æ÷
+    //äº‹ä»¶è§¦å‘å™¨
     protected EventTriggerListener eventListener;
-    //¿¨ÅÆ¶¯»­¿ØÖÆÆ÷
+    //å¡ç‰ŒåŠ¨ç”»æ§åˆ¶å™¨
     protected Animator cardAnimator;
 
-    //ÓÃÓÚ¿ØÖÆÊÂ¼ş½»»¥µÄCanvasGroup
+    //ç”¨äºæ§åˆ¶äº‹ä»¶äº¤äº’çš„CanvasGroup
     protected CanvasGroup canvasGroup;
 
-    //³õÊ¼»¯¿¨ÅÆ
+    //åˆå§‹åŒ–å¡ç‰Œ
     public virtual void InitCard(int cardID)
     {
         cardData = new CardData(cardID);
         this.cardID = cardID;
-        //»ñÈ¡¸÷ÖÖUI¡¢½Å±¾¡¢×é¼ş
+        //è·å–å„ç§UIã€è„šæœ¬ã€ç»„ä»¶
         canvasGroup = GetComponent<CanvasGroup>();
         img_Main = GameTool.GetTheChildComponent<Image>(gameObject, "Card_Main");
 
-        //Èç¹û°üº¬ÏÂ»®Ïß£¬ÔòËµÃ÷SpriteÀ´×ÔÍ¼±ê×é×é
+        //å¦‚æœåŒ…å«ä¸‹åˆ’çº¿ï¼Œåˆ™è¯´æ˜Spriteæ¥è‡ªå›¾æ ‡ç»„ç»„
         if (cardData.CardImgRes.Contains("_"))
         {
             string path = cardData.CardImgRes.Split('_')[0];
@@ -68,23 +68,23 @@ public class BaseCard : MonoBehaviour
                 {
                     case CardType.TiShu:
                         GameTool.GetTheChildComponent<Text>(gameObject, "Text_CardType").
-                            text = "ÑıÃÎ~" +"ÌåÊõ" ;
+                            text = "å¦–æ¢¦~" +"ä½“æœ¯" ;
                         break;
                     case CardType.JiNeng:
                         GameTool.GetTheChildComponent<Text>(gameObject, "Text_CardType").
-                            text = "ÑıÃÎ~" + "¼¼ÄÜ";
+                            text = "å¦–æ¢¦~" + "æŠ€èƒ½";
                         break;
                     case CardType.FaShu:
                         GameTool.GetTheChildComponent<Text>(gameObject, "Text_CardType").
-                            text = "ÑıÃÎ~" + "·¨Êõ";
+                            text = "å¦–æ¢¦~" + "æ³•æœ¯";
                         break;
                     case CardType.FangYu:
                         GameTool.GetTheChildComponent<Text>(gameObject, "Text_CardType").
-                            text = "ÑıÃÎ~" + "·ÀÓù";
+                            text = "å¦–æ¢¦~" + "é˜²å¾¡";
                         break;
                     case CardType.DanMu:
                         GameTool.GetTheChildComponent<Text>(gameObject, "Text_CardType").
-                            text = "ÑıÃÎ~" + "µ¯Ä»";
+                            text = "å¦–æ¢¦~" + "å¼¹å¹•";
                         break;
                 }
                 
@@ -92,13 +92,13 @@ public class BaseCard : MonoBehaviour
         }
     }
 
-    //³õÊ¼»¯¿¨ÅÆ
+    //åˆå§‹åŒ–å¡ç‰Œ
     public virtual void InitCard(CardData data)
     {
         cardData = new CardData(data);
 
         this.cardID = data.CardID;
-        //»ñÈ¡¸÷ÖÖUI¡¢½Å±¾¡¢×é¼ş
+        //è·å–å„ç§UIã€è„šæœ¬ã€ç»„ä»¶
         canvasGroup = GetComponent<CanvasGroup>();
         img_Main = GameTool.GetTheChildComponent<Image>(gameObject, "Card_Main");
         img_Main.sprite = ResourcesManager.Instance.LoadResources<Sprite>(cardData.CardImgRes);
@@ -118,36 +118,36 @@ public class BaseCard : MonoBehaviour
                 {
                     case CardType.TiShu:
                         GameTool.GetTheChildComponent<Text>(gameObject, "Text_CardType").
-                            text = "ÑıÃÎ~" + "ÌåÊõ";
+                            text = "å¦–æ¢¦~" + "ä½“æœ¯";
                         break;
                     case CardType.JiNeng:
                         GameTool.GetTheChildComponent<Text>(gameObject, "Text_CardType").
-                            text = "ÑıÃÎ~" + "¼¼ÄÜ";
+                            text = "å¦–æ¢¦~" + "æŠ€èƒ½";
                         break;
                     case CardType.FaShu:
                         GameTool.GetTheChildComponent<Text>(gameObject, "Text_CardType").
-                            text = "ÑıÃÎ~" + "·¨Êõ";
+                            text = "å¦–æ¢¦~" + "æ³•æœ¯";
                         break;
                     case CardType.FangYu:
                         GameTool.GetTheChildComponent<Text>(gameObject, "Text_CardType").
-                            text = "ÑıÃÎ~" + "·ÀÓù";
+                            text = "å¦–æ¢¦~" + "é˜²å¾¡";
                         break;
                     case CardType.DanMu:
                         GameTool.GetTheChildComponent<Text>(gameObject, "Text_CardType").
-                            text = "ÑıÃÎ~" + "µ¯Ä»";
+                            text = "å¦–æ¢¦~" + "å¼¹å¹•";
                         break;
                 }
 
             }
         }
     }
-    //»ñÈ¡¿¨ÅÆÍâ¿ò
+    //è·å–å¡ç‰Œå¤–æ¡†
     protected virtual Sprite GetCardOutLine()
     {
         return null;
     }
 
-    //³õÊ¼»¯ÊÂ¼ş
+    //åˆå§‹åŒ–äº‹ä»¶
     protected virtual void InitEvent()
     {
         eventListener=EventTriggerListener.Get(GameTool.FindTheChild(gameObject,"EventTrigger").gameObject);
@@ -177,27 +177,27 @@ public class BaseCard : MonoBehaviour
         InitEvent();
     }
 
-    //µ±Êó±êÑ¡ÖĞ¿¨ÅÆÊ±µÄ»Øµ÷
+    //å½“é¼ æ ‡é€‰ä¸­å¡ç‰Œæ—¶çš„å›è°ƒ
     protected virtual void OnEnter()
     {
         
     }
-    //µ±Êó±êÀë¿ª¿¨ÅÆÊ±µÄ»Øµ÷
+    //å½“é¼ æ ‡ç¦»å¼€å¡ç‰Œæ—¶çš„å›è°ƒ
     protected virtual void OnExit()
     {
         
     }
-    //µ±Êó±êÌ§ÆğÊ±µÄ»Øµ÷
+    //å½“é¼ æ ‡æŠ¬èµ·æ—¶çš„å›è°ƒ
     protected virtual void OnUp()
     {
        
     }
-    //µ±Êó±êµã»÷Ê±µÄ»Øµ÷
+    //å½“é¼ æ ‡ç‚¹å‡»æ—¶çš„å›è°ƒ
     protected virtual void OnDown()
     {
 
     }
-    //µ±Êó±êĞü¸¡Ê±µÄ»Øµ÷
+    //å½“é¼ æ ‡æ‚¬æµ®æ—¶çš„å›è°ƒ
     protected virtual void OnSelect()
     {
 

@@ -4,7 +4,7 @@ using UnityEngine.EventSystems;
 
     public class EventTriggerListener :UnityEngine.EventSystems.EventTrigger 
     {
-        //¶¨Òå³ö·¢ÊÂ¼şÖĞ°ó¶¨µÄÎ¯ÍĞ
+        //å®šä¹‰å‡ºå‘äº‹ä»¶ä¸­ç»‘å®šçš„å§”æ‰˜
         public delegate void VoidDelegate(GameObject go);
         public VoidDelegate onClick;
         public VoidDelegate onDown;
@@ -18,11 +18,11 @@ using UnityEngine.EventSystems;
 
 
         /// <summary>
-        /// µÃµ½¡°¼àÌıÆ÷¡±×é¼ş
+        /// å¾—åˆ°â€œç›‘å¬å™¨â€ç»„ä»¶
         /// </summary>
-        /// <param name="go">¼àÌıµÄÓÎÏ·¶ÔÏó</param>
+        /// <param name="go">ç›‘å¬çš„æ¸¸æˆå¯¹è±¡</param>
         /// <returns>
-        /// ¼àÌıÆ÷
+        /// ç›‘å¬å™¨
         /// </returns>
         public static EventTriggerListener Get(GameObject go)
         {
