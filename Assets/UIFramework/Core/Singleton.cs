@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 //单例模式(多个类共用一个实例)
 //不继承于MonoBehaviour

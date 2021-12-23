@@ -2,31 +2,30 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using GameCore;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Serialization;
 
 public class HandCardManager : UnitySingleton<HandCardManager>
 {
-    //ÊÖÅÆ¶ÔÏó¸¸ÎïÌå
+    //æ‰‹ç‰Œå¯¹è±¡çˆ¶ç‰©ä½“
     private GameObject handCardGo;
-    //µ±Ç°ÊÖÅÆÊıÁ¿
+    //å½“å‰æ‰‹ç‰Œæ•°é‡
     private int currentCardNum=0;
-    //ÊÖÅÆÉÏÏŞ
+    //æ‰‹ç‰Œä¸Šé™
     public int maxCardNum = 10;
-    //¿¨ÅÆÔ¤ÖÆÌå
+    //å¡ç‰Œé¢„åˆ¶ä½“
     private GameObject handCardPrefab;
-    //ÊÖÅÆÓÎÏ·ÎïÌåÁĞ±í
+    //æ‰‹ç‰Œæ¸¸æˆç‰©ä½“åˆ—è¡¨
     public List<GameObject> handCardGoList = new List<GameObject>();
-    //ÊÖÅÆ¶ÔÏóÁĞ±í
-    //Ñ¡ÖĞµÄ¿¨ÅÆ¶ÔÏó
+    //æ‰‹ç‰Œå¯¹è±¡åˆ—è¡¨
+    //é€‰ä¸­çš„å¡ç‰Œå¯¹è±¡
     public HandCard selectedCard=null;
     private void Awake()
     {
         EventDispatcher.AddListener(E_MessageType.BattleStart,InitHandCard);
     }
 
-    //³õÊ¼»¯ÊÖÅÆ¹ÜÀíÀà¶ÔÏó
+    //åˆå§‹åŒ–æ‰‹ç‰Œç®¡ç†ç±»å¯¹è±¡
     private void InitHandCard()
     {
         currentCardNum = 0;
@@ -34,10 +33,10 @@ public class HandCardManager : UnitySingleton<HandCardManager>
         handCardPrefab = ResourcesManager.Instance.LoadResources<GameObject>("Prefabs/Card/HandCard");
     }
 
-    //¸ù¾İ¿¨ÅÆID»ñÈ¡¿¨ÅÆµ½ÊÖÅÆ
+    //æ ¹æ®å¡ç‰ŒIDè·å–å¡ç‰Œåˆ°æ‰‹ç‰Œ
     public void GetCardByID(int cardID)
     {
-        //Èç¹ûÊÖÅÆÊı´óÓÚµÈÓÚÊÖÅÆÉÏÏŞÔòÌø³ö
+        //å¦‚æœæ‰‹ç‰Œæ•°å¤§äºç­‰äºæ‰‹ç‰Œä¸Šé™åˆ™è·³å‡º
         if (currentCardNum>=maxCardNum)
         {
             return;
@@ -54,10 +53,10 @@ public class HandCardManager : UnitySingleton<HandCardManager>
             handCard.GetComponent<HandCard>().SaveOriginalPos();
         }
     }
-    //¸ù¾İ¿¨ÅÆÊı¾İ»ñÈ¡¿¨ÅÆµ½ÊÖÅÆ
+    //æ ¹æ®å¡ç‰Œæ•°æ®è·å–å¡ç‰Œåˆ°æ‰‹ç‰Œ
     public void GetCardByData(CardData data)
     {
-        //Èç¹ûÊÖÅÆÊı´óÓÚµÈÓÚÊÖÅÆÉÏÏŞÔòÌø³ö
+        //å¦‚æœæ‰‹ç‰Œæ•°å¤§äºç­‰äºæ‰‹ç‰Œä¸Šé™åˆ™è·³å‡º
         if (currentCardNum >= maxCardNum)
         {
             return;
@@ -74,32 +73,32 @@ public class HandCardManager : UnitySingleton<HandCardManager>
             handCard.GetComponent<HandCard>().SaveOriginalPos();
         }
     }
-    //¶ªÆúËùÓĞÊÖÅÆ
+    //ä¸¢å¼ƒæ‰€æœ‰æ‰‹ç‰Œ
     public void DisAllCard()
     {
         for (int i = 0; i < handCardGoList.Count; i++)
         {
             var handCard = handCardGoList[i];
-            //½«¿¨ÅÆÊı¾İ¼ÓÈëÆúÅÆ¶Ñ
+            //å°†å¡ç‰Œæ•°æ®åŠ å…¥å¼ƒç‰Œå †
             DeskManager.Instance.disCardDeskList.Add(handCard.GetComponent<HandCard>().mCardData);
             Destroy(handCard);
         }
-        //Çå¿ÕÊÖÅÆÁĞ±í
+        //æ¸…ç©ºæ‰‹ç‰Œåˆ—è¡¨
         handCardGoList = new List<GameObject>();
         currentCardNum = 0;
     }
-    //µ÷Õû¿¨ÅÆÎ»ÖÃºÍĞı×ª
+    //è°ƒæ•´å¡ç‰Œä½ç½®å’Œæ—‹è½¬
     public void MoveAndRotateCard()
     {
-        //µÚÒ»ÕÅÅÆµÄX×ø±êºÍĞı×ª½Ç
+        //ç¬¬ä¸€å¼ ç‰Œçš„Xåæ ‡å’Œæ—‹è½¬è§’
         float firstX = -75 * (currentCardNum - 1);
-        //×ÜĞı×ª½Ç
+        //æ€»æ—‹è½¬è§’
         float totalRotate = (currentCardNum) * 1;
-        //Ğı×ªÆ«ÒÆÁ¿
+        //æ—‹è½¬åç§»é‡
         float offset = 0;
-        //ÖĞÎ»µØÖ·
+        //ä¸­ä½åœ°å€
         int midIndex = currentCardNum / 2;
-        //y×ø±êÆ«ÒÆÁ¿
+        //yåæ ‡åç§»é‡
         for (int i = 0; i < currentCardNum; i++)
         {
             float yPosOffset = 0;
@@ -169,7 +168,7 @@ public class HandCardManager : UnitySingleton<HandCardManager>
         }
     }
     
-    //ÒÆ³ıÊÖÅÆ
+    //ç§»é™¤æ‰‹ç‰Œ
     public void RemoveCard(GameObject cardGo)
     {
         handCardGoList.Remove(cardGo);

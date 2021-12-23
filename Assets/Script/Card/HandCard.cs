@@ -5,74 +5,73 @@ using System.Security.Cryptography;
 using UnityEngine;
 using UnityEngine.UI;
 using GameCore;
-using Unity.VisualScripting;
 
 public class HandCard : BaseCard
 {
     
-    //Ê¹ÓÃ¿¨ÅÆÊ±µÄÌØĞ§
+    //ä½¿ç”¨å¡ç‰Œæ—¶çš„ç‰¹æ•ˆ
     private GameObject useEffect;
-    //ÊÖÅÆ¹ÜÀíÆ÷µÄÊÖÅÆÁĞ±í
+    //æ‰‹ç‰Œç®¡ç†å™¨çš„æ‰‹ç‰Œåˆ—è¡¨
     private List<GameObject> handCardList;
-    //ÊÇ·ñÕıÔÚ±»ÍÏ×§
+    //æ˜¯å¦æ­£åœ¨è¢«æ‹–æ‹½
     private bool isDragging;
     public bool IsDragging => isDragging;
-    //³õÊ¼¿¨ÅÆÎ»ÖÃ
+    //åˆå§‹å¡ç‰Œä½ç½®
     private Vector3 originPos;
     public Vector3 OriginPos => originPos;
 
-    //³õÊ¼¿¨ÅÆĞı×ª
+    //åˆå§‹å¡ç‰Œæ—‹è½¬
     private Vector3 originRot;
 
-    //³õÊ¼»¯¿¨ÅÆ£¬¼Ì³Ğ»ù±¾¿¨ÅÆÀàµ«Ìí¼ÓÒ»Ğ©¶îÍâµÄ³õÊ¼»¯ÄÚÈİ
+    //åˆå§‹åŒ–å¡ç‰Œï¼Œç»§æ‰¿åŸºæœ¬å¡ç‰Œç±»ä½†æ·»åŠ ä¸€äº›é¢å¤–çš„åˆå§‹åŒ–å†…å®¹
     public override void InitCard(int cardID)
     {
         base.InitCard(cardID);
-        //»ñÈ¡ÊÖÅÆÁĞ±í
+        //è·å–æ‰‹ç‰Œåˆ—è¡¨
         handCardList = HandCardManager.Instance.handCardGoList;
-        //»ñÈ¡ÌØĞ§ÓÎÏ·ÎïÌå
+        //è·å–ç‰¹æ•ˆæ¸¸æˆç‰©ä½“
         useEffect = GameTool.FindTheChild(gameObject, "UseEffect").gameObject;
         useEffect.SetActive(false);
         isDragging = false;
     }
 
-    //ÊÇ·ñÕı±»Ñ¡ÖĞ
+    //æ˜¯å¦æ­£è¢«é€‰ä¸­
     private bool isSelecting;
-    //»ñÈ¡¿¨ÅÆÍâ¿ò
+    //è·å–å¡ç‰Œå¤–æ¡†
     protected override Sprite GetCardOutLine()
     {
         string outLineName = "";
         switch (cardData.CardType)
         {
             case CardType.TiShu:
-                outLineName += "ÌåÊõ";
+                outLineName += "ä½“æœ¯";
                 break;
             default:
-                outLineName += "ÌåÊõ";
+                outLineName += "ä½“æœ¯";
                 break;
         }
 
         switch (cardData.CardRare)
         {
             case CardRare.Normal:
-                outLineName += "ÆÕÍ¨";
+                outLineName += "æ™®é€š";
                 break;
             default:
-                outLineName += "ÆÕÍ¨";
+                outLineName += "æ™®é€š";
                 break;
         }
 
         Sprite outLine = ResourcesManager.Instance.LoadResources<Sprite>("Image/Card/CardOutLine/" + outLineName);
         return outLine;
     }
-    //³õÊ¼»¯¿¨ÅÆÊÂ¼ş
+    //åˆå§‹åŒ–å¡ç‰Œäº‹ä»¶
     protected override void InitEvent()
     {
         base.InitEvent();
         
         
     }
-    //µ±Êó±ê½øÈë¿¨ÅÆÊ±µÄ»Øµ÷
+    //å½“é¼ æ ‡è¿›å…¥å¡ç‰Œæ—¶çš„å›è°ƒ
     protected override void OnEnter()
     {
         cardAnimator.SetBool("Hover",true);
@@ -84,7 +83,7 @@ public class HandCard : BaseCard
         }
     }
    
-    //µ±Êó±êÀë¿ª¿¨ÅÆÊ±µÄ»Øµ÷
+    //å½“é¼ æ ‡ç¦»å¼€å¡ç‰Œæ—¶çš„å›è°ƒ
     protected override void OnExit()
     {
         cardAnimator.SetBool("Hover", false);
@@ -96,7 +95,7 @@ public class HandCard : BaseCard
             handCardList[i].GetComponent<HandCard>().cardAnimator.SetBool("Daging", false);
         }
     }
-    //µ±Êó±êÌ§ÆğÊ±µÄ»Øµ÷
+    //å½“é¼ æ ‡æŠ¬èµ·æ—¶çš„å›è°ƒ
     protected override void OnUp()
     {
         if (isDragging)
@@ -113,7 +112,7 @@ public class HandCard : BaseCard
             transform.localEulerAngles=originRot;
         }
     }
-    //µ±Êó±êµã»÷Ê±µÄ»Øµ÷
+    //å½“é¼ æ ‡ç‚¹å‡»æ—¶çš„å›è°ƒ
     protected override void OnDown()
     {
         if (cardData.CardCost > BattleManager.Instance.CurrentEnergy )
@@ -124,18 +123,18 @@ public class HandCard : BaseCard
         isSelecting = true;
         HandCardManager.Instance.selectedCard = this;
     }
-    //¼ÇÂ¼³õÊ¼Î»ÖÃ
+    //è®°å½•åˆå§‹ä½ç½®
     public void SaveOriginalPos()
     {
         originPos = transform.localPosition;
         originRot = transform.localEulerAngles;
     }
 
-    //¼ì²éÊÇ·ñ¿ÉÒÔÊ¹ÓÃ
+    //æ£€æŸ¥æ˜¯å¦å¯ä»¥ä½¿ç”¨
     private bool CheckUsable()
     {
 
-        //Èç¹û¿¨ÅÆÎ»ÖÃÂú×ãÌõ¼şÔò¿ÉÒÔÊ¹ÓÃ
+        //å¦‚æœå¡ç‰Œä½ç½®æ»¡è¶³æ¡ä»¶åˆ™å¯ä»¥ä½¿ç”¨
         if (transform.localPosition.y>=100&&
             !(cardData.CardTarget == CardTarget.SingleEnemy && BattleManager.Instance.selectedTarget == null))
         {
@@ -146,13 +145,13 @@ public class HandCard : BaseCard
         return false;
     }
 
-    //Ê¹ÓÃ¿¨ÅÆ
+    //ä½¿ç”¨å¡ç‰Œ
     public void UseCard()
     {
         BaseBattleUnit target=null;
         foreach (var effect in cardData.CardEffectDic)
         {
-            //¸ù¾İ¿¨ÅÆµÄÄ¿±êÀàĞÍÑ¡ÔñÄ¿±ê
+            //æ ¹æ®å¡ç‰Œçš„ç›®æ ‡ç±»å‹é€‰æ‹©ç›®æ ‡
             switch (cardData.CardTarget)
             {
                 case CardTarget.MyPlayer:
@@ -168,7 +167,7 @@ public class HandCard : BaseCard
         {
             handCardList[i].GetComponent<HandCard>().cardAnimator.SetBool("Daging", false);
         }
-        //ÆúÅÆ´¦Àí
+        //å¼ƒç‰Œå¤„ç†
         DeskManager.Instance.disCardDeskList.Add(this.cardData);
         HandCardManager.Instance.RemoveCard(this.gameObject);
 
@@ -177,20 +176,20 @@ public class HandCard : BaseCard
         EventDispatcher.TriggerEvent(E_MessageType.UseCard);
     }
 
-    //È¡ÏûUIÊÂ¼ş¼ì²â
+    //å–æ¶ˆUIäº‹ä»¶æ£€æµ‹
     public void CancelUIEventListen()
     {
         canvasGroup.interactable = false;
         canvasGroup.blocksRaycasts = false;
     }
-    //¼¤»îUIÊÂ¼ş¼ì²â
+    //æ¿€æ´»UIäº‹ä»¶æ£€æµ‹
     public void ActiveUIEventListen()
     {
         canvasGroup.interactable = true;
         canvasGroup.blocksRaycasts = true;
     }
 
-    //¼ì²éÊÇ·ñ¼¤»îÊÂ¼ş¼ì²â
+    //æ£€æŸ¥æ˜¯å¦æ¿€æ´»äº‹ä»¶æ£€æµ‹
     public void CheckEventActive()
     {
         if (HandCardManager.Instance.selectedCard==null)

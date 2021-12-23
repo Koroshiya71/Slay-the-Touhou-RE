@@ -6,154 +6,156 @@ using UnityEngine;
 
 public class BattleManager : UnitySingleton<BattleManager>
 {
-    //µ±Ç°ÄÜÁ¿Öµ
-    private int currentEnergy=3;
+    //å½“å‰èƒ½é‡å€¼
+    private int currentEnergy = 3;
     public int CurrentEnergy => currentEnergy;
 
-    //ÄÜÁ¿ÉÏÏŞ
-    private int maxEnergy=3;
+    //èƒ½é‡ä¸Šé™
+    private int maxEnergy = 3;
     public int MaxEnergy => maxEnergy;
 
-    //µ±Ç°Ñ¡ÖĞµÄÄ¿±ê
+    //å½“å‰é€‰ä¸­çš„ç›®æ ‡
     public BaseBattleUnit selectedTarget;
 
-    //Ã¿»ØºÏ³é¿¨Êı
+    //æ¯å›åˆæŠ½å¡æ•°
     public int turnDrawCardNum = 5;
 
-    //Õ½¶·Êı¾İ×Ü×Öµä<id,Õ½¶·Êı¾İ>
+    //æˆ˜æ–—æ•°æ®æ€»å­—å…¸<id,æˆ˜æ–—æ•°æ®>
     public Dictionary<int, BattleData> battleDataDic = new Dictionary<int, BattleData>();
 
+    //æ˜¯å¦æ˜¯æœ¬åœºæˆ˜æ–—çš„ç¬¬ä¸€å›åˆ
+    public bool isFirstTurn = false;
     /// <summary>
-    /// µĞÈËÏà¹Ø
+    /// æ•Œäººç›¸å…³
     /// </summary>
-    //µĞÈËÔ¤ÖÆÌå
+    //æ•Œäººé¢„åˆ¶ä½“
     public GameObject enemyPrefab;
 
-    //µĞÈËÊı×é
+    //æ•Œäººæ•°ç»„
     public List<Enemy> inBattleEnemyList = new List<Enemy>();
-    //µĞÈËÎ»ÖÃÊı×é
+    //æ•Œäººä½ç½®æ•°ç»„
     public List<Vector3> enemyPosList = new List<Vector3>();
 
-    //³õÊ¼»¯Õ½¶·¹ÜÀíÆ÷
+    //åˆå§‹åŒ–æˆ˜æ–—ç®¡ç†å™¨
     public void InitBattleManager()
     {
-        //»ñÈ¡µĞÈËÔ¤ÖÆÌåºÍµĞÈË¸¸ÎïÌå
+        //è·å–æ•Œäººé¢„åˆ¶ä½“å’Œæ•Œäººçˆ¶ç‰©ä½“
         enemyPrefab = ResourcesManager.Instance.LoadResources<GameObject>("Prefabs/" + "Enemy/" + "Enemy");
-        //³õÊ¼»¯µĞÈËÎ»ÖÃÁĞ±í
-        enemyPosList= new List<Vector3>()
+        //åˆå§‹åŒ–æ•Œäººä½ç½®åˆ—è¡¨
+        enemyPosList = new List<Vector3>()
         {
             new Vector3(250,-50,0),
             new Vector3(125,-50,0),
             new Vector3(375,-50,0),
         };
-        //³õÊ¼»¯³éÅÆÊı
+        //åˆå§‹åŒ–æŠ½ç‰Œæ•°
         turnDrawCardNum = 5;
-        //³õÊ¼»¯¿¨ÅÆÄ¿±êÎª¿Õ
+        //åˆå§‹åŒ–å¡ç‰Œç›®æ ‡ä¸ºç©º
         selectedTarget = null;
-        //³õÊ¼»¯ÄÜÁ¿
+        //åˆå§‹åŒ–èƒ½é‡
         maxEnergy = 3;
         currentEnergy = maxEnergy;
 
     }
 
 
-    //³õÊ¼»¯Õ½¶·
+    //åˆå§‹åŒ–æˆ˜æ–—
     public void InitBattle(BattleData battleData)
     {
         UIManager.Instance.HideSingleUI(E_UiId.MapUI);
         UIManager.Instance.ShowUI(E_UiId.BattleUI);
 
-        //Õ½¶·UIÏÔÊ¾Ê±´¥·¢Õ½¶·¿ªÊ¼ÊÂ¼ş
+        //æˆ˜æ–—UIæ˜¾ç¤ºæ—¶è§¦å‘æˆ˜æ–—å¼€å§‹äº‹ä»¶
         EventDispatcher.TriggerEvent(E_MessageType.BattleStart);
 
         foreach (var enemyID in battleData.EnemyIDList)
         {
             CreateEnemy(enemyID);
         }
-
-        //¿ªÊ¼»ØºÏ
+        isFirstTurn=true;
+        //å¼€å§‹å›åˆ
         StartCoroutine(TurnStart());
     }
-    //»ØºÏ¿ªÊ¼
+    //å›åˆå¼€å§‹
     public IEnumerator TurnStart()
     {
         EventDispatcher.TriggerEvent(E_MessageType.TurnStart);
         yield return new WaitForSeconds(0.5f);
-        //³õÊ¼»¯ÄÜÁ¿
+        //åˆå§‹åŒ–èƒ½é‡
         currentEnergy = maxEnergy;
-        //³éÅÆ
+        //æŠ½ç‰Œ
         for (int i = 0; i < turnDrawCardNum; i++)
         {
             DeskManager.Instance.DrawCard();
         }
     }
-    //»ØºÏ½áÊø°´Å¥µã»÷»Øµ÷
+    //å›åˆç»“æŸæŒ‰é’®ç‚¹å‡»å›è°ƒ
     public void OnTurnEndButtonDown()
     {
         StartCoroutine(TurnEnd());
     }
-    //»ØºÏ½áÊøĞ¯³Ì
+    //å›åˆç»“æŸæºç¨‹
     public IEnumerator TurnEnd()
     {
-        
+
         HandCardManager.Instance.DisAllCard();
         EventDispatcher.TriggerEvent(E_MessageType.TurnEnd);
         yield return new WaitForSeconds(0.5f);
         foreach (var enemy in inBattleEnemyList)
         {
             enemy.TakeAction();
-            //TODO£ºÌí¼Ó²¥·Å¶¯»­µÄ¹¦ÄÜ
+            //TODOï¼šæ·»åŠ æ’­æ”¾åŠ¨ç”»çš„åŠŸèƒ½
         }
         StartCoroutine(TurnStart());
     }
-    //´´½¨µĞÈË
+    //åˆ›å»ºæ•Œäºº
     public void CreateEnemy(int enemyID)
     {
         GameObject enemyGO = Instantiate(enemyPrefab);
         enemyGO.transform.SetParent(GameObject.Find("Enemies").transform);
         enemyGO.transform.localPosition = enemyPosList[inBattleEnemyList.Count];
-        Enemy newEnemy =enemyGO .GetComponent<Enemy>();
+        Enemy newEnemy = enemyGO.GetComponent<Enemy>();
         newEnemy.Init(enemyID);
         inBattleEnemyList.Add(newEnemy);
     }
-    //´¥·¢µĞÈËĞĞ¶¯Ğ§¹û
+    //è§¦å‘æ•Œäººè¡ŒåŠ¨æ•ˆæœ
     public void TriggerActionEffect(ActionData actData)
     {
         switch (actData.ActionID)
         {
-            //¶ÔÍæ¼ÒÔì³ÉvalueµãÉËº¦
+            //å¯¹ç©å®¶é€ æˆvalueç‚¹ä¼¤å®³
             case 1001:
                 Player.Instance.TakeDamage(actData.ActionValue);
                 break;
         }
     }
-    
-    //ÉèÖÃ·ÑÓÃ
+
+    //è®¾ç½®è´¹ç”¨
     public void EditEnergy(int newEnergy)
     {
         currentEnergy = newEnergy;
     }
-    
-    //¸ù¾İ¿¨ÅÆĞ§¹ûIDºÍĞ§¹ûÖµ´¥·¢Ğ§¹û
-    public void TakeCardEffect(int effectID,int effectValue,BaseBattleUnit target=null)
+
+    //æ ¹æ®å¡ç‰Œæ•ˆæœIDå’Œæ•ˆæœå€¼è§¦å‘æ•ˆæœ
+    public void TakeCardEffect(int effectID, int effectValue, BaseBattleUnit target = null)
     {
-        //Èç¹ûÃ»ÓĞÌØ±ğÖ¸¶¨Ä¿±êÔòÄ¬ÈÏÖ¸¶¨µ±Ç°Ñ¡ÖĞµÄÄ¿±ê
-        if (target==null)
+        //å¦‚æœæ²¡æœ‰ç‰¹åˆ«æŒ‡å®šç›®æ ‡åˆ™é»˜è®¤æŒ‡å®šå½“å‰é€‰ä¸­çš„ç›®æ ‡
+        if (target == null)
         {
             target = selectedTarget;
         }
         switch (effectID)
         {
-            //¶ÔÄ¿±êÔì³Éµ¥ÌåÉËº¦
+            //å¯¹ç›®æ ‡é€ æˆå•ä½“ä¼¤å®³
             case 1001:
-                if (target!=null)
+                if (target != null)
                 {
                     target.TakeDamage(effectValue);
                 }
                 break;
-            //»ñµÃ»¤¼×
+            //è·å¾—æŠ¤ç”²
             case 1002:
-                if (target!=null)
+                if (target != null)
                 {
                     target.GetShield(effectValue);
                 }
@@ -161,17 +163,19 @@ public class BattleManager : UnitySingleton<BattleManager>
         }
     }
 
-    //Õ½¶·½áÊø
+    //æˆ˜æ–—ç»“æŸ
     public void BattleEnd()
     {
-        //µ±Ç°ËùÔÚ²ãÊı+1
+        //é‡ç½®å›åˆæ•°
+        isFirstTurn=false;
+        //å½“å‰æ‰€åœ¨å±‚æ•°+1
         GameSceneManager.Instance.currentLayer++;
-        //ÆúµôËùÓĞÊÖÅÆ²¢ÖØÖÃÅÆ¶Ñ
+        //å¼ƒæ‰æ‰€æœ‰æ‰‹ç‰Œå¹¶é‡ç½®ç‰Œå †
         HandCardManager.Instance.DisAllCard();
         DeskManager.Instance.ResetDesks();
-        //Òş²ØÕ½¶·UI
+        //éšè—æˆ˜æ–—UI
         UIManager.Instance.HideSingleUI(E_UiId.BattleUI);
-        //ÏÔÊ¾µØÍ¼½çÃæ
+        //æ˜¾ç¤ºåœ°å›¾ç•Œé¢
         UIManager.Instance.ShowUI(E_UiId.MapUI);
         GameSceneManager.Instance.UpdateGameSceneState();
     }

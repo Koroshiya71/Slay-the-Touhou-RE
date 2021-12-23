@@ -2,7 +2,6 @@
 using System.Collections;
 using System;
 using System.Collections.Generic;
-using Random = Unity.Mathematics.Random;
 
 //工具类,把一些常用到的方法放在这个类里面
 //为了方便外界调用,把里面的方法都设置为静态的

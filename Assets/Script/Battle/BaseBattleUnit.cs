@@ -3,24 +3,24 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-
+using GameCore;
 public class BaseBattleUnit : MonoBehaviour
 {
-    //ÉúÃüÖµÏà¹Ø
+    //ç”Ÿå‘½å€¼ç›¸å…³
     protected int maxHp = 50;
     protected int currentHp = 50;
     protected Slider slider_Hp;
     protected Text text_Hp;
 
-    //»¤¶ÜÖµÏà¹Ø
+    //æŠ¤ç›¾å€¼ç›¸å…³
     protected int currentShield = 0;
     protected Image img_Shield;
     protected Text text_Shield;
-    
-    //Ñ¡ÖĞÌØĞ§
+
+    //é€‰ä¸­ç‰¹æ•ˆ
     protected GameObject selectEffect;
 
-    //³õÊ¼»¯UIºÍÊı¾İ¶ÔÏó
+    //åˆå§‹åŒ–UIå’Œæ•°æ®å¯¹è±¡
     public virtual void Init(int id = 1)
     {
         InitDataOnAwake(id);
@@ -31,41 +31,42 @@ public class BaseBattleUnit : MonoBehaviour
     {
     }
 
-    //ÊÜµ½ÉËº¦
+    //å—åˆ°ä¼¤å®³
     public virtual void TakeDamage(int damage)
     {
-        //Èç¹ûÓĞ»¤¶Ü£¬ÓÅÏÈ¿Û³ı»¤¶Ü
+        //å¦‚æœæœ‰æŠ¤ç›¾ï¼Œä¼˜å…ˆæ‰£é™¤æŠ¤ç›¾
         if (currentShield >= damage)
         {
-            //»¤¶ÜÖµ´óÓÚµÈÓÚÉËº¦ÖµÊ±²»Ôì³ÉÉúÃüÖµÉËº¦
+            //æŠ¤ç›¾å€¼å¤§äºç­‰äºä¼¤å®³å€¼æ—¶ä¸é€ æˆç”Ÿå‘½å€¼ä¼¤å®³
             currentShield -= damage;
+            UpdateUI();
             return;
         }
 
-        //»¤¶ÜÖµĞ¡ÓÚÉËº¦ÖµÊ±ÓÅÏÈÊ¹ÓÃ»¤¶ÜµÖÏû²¿·ÖÉËº¦
+        //æŠ¤ç›¾å€¼å°äºä¼¤å®³å€¼æ—¶ä¼˜å…ˆä½¿ç”¨æŠ¤ç›¾æŠµæ¶ˆéƒ¨åˆ†ä¼¤å®³
         damage -= currentShield;
-
+        currentShield = 0;
         currentHp -= damage;
-        
+
         UpdateUI();
-        if (currentHp<=0)
+        if (currentHp <= 0)
         {
             Die();
         }
     }
-    //¸üĞÂUI
+    //æ›´æ–°UI
     public virtual void UpdateUI()
     {
-        //¸üĞÂÑªÌõUI
+        //æ›´æ–°è¡€æ¡UI
         slider_Hp.value = (float)currentHp / maxHp;
         text_Hp.text = currentHp + " / " + maxHp;
-        //Èç¹û³õÊ¼»¤¶ÜÖµÎª0ÔòÈ¡ÏûÏà¹ØUIµÄÏÔÊ¾
-        if (currentShield == 0)
+        //å¦‚æœæŠ¤ç›¾å€¼å°äºç­‰äº0åˆ™å–æ¶ˆç›¸å…³UIçš„æ˜¾ç¤º
+        if (currentShield <= 0)
         {
             img_Shield.enabled = false;
             text_Shield.enabled = false;
         }
-        //·ñÔò¾ÍÏÔÊ¾¶ÔÓ¦µÄ»¤¶ÜÖµ
+        //å¦åˆ™å°±æ˜¾ç¤ºå¯¹åº”çš„æŠ¤ç›¾å€¼
         else
         {
             img_Shield.enabled = true;
@@ -73,54 +74,66 @@ public class BaseBattleUnit : MonoBehaviour
             text_Shield.text = currentShield.ToString();
         }
     }
-    //»ñµÃ»¤¼×
+    //è·å¾—æŠ¤ç”²
     public virtual void GetShield(int shield)
     {
         currentShield += shield;
         UpdateUI();
     }
-    //ÉúÃüÖµ¹éÁãÊ±µÄËÀÍö·½·¨
+    //ç”Ÿå‘½å€¼å½’é›¶æ—¶çš„æ­»äº¡æ–¹æ³•
     public virtual void Die()
     {
 
     }
-    //³õÊ¼»¯UI
+    //åˆå§‹åŒ–UI
     protected virtual void InitUIOnAwake()
     {
-        //»ñÈ¡Ñ¡ÖĞÌØĞ§¶ÔÏó²¢ÔÚ¿ªÊ¼Ê±½ûÓÃ
+        //è·å–é€‰ä¸­ç‰¹æ•ˆå¯¹è±¡å¹¶åœ¨å¼€å§‹æ—¶ç¦ç”¨
         selectEffect = GameTool.FindTheChild(gameObject, "Img_Select").gameObject;
         selectEffect.SetActive(false);
 
-        //³õÊ¼»¯ÑªÁ¿ºÍÑªÌõUI
+        //åˆå§‹åŒ–è¡€é‡å’Œè¡€æ¡UI
         slider_Hp = GameTool.GetTheChildComponent<Slider>(gameObject, "Slider_Hp");
         text_Hp = GameTool.GetTheChildComponent<Text>(gameObject, "Text_Hp");
         currentHp = maxHp;
         text_Hp.text = currentHp + " / " + maxHp;
 
-        //³õÊ¼»¯»¤¶ÜÖµºÍ»¤¶ÜUI
+        //åˆå§‹åŒ–æŠ¤ç›¾å€¼å’ŒæŠ¤ç›¾UI
         img_Shield = GameTool.GetTheChildComponent<Image>(gameObject, "Img_Shield");
 
         text_Shield = GameTool.GetTheChildComponent<Text>(gameObject, "Text_Shield");
-        //Èç¹û³õÊ¼»¤¶ÜÖµÎª0ÔòÈ¡ÏûÏà¹ØUIµÄÏÔÊ¾
-        if (currentShield==0)
+        //å¦‚æœåˆå§‹æŠ¤ç›¾å€¼ä¸º0åˆ™å–æ¶ˆç›¸å…³UIçš„æ˜¾ç¤º
+        if (currentShield == 0)
         {
             img_Shield.enabled = false;
             text_Shield.enabled = false;
         }
-        //·ñÔò¾ÍÏÔÊ¾¶ÔÓ¦µÄ»¤¶ÜÖµ
+        //å¦åˆ™å°±æ˜¾ç¤ºå¯¹åº”çš„æŠ¤ç›¾å€¼
         else
         {
             img_Shield.enabled = true;
             text_Shield.text = currentShield.ToString();
         }
+
     }
 
-    //³õÊ¼»¯Êı¾İ
+    //åˆå§‹åŒ–äº‹ä»¶
+    protected virtual void InitEventOnAwake()
+    {
+        EventDispatcher.AddListener(E_MessageType.TurnStart,delegate{
+            if(!BattleManager.Instance.isFirstTurn)
+            {
+                currentShield=0;
+                UpdateUI();
+            }
+        });
+    }
+    //åˆå§‹åŒ–æ•°æ®
     protected virtual void InitDataOnAwake(int id)
     {
     }
 
-    //´¥·¢Æ÷Ïà¹ØÊÂ¼ş
+    //è§¦å‘å™¨ç›¸å…³äº‹ä»¶
     protected virtual void OnTriggerEnter2D(Collider2D other)
     {
     }
