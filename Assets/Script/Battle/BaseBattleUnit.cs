@@ -20,6 +20,9 @@ public class BaseBattleUnit : MonoBehaviour
     //选中特效
     protected GameObject selectEffect;
 
+    //状态字典
+    public Dictionary<int,StateData>stateDic=new Dictionary<int, StateData>();
+
     //初始化UI和数据对象
     public virtual void Init(int id = 1)
     {

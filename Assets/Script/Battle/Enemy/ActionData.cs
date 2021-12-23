@@ -12,7 +12,6 @@ public enum ActionType
     Weaken, //削弱
     Shield //获取护甲
 }
-
 public class ActionData
 {
     //行为ID
@@ -24,12 +23,15 @@ public class ActionData
     private string actionDes;
     //行动效果值
     private int actionValue;
-
+    //是否需要目标
+    private bool needTarget;
     /// <summary>
     /// 属性
     /// </summary>
     public int ActionValue => actionValue;
     public string ActionDes => actionDes;
+    public bool NeedTarget => needTarget;
+
     public int ActionID
     {
         get => actionID;
@@ -55,6 +57,17 @@ public class ActionData
             case "强化":
                 actionType = ActionType.Buff;
                 break;
+        }
+        tempStr = ReadActionCfgData("NeedTarget", id);
+        switch (tempStr)
+        {
+            case "1":
+                needTarget = true;
+                break;
+            case "0":
+                needTarget = false;
+                break;
+
         }
     }
 

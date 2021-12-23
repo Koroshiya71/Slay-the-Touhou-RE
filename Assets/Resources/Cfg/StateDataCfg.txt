@@ -1,0 +1,5 @@
+ID,Name,ResourcePath,StateType,StateDes
+//状态ID,//状态名称,//状态素材路径,//状态类型,//状态描述
+-1,-1,-1,-1,-1
+1,灵体,Image\UIImage\StateImg\LingTi,Buff,受到的伤害减少30%
+2,中幽灵,Image\UIImage\StateImg\LingTi,普通,普通

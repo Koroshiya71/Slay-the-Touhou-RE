@@ -6,28 +6,28 @@ using UnityEngine;
 
 public class GameSceneManager : UnitySingleton<GameSceneManager>
 {
-    //¸÷ÖÖ³¡¾°µÄ×î´óÊıÁ¿
+    //å„ç§åœºæ™¯çš„æœ€å¤§æ•°é‡
     public int maxSceneNum = 20;
-    //µ±Ç°´¦ÓÚµÚ¼¸²ã
+    //å½“å‰å¤„äºç¬¬å‡ å±‚
     public int currentLayer = 0;
-    //ÉÏ´Îµã»÷µÄÊÇ¸Ã²ãµÚ¼¸ºÅ³¡¾°
+    //ä¸Šæ¬¡ç‚¹å‡»çš„æ˜¯è¯¥å±‚ç¬¬å‡ å·åœºæ™¯
     public int lastIndex = 0;
-    //³¡¾°Ô¤ÖÆÌå
+    //åœºæ™¯é¢„åˆ¶ä½“
     private GameObject gameScenePrefab;
-    //¸¸ÎïÌå
+    //çˆ¶ç‰©ä½“
     private Transform contentParent;
-    //ÓÎÏ·ÖĞµÄËùÓĞ³¡¾°
+    //æ¸¸æˆä¸­çš„æ‰€æœ‰åœºæ™¯
     public List<BaseGameScene> inGameSceneList=new List<BaseGameScene>();
 
 
-    //³õÊ¼»¯ÓÎÏ·³¡¾°¹ÜÀíÆ÷
+    //åˆå§‹åŒ–æ¸¸æˆåœºæ™¯ç®¡ç†å™¨
     public void InitGameSceneManager()
     {
-        //»ñÈ¡ÓÎÏ·³¡¾°Ô¤ÖÆÌåµÈ
+        //è·å–æ¸¸æˆåœºæ™¯é¢„åˆ¶ä½“ç­‰
         gameScenePrefab = ResourcesManager.Instance.LoadResources<GameObject>("Prefabs/" + "Scene/" + "GameScene");
         maxSceneNum = 20;
         contentParent = GameObject.Find("Content").transform;
-        //Éú³É³¡¾°
+        //ç”Ÿæˆåœºæ™¯
         for (int i = 0; i < 120; i++)
         {
             GameObject newSceneGO = Instantiate(gameScenePrefab);
@@ -36,26 +36,26 @@ public class GameSceneManager : UnitySingleton<GameSceneManager>
             newSceneGO.transform.position = new Vector2(220 + i % 6 * 300, 100 + i / 6 * 200);
 
         }
-        //´ÓµÚÒ»²ã¿ªÊ¼
+        //ä»ç¬¬ä¸€å±‚å¼€å§‹
         currentLayer = 1;
 
         UpdateGameSceneState();
     }
 
-    //¸üĞÂ³¡¾°×´Ì¬(ÊÇ·ñ¿ÉÑ¡)
+    //æ›´æ–°åœºæ™¯çŠ¶æ€(æ˜¯å¦å¯é€‰)
     public void UpdateGameSceneState()
     {
         foreach (var gameScene in inGameSceneList)
         {
-            //¸ù¾İµ±Ç°²ãÊı¸üĞÂ½»»¥×´Ì¬
+            //æ ¹æ®å½“å‰å±‚æ•°æ›´æ–°äº¤äº’çŠ¶æ€
             if (gameScene.sceneData.Layer==currentLayer)
             {
-                //Èç¹ûÊÇµÚÒ»²ã£¬ÔòÈ«²¿¶¼¿É½»»¥
+                //å¦‚æœæ˜¯ç¬¬ä¸€å±‚ï¼Œåˆ™å…¨éƒ¨éƒ½å¯äº¤äº’
                 if (currentLayer==1)
                 {
                     gameScene.ChangeGameSceneState(true);
                 }
-                //Èç¹û¸Ã³¡¾°µÄµØÖ·ÓëÉÏÒ»¸öµã»÷¹ıµÄµØÖ·%6ºóµÄ²îµÄ¾ø¶ÔÖµĞ¡ÓÚµÈÓÚ1Ôò¿ÉÒÔ½»»¥
+                //å¦‚æœè¯¥åœºæ™¯çš„åœ°å€ä¸ä¸Šä¸€ä¸ªç‚¹å‡»è¿‡çš„åœ°å€%6åçš„å·®çš„ç»å¯¹å€¼å°äºç­‰äº1åˆ™å¯ä»¥äº¤äº’
                 if (Mathf.Abs((inGameSceneList.IndexOf(gameScene)%6)-(lastIndex%6))<=1)
                 {
                     gameScene.ChangeGameSceneState(true);
@@ -63,7 +63,7 @@ public class GameSceneManager : UnitySingleton<GameSceneManager>
 
                 continue;
             }
-            //²»Âú×ãÉÏÃæÌõ¼şµÄÔòÎŞ·¨½»»¥
+            //ä¸æ»¡è¶³ä¸Šé¢æ¡ä»¶çš„åˆ™æ— æ³•äº¤äº’
             gameScene.ChangeGameSceneState(false);
         }
     }

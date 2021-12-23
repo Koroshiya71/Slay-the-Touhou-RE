@@ -5,30 +5,30 @@ using UnityEngine;
 
 public enum BattleType
 {
-    Normal,//ÆÕÍ¨Õ½¶·
-    Elite,//¾«Ó¢Õ½¶·
-    Boss,//BossÕ½
+    Normal,//æ™®é€šæˆ˜æ–—
+    Elite,//ç²¾è‹±æˆ˜æ–—
+    Boss,//Bossæˆ˜
 }
 public class BattleData
 {
-    //Õ½¶·ÀàĞÍ
+    //æˆ˜æ–—ç±»å‹
     private BattleType battleType;
-    //Õ½¶·ID
+    //æˆ˜æ–—ID
     private int battleID;
 
-    //µĞÈËIDÁĞ±í
+    //æ•ŒäººIDåˆ—è¡¨
     private List<int> enemyIDList=new List<int>();
 
 
     /// <summary>
-    /// ÊôĞÔ
+    /// å±æ€§
     /// </summary>
     public BattleType BattleType => battleType;
 
     public int BattleID => battleID;
 
     public List<int> EnemyIDList => enemyIDList;
-    //¸ù¾İIDµÄ¹¹Ôìº¯Êı
+    //æ ¹æ®IDçš„æ„é€ å‡½æ•°
     public BattleData(int id)
     {
         string tempStr="";
@@ -36,7 +36,7 @@ public class BattleData
         tempStr = ReadBattleCfgData("BattleType", id);
         switch (tempStr)
         {
-            case "ÆÕÍ¨Õ½¶·":
+            case "æ™®é€šæˆ˜æ–—":
                 battleType = BattleType.Normal;
                 break;
         }
@@ -46,7 +46,7 @@ public class BattleData
             enemyIDList.Add(int.Parse(ReadBattleCfgData("EnemyID"+i,id)));
         }
     }
-    //¸ù¾İcfgÊı¾İ±í¶ÁÈ¡µĞÈËÊı¾İ
+    //æ ¹æ®cfgæ•°æ®è¡¨è¯»å–æ•Œäººæ•°æ®
     private string ReadBattleCfgData(string key, int id)
     {
         string data = DataController.Instance.ReadCfg(key, id, DataController.Instance.dicBattleData);

@@ -22,6 +22,8 @@ public class Enemy : BaseBattleUnit
     //敌人名称文本
     protected Text text_EnemyName;
 
+    //敌人状态字典
+    public Dictionary<int, StateData> enemyStateDic = new Dictionary<int, StateData>();
     /// <summary>
     /// 敌人行动相关
     /// </summary>
@@ -58,6 +60,7 @@ public class Enemy : BaseBattleUnit
         //获取行动列表中的第一个行为
         currentAction = enemyData.EnemyActionDic
             .ElementAt(Convert.ToInt32(activeActionMode[currentActionNo].ToString()) - 1).Value;
+        
         currentActionNo++;
     }
 
@@ -171,7 +174,8 @@ public class Enemy : BaseBattleUnit
     //执行行动
     public void TakeAction()
     {
-        BattleManager.Instance.TriggerActionEffect(currentAction);
+        BattleManager.Instance.TriggerActionEffect(this,currentAction);
+        
     }
     //更新行动
     public void UpdateAction()

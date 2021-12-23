@@ -40,7 +40,7 @@ public class BattleManager : UnitySingleton<BattleManager>
     public void InitBattleManager()
     {
         //获取敌人预制体和敌人父物体
-        enemyPrefab = ResourcesManager.Instance.LoadResources<GameObject>("Prefabs/" + "Enemy/" + "Enemy");
+        enemyPrefab = ResourcesManager.Instance.LoadResources<GameObject>("Prefabs/" + "Battle/"+"Enemy/" + "Enemy");
         //初始化敌人位置列表
         enemyPosList = new List<Vector3>()
         {
@@ -125,7 +125,7 @@ public class BattleManager : UnitySingleton<BattleManager>
         inBattleEnemyList.Add(newEnemy);
     }
     //触发敌人行动效果
-    public void TriggerActionEffect(ActionData actData)
+    public void TriggerActionEffect(BaseBattleUnit unit,ActionData actData)
     {
         
         switch (actData.ActionID)
@@ -137,7 +137,7 @@ public class BattleManager : UnitySingleton<BattleManager>
                 break;
             //自身获得value层灵体
             case 1002:
-                
+                StateManager.AddStateToTarget(unit,1001,actData.ActionValue);
                 break;
         }
     }

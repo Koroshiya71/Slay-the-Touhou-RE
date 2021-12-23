@@ -12,6 +12,7 @@ public class Player : BaseBattleUnit
         Init();
         Instance = this;
     }
+    //玩家状态字典
 
 }
 //玩家数据

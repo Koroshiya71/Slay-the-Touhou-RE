@@ -21,6 +21,8 @@ public class DataController : Singleton<DataController>
 
     //用于存放行动数据配置表的字典<字段名,<id,字段的值>>
     public Dictionary<string, Dictionary<string, string>> dicActionData;
+    //用于存放状态数据配置表的字典<字段名,<id,字段的值>>
+    public Dictionary<string, Dictionary<string, string>> dicStateData;
     //加载所有的配置表
     public void LoadAllCfg()
     {
@@ -59,6 +61,11 @@ public class DataController : Singleton<DataController>
     private void LoadActionDataCfg()
     {
         ExcelData.LoadExcelFormCSV("ActionDataCfg", out dicActionData);
+    }
+    //加载状态效果配置表
+    private void LoadStateDataCfg()
+    {
+        ExcelData.LoadExcelFormCSV("StateDataCfg", out dicStateData);
     }
     //供外界调用的,用于读取配置表字段值得方法(字段名,ID,存放配置表内容对应的字典)
     public string ReadCfg(string keyName,int id,Dictionary<string, Dictionary<string, string>> dic)
