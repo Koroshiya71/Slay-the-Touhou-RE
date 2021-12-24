@@ -56,6 +56,7 @@ public class StateData
         reduceOverTurn = ReadStateCfgData("ReduceOverTime", id) == "1";
     }
 }
+
 public class StateManager : UnitySingleton<StateManager>
 {
     //状态图标预制体
@@ -83,17 +84,21 @@ public class StateManager : UnitySingleton<StateManager>
                 newState.transform.localPosition = new Vector3(-40 + target.stateDic.Count % 5 * 20, -55 - 20 * target.stateDic.Count / 5);
             }
             //添加到玩家状态字典
-            target.stateDic.Add(newData.stateID, newData);
+            target.stateDic.Add(newData.stateID, newState);
         }
         else
         {
             //如果已有，则直接叠加层数即可
-            target.stateDic[id].stateStack += stack;
+            target.stateDic[id].stateData.stateStack += stack;
         }
 
     }
 
-
+    //检查目标身上是否有该状态
+    public static bool CheckState(BaseBattleUnit target, int id)
+    {
+        return target.stateDic.ContainsKey(id);
+    }
 
     private void Awake()
     {

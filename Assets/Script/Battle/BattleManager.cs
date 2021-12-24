@@ -100,9 +100,8 @@ public class BattleManager : UnitySingleton<BattleManager>
     //回合结束携程
     public IEnumerator TurnEnd()
     {
-        HandCardManager.Instance.DisAllCard();
         EventDispatcher.TriggerEvent(E_MessageType.TurnEnd);
-
+        HandCardManager.Instance.DisAllCard();
         foreach (var enemy in inBattleEnemyList)
         {
             //每个敌人行动间隔一段时间

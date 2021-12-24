@@ -13,7 +13,7 @@ public class BattleUI : BaseUI
     {
         base.InitUiOnAwake();
         text_Eng = GameTool.GetTheChildComponent<Text>(gameObject, "Text_Eng");
-        btn_TurnEnd= GameTool.GetTheChildComponent<Button>(gameObject, "Btn_TurnEnd");
+        btn_TurnEnd = GameTool.GetTheChildComponent<Button>(gameObject, "Btn_TurnEnd");
         text_TurnChange = GameTool.GetTheChildComponent<Text>(gameObject, "Text_TurnStart");
         //添加回调
         btn_TurnEnd.onClick.AddListener(BattleManager.Instance.OnTurnEndButtonDown);
@@ -40,6 +40,18 @@ public class BattleUI : BaseUI
     private void HideTurnStartTxt()
     {
         text_TurnChange.enabled = false;
+
+    }
+    //回合结束
+    private IEnumerator TurnUpdate(bool isEnd)
+    {
+        yield return new WaitForSeconds(0.5f);
+        if (isEnd)
+        {
+            ActiveTurnEndBtn(true);
+        }
+        else
+            ActiveTurnEndBtn(true);
     }
     //添加事件监听
     public override void AddMessageListener()
@@ -51,16 +63,14 @@ public class BattleUI : BaseUI
             ShowTurnStartTxt();
             text_TurnChange.text = "玩家回合";
             UpdateUI();
-            ActiveTurnEndBtn(true);
-            Invoke(nameof(HideTurnStartTxt),0.5f);
-            
+            StartCoroutine(TurnUpdate(false));
         });
         EventDispatcher.AddListener(E_MessageType.TurnEnd, delegate
         {
             ShowTurnStartTxt();
             text_TurnChange.text = "敌人回合";
-            Invoke(nameof(HideTurnStartTxt), 0.5f);
-            ActiveTurnEndBtn(false);
+            StartCoroutine(TurnUpdate(true));
+
         });
     }
     //启用/禁用回合结束按钮

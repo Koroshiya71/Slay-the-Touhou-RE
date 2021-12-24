@@ -21,7 +21,7 @@ public class BaseBattleUnit : MonoBehaviour
     protected GameObject selectEffect;
 
     //状态字典
-    public Dictionary<int, StateData> stateDic = new Dictionary<int, StateData>();
+    public Dictionary<int, State> stateDic = new Dictionary<int, State>();
 
     //是玩家还是敌人
     public bool isPlayer;
@@ -42,6 +42,12 @@ public class BaseBattleUnit : MonoBehaviour
     //受到伤害
     public virtual void TakeDamage(int damage)
     {
+        //灵体检测
+        if (StateManager.CheckState(this, 1001))
+        {
+            damage = (int)(0.7f * damage);
+            Debug.Log(damage);
+        }
         //如果有护盾，优先扣除护盾
         if (currentShield >= damage)
         {
@@ -88,6 +94,41 @@ public class BaseBattleUnit : MonoBehaviour
         currentShield += shield;
         UpdateUI();
     }
+
+    //回合结束更新状态字典
+    public void UpdateStateDic()
+    {
+        foreach (var state in stateDic.Values)
+        {
+            if (state.stateData.reduceOverTurn)
+            {
+                state.stateData.stateStack -= 1;
+            }
+        }
+        //检查有没有层数<=0的状态直接将其清除
+        CheckClearState();
+    }
+    //检测清除状态
+    public void CheckClearState()
+    {
+        //需要清除的状态列表
+        List<State> clearList = new List<State>();
+        foreach (var state in stateDic.Values)
+        {
+            if (state.stateData.stateStack <= 0)
+            {
+                clearList.Add(state);
+            }
+        }
+        foreach (var clearState in clearList)
+        {
+            //从字典中移除
+            stateDic.Remove(clearState.stateData.stateID);
+            //销毁游戏物体
+            Destroy(clearState.gameObject);
+        }
+    }
+
     //生命值归零时的死亡方法
     public virtual void Die()
     {
@@ -137,6 +178,8 @@ public class BaseBattleUnit : MonoBehaviour
             }
         });
     }
+
+
     //初始化数据
     protected virtual void InitDataOnAwake(int id)
     {
