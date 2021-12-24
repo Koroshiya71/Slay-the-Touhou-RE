@@ -40,7 +40,7 @@ public class BattleManager : UnitySingleton<BattleManager>
     public void InitBattleManager()
     {
         //获取敌人预制体和敌人父物体
-        enemyPrefab = ResourcesManager.Instance.LoadResources<GameObject>("Prefabs/" + "Battle/"+"Enemy/" + "Enemy");
+        enemyPrefab = ResourcesManager.Instance.LoadResources<GameObject>("Prefabs/" + "Battle/" + "Enemy/" + "Enemy");
         //初始化敌人位置列表
         enemyPosList = new List<Vector3>()
         {
@@ -112,6 +112,10 @@ public class BattleManager : UnitySingleton<BattleManager>
             //TODO：添加播放动画的功能
         }
         yield return new WaitForSeconds(0.5f);
+        foreach (var enemy in inBattleEnemyList)
+        {
+            enemy.UpdateCurrentAction();
+        }
         StartCoroutine(TurnStart());
     }
     //创建敌人
@@ -125,19 +129,19 @@ public class BattleManager : UnitySingleton<BattleManager>
         inBattleEnemyList.Add(newEnemy);
     }
     //触发敌人行动效果
-    public void TriggerActionEffect(BaseBattleUnit unit,ActionData actData)
+    public void TriggerActionEffect(BaseBattleUnit unit, ActionData actData)
     {
-        
+
         switch (actData.ActionID)
         {
-            
+
             //对玩家造成value点伤害
             case 1001:
                 Player.Instance.TakeDamage(actData.ActionValue);
                 break;
             //自身获得value层灵体
             case 1002:
-                StateManager.AddStateToTarget(unit,1001,actData.ActionValue);
+                StateManager.AddStateToTarget(unit, 1001, actData.ActionValue);
                 break;
         }
     }
@@ -146,7 +150,7 @@ public class BattleManager : UnitySingleton<BattleManager>
     public void EditEnergy(int newEnergy)
     {
         currentEnergy = newEnergy;
-        
+
     }
 
     //根据卡牌效果ID和效果值触发效果

@@ -26,11 +26,12 @@ public class DataController : Singleton<DataController>
     //加载所有的配置表
     public void LoadAllCfg()
     {
-       LoadCardDataCfg();
-       LoadEnemyDataCfg();
-       LoadBattleDataCfg();
-       LoadCardEffectCfg();
-       LoadActionDataCfg();
+        LoadCardDataCfg();
+        LoadEnemyDataCfg();
+        LoadBattleDataCfg();
+        LoadCardEffectCfg();
+        LoadActionDataCfg();
+        LoadStateDataCfg();
     }
     //加载卡牌数据配置表
     private void LoadCardDataCfg()
@@ -48,14 +49,14 @@ public class DataController : Singleton<DataController>
         ExcelData.LoadExcelFormCSV("BattleDataCfg", out dicBattleData);
         for (int i = 1; i <= dicBattleData["ID"].Count; i++)
         {
-            BattleManager.Instance.battleDataDic.Add(i,new BattleData(i));
+            BattleManager.Instance.battleDataDic.Add(i, new BattleData(i));
         }
     }
     //加载卡牌效果配置表
     private void LoadCardEffectCfg()
     {
         ExcelData.LoadExcelFormCSV("CardEffectCfg", out dicCardEffect);
-        
+
     }
     //加载卡牌效果配置表
     private void LoadActionDataCfg()
@@ -68,8 +69,8 @@ public class DataController : Singleton<DataController>
         ExcelData.LoadExcelFormCSV("StateDataCfg", out dicStateData);
     }
     //供外界调用的,用于读取配置表字段值得方法(字段名,ID,存放配置表内容对应的字典)
-    public string ReadCfg(string keyName,int id,Dictionary<string, Dictionary<string, string>> dic)
-    {   
+    public string ReadCfg(string keyName, int id, Dictionary<string, Dictionary<string, string>> dic)
+    {
         return dic[keyName][id.ToString()];
     }
 }

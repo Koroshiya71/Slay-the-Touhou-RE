@@ -11,6 +11,7 @@ public class Player : BaseBattleUnit
     {
         Init();
         Instance = this;
+        isPlayer = true;
     }
     //玩家状态字典
 

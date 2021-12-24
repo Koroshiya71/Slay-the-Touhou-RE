@@ -53,14 +53,14 @@ public class Enemy : BaseBattleUnit
         enemyData = new EnemyData(id);
         maxHp = enemyData.MAXHp;
         currentHp = maxHp;
-
+        isPlayer = false;
         //从行动模式列表中随机选择一个行动模式
         activeActionMode = enemyData.ActionModeList[Random.Range(0, enemyData.ActionModeList.Count)];
         currentActionNo = 0;
         //获取行动列表中的第一个行为
         currentAction = enemyData.EnemyActionDic
             .ElementAt(Convert.ToInt32(activeActionMode[currentActionNo].ToString()) - 1).Value;
-        
+
         currentActionNo++;
     }
 
@@ -174,13 +174,39 @@ public class Enemy : BaseBattleUnit
     //执行行动
     public void TakeAction()
     {
-        BattleManager.Instance.TriggerActionEffect(this,currentAction);
-        
+        BattleManager.Instance.TriggerActionEffect(this, currentAction);
+
     }
     //更新行动
-    public void UpdateAction()
+    public void UpdateCurrentAction()
     {
+        //获取行动列表中的第一个行为
+        currentActionNo %= activeActionMode.Length;
+        currentAction = enemyData.EnemyActionDic
+            .ElementAt(Convert.ToInt32(activeActionMode[currentActionNo].ToString()) - 1).Value;
 
+        currentActionNo++;
+
+        //更新UI
+        text_ActionDes.enabled = false;
+        text_ActionValue.enabled = false;
+        switch (currentAction.ActionType)
+        {
+            case ActionType.Attack:
+                img_EnemyAction.sprite =
+                    ResourcesManager.Instance.LoadResources<Sprite>("Image/" + "UIImage/" + "EnemyAction/" + "Attack");
+                text_ActionValue.text = currentAction.ActionValue.ToString();
+                text_ActionValue.enabled = true;
+                break;
+            case ActionType.Buff:
+                img_EnemyAction.sprite =
+                        ResourcesManager.Instance.LoadResources<Sprite>("Image/" + "UIImage/" + "EnemyAction/" + "Buff");
+                text_ActionValue.enabled = false;
+                break;
+        }
+
+        text_ActionDes.text = currentAction.ActionDes.Replace("value", currentAction.ActionValue.ToString());
+        text_ActionDes.enabled = false;
     }
     //死亡方法
     public override void Die()

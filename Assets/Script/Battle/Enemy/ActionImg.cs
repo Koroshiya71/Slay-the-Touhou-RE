@@ -10,7 +10,6 @@ public class ActionImg : MonoBehaviour,IPointerEnterHandler,IPointerExitHandler
     //所属的Enemy对象
     private Enemy thisEnemy;
     //事件触发器
-    private EventTrigger eventTrigger;
     private void Awake()
     {
         //获取所属的敌人对象，并初始禁用这些文字的显示

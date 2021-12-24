@@ -21,14 +21,17 @@ public class BaseBattleUnit : MonoBehaviour
     protected GameObject selectEffect;
 
     //状态字典
-    public Dictionary<int,StateData>stateDic=new Dictionary<int, StateData>();
+    public Dictionary<int, StateData> stateDic = new Dictionary<int, StateData>();
+
+    //是玩家还是敌人
+    public bool isPlayer;
 
     //初始化UI和数据对象
     public virtual void Init(int id = 1)
     {
         InitDataOnAwake(id);
         InitUIOnAwake();
-        
+
         InitEventOnAwake();
     }
 
@@ -125,10 +128,11 @@ public class BaseBattleUnit : MonoBehaviour
     //初始化事件
     protected virtual void InitEventOnAwake()
     {
-        EventDispatcher.AddListener(E_MessageType.TurnStart,delegate{
-            if(!BattleManager.Instance.isInit)
+        EventDispatcher.AddListener(E_MessageType.TurnStart, delegate
+        {
+            if (!BattleManager.Instance.isInit)
             {
-                currentShield=0;
+                currentShield = 0;
                 UpdateUI();
             }
         });

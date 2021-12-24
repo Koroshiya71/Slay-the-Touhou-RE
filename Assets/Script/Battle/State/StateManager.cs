@@ -59,7 +59,7 @@ public class StateManager : UnitySingleton<StateManager>
     //状态图标预制体
     public static GameObject stateObj;
     //给玩家附加状态(状态ID，层数)
-    public static void AddStateToTarget(BaseBattleUnit target,int id, int stack)
+    public static void AddStateToTarget(BaseBattleUnit target, int id, int stack)
     {
         //判断是否已有该状态
         if (!target.stateDic.ContainsKey(id))
@@ -72,8 +72,14 @@ public class StateManager : UnitySingleton<StateManager>
             newState.GetComponent<Image>().sprite = newData.stateSprite;
             newState.transform.SetParent(target.transform);
             newState.transform.localScale = new Vector3(1, 1, 1);
-            newState.transform.position = new Vector3(-15 + target.stateDic.Count % 5 * 20, -25 - 20 * target.stateDic.Count / 5);
-
+            if (target.isPlayer)
+            {
+                newState.transform.localPosition = new Vector3(-15 + target.stateDic.Count % 5 * 20, -25 - 20 * target.stateDic.Count / 5);
+            }
+            else
+            {
+                newState.transform.localPosition = new Vector3(-40 + target.stateDic.Count % 5 * 20, -55 - 20 * target.stateDic.Count / 5);
+            }
             //添加到玩家状态字典
             target.stateDic.Add(newData.stateID, newData);
         }
@@ -86,7 +92,7 @@ public class StateManager : UnitySingleton<StateManager>
     }
 
 
-    
+
     private void Awake()
     {
         stateObj = ResourcesManager.Instance.LoadResources<GameObject>("Prefabs/" + "Battle/" + "State");

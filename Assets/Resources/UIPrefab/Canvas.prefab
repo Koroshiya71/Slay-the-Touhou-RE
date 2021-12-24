@@ -177,6 +177,7 @@ GameObject:
   - component: {fileID: 3083930284292238311}
   - component: {fileID: 1376955742808030485}
   - component: {fileID: 2866397888423907500}
+  - component: {fileID: 4145815253739928787}
   m_Layer: 0
   m_Name: UnitySingletonObj
   m_TagString: Untagged
@@ -255,6 +256,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   selectedTarget: {fileID: 0}
   turnDrawCardNum: 5
+  isInit: 1
   enemyPrefab: {fileID: 0}
   inBattleEnemyList: []
   enemyPosList: []
@@ -284,6 +286,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 67de658bd5b87a84db43a7df5401579d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hasInitDrawCardDesk: 0
+--- !u!114 &4145815253739928787
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4927724440062425714}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d4c3d4efdec9b646a4b025f522ee2e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &4927724440435983436
