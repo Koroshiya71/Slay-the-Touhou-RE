@@ -26,7 +26,8 @@ public class StateData
     public Sprite stateSprite;
     //状态层数
     public int stateStack;
-
+    //是否每回合递减
+    public bool reduceOverTurn;
     //根据cfg数据表读取敌人数据
     private string ReadStateCfgData(string key, int id)
     {
@@ -52,6 +53,7 @@ public class StateData
                 break;
 
         }
+        reduceOverTurn = ReadStateCfgData("ReduceOverTime", id) == "1";
     }
 }
 public class StateManager : UnitySingleton<StateManager>
