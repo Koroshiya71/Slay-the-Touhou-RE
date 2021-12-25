@@ -5,13 +5,13 @@ using UnityEngine;
 using UnityEngine.UI;
 
 
-//Ö÷½çÃæUI
+//ä¸»ç•Œé¢UI
 public class MainUI : BaseUI
 {
-    //¿ªÊ¼ÓÎÏ·°´Å¥
+    //å¼€å§‹æ¸¸æˆæŒ‰é’®
     private Button btn_StartGame;
 
-    //»ñÈ¡UI×é¼ş²¢Ìí¼Ó»Øµ÷º¯Êı
+    //è·å–UIç»„ä»¶å¹¶æ·»åŠ å›è°ƒå‡½æ•°
     protected override void InitUiOnAwake()
     {
         base.InitUiOnAwake();
@@ -20,7 +20,7 @@ public class MainUI : BaseUI
     }
 
 
-    //³õÊ¼»¯UIÀàĞÍµÈÊı¾İ
+    //åˆå§‹åŒ–UIç±»å‹ç­‰æ•°æ®
     protected override void InitDataOnAwake()
     {
         base.InitDataOnAwake();
@@ -28,7 +28,7 @@ public class MainUI : BaseUI
         this.uiType.showMode = E_ShowUIMode.DoNothing;
     }
 
-    //¼ÓÔØÓÎÏ·³¡¾°
+    //åŠ è½½æ¸¸æˆåœºæ™¯
     private void LoadGameScene()
     {
         SceneController.Instance.LoadSceneAsync("GameScene", delegate

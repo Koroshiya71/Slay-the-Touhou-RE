@@ -46,7 +46,6 @@ public class BaseBattleUnit : MonoBehaviour
         if (StateManager.CheckState(this, 1001))
         {
             damage = (int)(0.7f * damage);
-            Debug.Log(damage);
         }
         //如果有护盾，优先扣除护盾
         if (currentShield >= damage)

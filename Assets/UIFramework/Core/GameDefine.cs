@@ -12,6 +12,7 @@ public enum E_MessageType
     TurnEnd,//回合结束
     SaveGame,//游戏存档
     UseCard,//使用卡牌
+    DisplayCard,//展示卡牌
 }
 //物品的分类
 //public enum E_GoodsType
@@ -52,19 +53,22 @@ public enum E_UiId
     GameMainUI,
     LoadingUI,
     BattleUI,
-    MapUI
+    MapUI,
+    DisplayCardUI
 }
 public class GameDefine
 {
-  
+
     public static Dictionary<E_UiId, string> dicPath = new Dictionary<E_UiId, string>()
     {
-        
+
         { E_UiId.LoadingUI,"UIPrefab/"+"LoadingUI"},
         { E_UiId.MainUI,"UIPrefab/"+"MainUI"},
         { E_UiId.GameMainUI,"UIPrefab/"+"GameMainUI"},
         { E_UiId.BattleUI,"UIPrefab/"+"BattleUI"},
         { E_UiId.MapUI,"UIPrefab/"+"MapUI"},
+        { E_UiId.DisplayCardUI,"UIPrefab/"+"DisplayCardUI"},
+
 
     };
     public static Type GetUIScriptType(E_UiId uiId)
@@ -75,7 +79,7 @@ public class GameDefine
             case E_UiId.NullUI:
                 GameDebuger.Log("自动添加脚本的时候,传入的窗体id为NullUI");
                 break;
-           
+
             case E_UiId.LoadingUI:
                 scriptType = typeof(LoadingUI);
                 break;
@@ -89,6 +93,9 @@ public class GameDefine
                 scriptType = typeof(BattleUI);
                 break;
             case E_UiId.MapUI:
+                scriptType = typeof(MapUI);
+                break;
+            case E_UiId.DisplayCardUI:
                 scriptType = typeof(MapUI);
                 break;
             default:

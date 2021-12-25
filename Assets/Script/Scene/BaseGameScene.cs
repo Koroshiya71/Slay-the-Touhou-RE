@@ -48,6 +48,7 @@ public class BaseGameScene : MonoBehaviour
         });
         switch (sceneData.SceneType)
         {
+            //如果场景类型为普通战斗，则随机选取一个战斗场景数据
             case SceneType.NormalCombat:
                 while (true)
                 {
@@ -62,6 +63,7 @@ public class BaseGameScene : MonoBehaviour
                     BattleManager.Instance.InitBattle(battleData);
                 });
                 break;
+            //
         }
     }
     //改变场景可选状态

@@ -4,21 +4,21 @@ using UnityEngine;
 
 public enum EventType
 {
-    Battle,//Õ½¶·
-    NormalEvent,//ÆÕÍ¨ÊÂ¼ş
-    SpecialEvent,//ÌØÊâÊÂ¼ş
+    Battle,//æˆ˜æ–—
+    NormalEvent,//æ™®é€šäº‹ä»¶
+    SpecialEvent,//ç‰¹æ®Šäº‹ä»¶
 }
 public class EventData
 {
-    //ÊÂ¼şID
+    //äº‹ä»¶ID
     private int eventID;
-    //ÊÂ¼şÀàĞÍ
+    //äº‹ä»¶ç±»å‹
     private EventType eventType;
-    //ÊÇ·ñÒÑ¾­´¥·¢¹ı
+    //æ˜¯å¦å·²ç»è§¦å‘è¿‡
     private bool hasTriggered;
-    //ÊÇ·ñ¿ÉÒÔÖØ¸´´¥·¢
+    //æ˜¯å¦å¯ä»¥é‡å¤è§¦å‘
     private bool canRecall;
-    //Ç°ÖÃÊÂ¼şID
+    //å‰ç½®äº‹ä»¶ID
     private int preEventID;
 
     public EventData(int ID)
