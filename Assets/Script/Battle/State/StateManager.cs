@@ -28,6 +28,8 @@ public class StateData
     public int stateStack;
     //是否每回合递减
     public bool reduceOverTurn;
+    //是否显示层数
+    public bool showStack;
     //根据cfg数据表读取敌人数据
     private string ReadStateCfgData(string key, int id)
     {
@@ -54,6 +56,7 @@ public class StateData
 
         }
         reduceOverTurn = ReadStateCfgData("ReduceOverTime", id) == "1";
+        showStack = ReadStateCfgData("ShowStack", id) == "1";
     }
 }
 
@@ -75,6 +78,8 @@ public class StateManager : UnitySingleton<StateManager>
             newState.GetComponent<Image>().sprite = newData.stateSprite;
             newState.transform.SetParent(target.transform);
             newState.transform.localScale = new Vector3(1, 1, 1);
+            //更新其UI状态
+            newState.UpdateStateUI();
             if (target.isPlayer)
             {
                 newState.transform.localPosition = new Vector3(-15 + target.stateDic.Count % 5 * 20, -25 - 20 * target.stateDic.Count / 5);

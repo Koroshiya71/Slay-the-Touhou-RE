@@ -189,7 +189,8 @@ public class BattleManager : UnitySingleton<BattleManager>
         //弃掉所有手牌并重置牌堆
         HandCardManager.Instance.DisAllCard();
         DeskManager.Instance.ResetDesks();
-
+        //清除玩家身上所有状态
+        Player.Instance.ClearAllState();
         //隐藏战斗UI
         UIManager.Instance.HideSingleUI(E_UiId.BattleUI);
         //显示地图界面
@@ -197,8 +198,18 @@ public class BattleManager : UnitySingleton<BattleManager>
         GameSceneManager.Instance.UpdateGameSceneState();
     }
 
-
-
+    private void Update() {
+        //GM调试命令
+        if(Input.GetKeyDown(KeyCode.R))
+        {
+            foreach(var enemy in inBattleEnemyList)
+            {
+                enemy.Die();
+            }
+            BattleEnd();
+        }
+    }
+    
     private void Awake()
     {
         InitBattleManager();

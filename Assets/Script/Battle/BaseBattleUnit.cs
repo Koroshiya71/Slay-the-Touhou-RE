@@ -95,6 +95,7 @@ public class BaseBattleUnit : MonoBehaviour
         UpdateUI();
     }
 
+    #region 状态相关
     //回合结束更新状态字典
     public void UpdateStateDic()
     {
@@ -107,6 +108,11 @@ public class BaseBattleUnit : MonoBehaviour
         }
         //检查有没有层数<=0的状态直接将其清除
         CheckClearState();
+        //更新层数显示
+        foreach (var state in stateDic.Values)
+        {
+            state.UpdateStateUI();
+        }
     }
     //检测清除状态
     public void CheckClearState()
@@ -128,12 +134,25 @@ public class BaseBattleUnit : MonoBehaviour
             Destroy(clearState.gameObject);
         }
     }
+    //清除所有状态
+    public void ClearAllState()
+    {
+        foreach (var state in stateDic.Values)
+        {
+            Destroy(state.gameObject);
+        }
+        stateDic.Clear();
+    }
+    #endregion
+
+
 
     //生命值归零时的死亡方法
     public virtual void Die()
     {
 
     }
+    #region 初始化   
     //初始化UI
     protected virtual void InitUIOnAwake()
     {
@@ -169,6 +188,7 @@ public class BaseBattleUnit : MonoBehaviour
     //初始化事件
     protected virtual void InitEventOnAwake()
     {
+        //回合开始时初始化UI
         EventDispatcher.AddListener(E_MessageType.TurnStart, delegate
         {
             if (!BattleManager.Instance.isInit)
@@ -177,13 +197,18 @@ public class BaseBattleUnit : MonoBehaviour
                 UpdateUI();
             }
         });
+        //回合结束时更新状态
+        EventDispatcher.AddListener(E_MessageType.TurnEnd, delegate
+        {
+            UpdateStateDic();
+        });
     }
-
-
     //初始化数据
     protected virtual void InitDataOnAwake(int id)
     {
+        
     }
+    #endregion
 
     //触发器相关事件
     protected virtual void OnTriggerEnter2D(Collider2D other)
