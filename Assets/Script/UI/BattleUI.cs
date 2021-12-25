@@ -43,15 +43,20 @@ public class BattleUI : BaseUI
 
     }
     //回合结束
-    private IEnumerator TurnUpdate(bool isEnd)
+    private IEnumerator TurnUpdate(bool isStart)
     {
-        yield return new WaitForSeconds(0.5f);
-        if (isEnd)
+        if (isStart)
         {
+            yield return new WaitForSeconds(0.5f);
             ActiveTurnEndBtn(true);
+            HideTurnStartTxt();
         }
         else
-            ActiveTurnEndBtn(true);
+        {
+            ActiveTurnEndBtn(false);
+            yield return new WaitForSeconds(0.5f);
+            HideTurnStartTxt();
+        }
     }
     //添加事件监听
     public override void AddMessageListener()
@@ -63,13 +68,13 @@ public class BattleUI : BaseUI
             ShowTurnStartTxt();
             text_TurnChange.text = "玩家回合";
             UpdateUI();
-            StartCoroutine(TurnUpdate(false));
+            StartCoroutine(TurnUpdate(true));
         });
         EventDispatcher.AddListener(E_MessageType.TurnEnd, delegate
         {
             ShowTurnStartTxt();
             text_TurnChange.text = "敌人回合";
-            StartCoroutine(TurnUpdate(true));
+            StartCoroutine(TurnUpdate(false));
 
         });
     }
