@@ -6,15 +6,32 @@ using UnityEngine.UI;
 
 public class BattleUI : BaseUI
 {
+    //能量文本
     private Text text_Eng;
+    //回合结束按钮
     private Button btn_TurnEnd;
+    //回合切换文本
     private Text text_TurnChange;
+    //抽牌堆
+    private Button btn_ShowDrawCard;
+    private Text text_ShowDrawCard;
+    //弃牌堆
+    private Button btn_ShowDiscard;
+    private Text text_ShowDiscard;
+
     protected override void InitUiOnAwake()
     {
         base.InitUiOnAwake();
         text_Eng = GameTool.GetTheChildComponent<Text>(gameObject, "Text_Eng");
         btn_TurnEnd = GameTool.GetTheChildComponent<Button>(gameObject, "Btn_TurnEnd");
         text_TurnChange = GameTool.GetTheChildComponent<Text>(gameObject, "Text_TurnStart");
+
+        btn_ShowDrawCard = GameTool.GetTheChildComponent<Button>(gameObject, "Btn_ShowDrawCard");
+        text_ShowDrawCard = GameTool.GetTheChildComponent<Text>(btn_ShowDrawCard.gameObject, "Text_Num");
+
+        btn_ShowDiscard = GameTool.GetTheChildComponent<Button>(gameObject, "Btn_ShowDisCard");
+        text_ShowDiscard = GameTool.GetTheChildComponent<Text>(btn_ShowDiscard.gameObject, "Text_Num");
+
         //添加回调
         btn_TurnEnd.onClick.AddListener(BattleManager.Instance.OnTurnEndButtonDown);
 
@@ -63,6 +80,7 @@ public class BattleUI : BaseUI
     {
         EventDispatcher.AddListener(E_MessageType.UseCard, UpdateUI);
         EventDispatcher.AddListener(E_MessageType.BattleStart, UpdateUI);
+        EventDispatcher.AddListener(E_MessageType.DrawCard, UpdateUI);
         EventDispatcher.AddListener(E_MessageType.TurnStart, delegate
         {
             ShowTurnStartTxt();
@@ -88,7 +106,8 @@ public class BattleUI : BaseUI
     public void UpdateUI()
     {
         text_Eng.text = BattleManager.Instance.CurrentEnergy + "/" + BattleManager.Instance.MaxEnergy;
-
+        text_ShowDrawCard.text = DeskManager.Instance.drawCardDeskList.Count.ToString();
+        text_ShowDiscard.text = DeskManager.Instance.disCardDeskList.Count.ToString();
     }
 
 }

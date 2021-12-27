@@ -13,6 +13,7 @@ public enum E_MessageType
     SaveGame,//游戏存档
     UseCard,//使用卡牌
     DisplayCard,//展示卡牌
+    DrawCard,//抽牌
 }
 //物品的分类
 //public enum E_GoodsType

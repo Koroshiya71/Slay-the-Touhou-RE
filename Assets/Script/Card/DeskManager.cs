@@ -13,7 +13,7 @@ public class DeskManager : UnitySingleton<DeskManager>
 
     //牌库列表对象<卡牌数据>
     public List<CardData> deskCardList = new List<CardData>();
-    
+
     //抽牌堆列表对象<卡牌数据>
     public List<CardData> drawCardDeskList = new List<CardData>();
     //弃牌堆列表对象<卡牌数据>
@@ -46,7 +46,7 @@ public class DeskManager : UnitySingleton<DeskManager>
     public void InitDrawCardDesk()
     {
         //如果弃牌堆为空且从未初始化过抽牌堆，则从牌库进行第一次初始化
-        if (disCardDeskList.Count==0&&!hasInitDrawCardDesk)
+        if (disCardDeskList.Count == 0 && !hasInitDrawCardDesk)
         {
             hasInitDrawCardDesk = true;
 
@@ -57,7 +57,7 @@ public class DeskManager : UnitySingleton<DeskManager>
             }
         }
         //如果抽牌堆中的卡牌数量不为0,则将所有弃牌堆中的卡牌加入抽牌堆
-        else if (disCardDeskList.Count>1)
+        else if (disCardDeskList.Count > 1)
         {
             for (int i = 0; i < disCardDeskList.Count; i++)
             {
@@ -82,7 +82,7 @@ public class DeskManager : UnitySingleton<DeskManager>
     //抽牌轮转方法
     public void DrawCard()
     {
-        if (drawCardDeskList.Count==0)
+        if (drawCardDeskList.Count == 0)
         {
             InitDrawCardDesk();
 
@@ -99,21 +99,21 @@ public class DeskManager : UnitySingleton<DeskManager>
             HandCardManager.Instance.GetCardByID(data.CardID);
         }
         drawCardDeskList.Remove(data);
-
+        EventDispatcher.TriggerEvent(E_MessageType.DrawCard);
     }
     void Start()
     {
-        
+
     }
 
     void Update()
     {
-        
+
     }
 
     private void Awake()
     {
-        EventDispatcher.AddListener(E_MessageType.GameStart,InitDeskManager);
-        EventDispatcher.AddListener(E_MessageType.BattleStart,InitDrawCardDesk);
+        EventDispatcher.AddListener(E_MessageType.GameStart, InitDeskManager);
+        EventDispatcher.AddListener(E_MessageType.BattleStart, InitDrawCardDesk);
     }
 }
