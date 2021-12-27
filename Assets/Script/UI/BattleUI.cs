@@ -32,6 +32,22 @@ public class BattleUI : BaseUI
         btn_ShowDiscard = GameTool.GetTheChildComponent<Button>(gameObject, "Btn_ShowDisCard");
         text_ShowDiscard = GameTool.GetTheChildComponent<Text>(btn_ShowDiscard.gameObject, "Text_Num");
 
+        //查看抽牌堆
+        btn_ShowDrawCard.onClick.AddListener(delegate
+        {
+            UIManager.Instance.ShowUI(E_UiId.DisplayCardUI);
+            EventDispatcher.TriggerEvent<List<CardData>, ShowType>(
+                E_MessageType.DisplayCard, DeskManager.Instance.drawCardDeskList, ShowType.DrawCardDesk);
+        });
+
+        //查看弃牌堆
+        btn_ShowDiscard.onClick.AddListener(delegate
+        {
+            UIManager.Instance.ShowUI(E_UiId.DisplayCardUI);
+            EventDispatcher.TriggerEvent<List<CardData>, ShowType>(
+                E_MessageType.DisplayCard, DeskManager.Instance.disCardDeskList, ShowType.DisCardDesk);
+        });
+
         //添加回调
         btn_TurnEnd.onClick.AddListener(BattleManager.Instance.OnTurnEndButtonDown);
 

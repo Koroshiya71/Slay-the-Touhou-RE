@@ -77,6 +77,45 @@ public class DisplayCardUI : BaseUI
             //更新上一次显示的类型
             lastShowType = type;
         }
+        //如果这次要显示的卡牌数量<=之前显示过的卡牌量，则在已有基础上直接更新卡牌显示，并隐藏过于的卡牌物体
+        else if (count <= cardObjList.Count)
+        {
+            //重新初始化卡牌
+            for (int i = 0; i < cardObjList.Count; i++)
+            {
+                cardObjList[i].SetActive(true);
+                cardObjList[i].GetComponent<DisplayCard>().InitCard(dataList[i].CardID);
+            }
+            //隐藏大于列表量的游戏物体
+            for (int i = dataList.Count; i < cardObjList.Count; i++)
+            {
+                cardObjList[i].SetActive(false);
+            }
+        }
+        //如果这次要显示的卡牌数量>之前显示过的卡牌量，则在已有基础上直接更新部分卡牌显示，再新增对应数量的卡牌物体数量
+        else if (count > cardObjList.Count)
+        {
+            //重新初始化卡牌
+            for (int i = 0; i < cardObjList.Count; i++)
+            {
+                cardObjList[i].SetActive(true);
+                cardObjList[i].GetComponent<DisplayCard>().InitCard(dataList[i].CardID);
+            }
+            //生成大于列表量的游戏物体
+            for (int i = dataList.Count; i < cardObjList.Count; i++)
+            {
+                //生成卡牌
+                Transform newCardGo = Instantiate(normalCardPrefab).transform;
+                newCardGo.SetParent(content);
+                newCardGo.localScale = new Vector2(1.5f, 1.5f);
+                newCardGo.localPosition = new Vector3(250 + 350 * (i % 5), -200 - 400 * (i / 5));
+                DisplayCard newCard = newCardGo.GetComponent<DisplayCard>();
+                newCard.InitCard(dataList[i].CardID);
+                //添加到列表
+                cardObjList.Add(newCardGo.gameObject);
+            }
+        }
     }
-
 }
+
+
