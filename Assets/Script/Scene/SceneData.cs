@@ -13,22 +13,22 @@ public enum SceneType
 }
 public class SceneData 
 {
-    //¸Ã³¡¾°Î»ÓÚµÚ¼¸²ã
+    //è¯¥åœºæ™¯ä½äºç¬¬å‡ å±‚
     private int layer;
 
     public int Layer => layer;
 
     
-    //³¡¾°ÀàĞÍ
+    //åœºæ™¯ç±»å‹
     private SceneType sceneType;
 
     public SceneType SceneType => sceneType;
-    //Í¼Æ¬ËØ²ÄÂ·¾¶
+    //å›¾ç‰‡ç´ æè·¯å¾„
     private string resourcePath;
 
     public string ResourcePath => resourcePath; 
     
-    //¹¹Ôìº¯Êı
+    //æ„é€ å‡½æ•°
     public SceneData(int index)
     {
         int sceneSeed = Random.Range(0,5);
@@ -39,8 +39,8 @@ public class SceneData
         }
         else 
         {
-            //¸ù¾İËæ»úÊıÉú³É³¡¾°ÀàĞÍ
-            //TODO:ÔİÊ±ÎªµÈ¸ÅÂÊËæ»ú£¬´ıÉè¶¨¸÷ÖÖ³¡¾°µÄ²úÉú¸ÅÂÊ
+            //æ ¹æ®éšæœºæ•°ç”Ÿæˆåœºæ™¯ç±»å‹
+            //TODO:æš‚æ—¶ä¸ºç­‰æ¦‚ç‡éšæœºï¼Œå¾…è®¾å®šå„ç§åœºæ™¯çš„äº§ç”Ÿæ¦‚ç‡
             switch (sceneSeed)
             {
                 case 0:

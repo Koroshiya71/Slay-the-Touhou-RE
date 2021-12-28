@@ -16,14 +16,30 @@ public class EventPageData
     //页面ID
     public int pageID;
     //页面所属的事件ID
-    public int parentPageID;
+    public int parentEventID;
     //页面名称
     public string pageName;
     //页面图片素材路径
     public string resourcePath;
     //页面描述
     public string pageDes;
-    
+    //选项数量
+    public int choiceNum;
+    //选项结果列表
+    public List<string> resultList;
+
+    //根据ID构造
+    public EventPageData(int id)
+    {
+        pageID = id;
+        parentEventID = int.Parse(ReadCfgEventData("EventID", id));
+    }
+    //读取数据
+    private string ReadCfgEventData(string key, int id)
+    {
+        string data = DataController.Instance.ReadCfg(key, id, DataController.Instance.dicEventData);
+        return data;
+    }
 }
 public class EventData
 {
@@ -39,9 +55,7 @@ public class EventData
     private bool canRecall;
     //前置事件ID
     private int preEventID;
-
     //页面列表
-
 
     //构造函数
     public EventData(int ID)
@@ -51,11 +65,19 @@ public class EventData
     }
 }
 
-
+public class EventEffectData
+{
+    //效果ID
+    int effectID;
+    //效果值
+    int effectValue;
+    //效果描述
+    string effectDes;
+}
 public class GameEventManager : UnitySingleton<GameEventManager>
 {
-
-
+    //事件效果字典<id,事件效果数据>
+    public Dictionary<int, EventEffectData> eventEffectDic;
     void Start()
     {
 
