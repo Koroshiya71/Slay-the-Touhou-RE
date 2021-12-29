@@ -29,9 +29,9 @@ public class EventPageData
     //选项数量
     public int choiceNum;
     //选项描述列表
-    public List<string> choiceDesList;
+    public List<string> choiceDesList = new List<string>();
     //选项结果列表
-    public List<EventResultData> resultList;
+    public List<EventResultData> resultList = new List<EventResultData>();
 
     //根据ID构造
     public EventPageData(int id)
@@ -50,12 +50,13 @@ public class EventPageData
 
             string result = ReadCfgEventData("Result" + (i + 1), id);
             string[] results = result.Split(';');
-            Debug.Log("init" + i);
 
             //根据字符串初始化
             EventResultData newData = new EventResultData(results[0], int.Parse(results[1]), int.Parse(results[2]), int.Parse(results[3]));
             resultList.Add(newData);
+
         }
+        Debug.Log("init");
 
     }
     //读取数据
@@ -118,9 +119,9 @@ public class EventResultData
 public class GameEventManager : UnitySingleton<GameEventManager>
 {
     //页面字典<id,页面数据>
-    public Dictionary<int, EventPageData> eventPageDic;
+    public Dictionary<int, EventPageData> eventPageDic = new Dictionary<int, EventPageData>();
     //事件字典<id，事件数据>
-    public Dictionary<int, EventData> eventDic;
+    public Dictionary<int, EventData> eventDic = new Dictionary<int, EventData>();
 
     //初始化事件管理器
     public void InitGameEventManager()
@@ -131,20 +132,14 @@ public class GameEventManager : UnitySingleton<GameEventManager>
 
 
             int id = int.Parse(pageData.Key);
-            Debug.Log(id);
             //将所有页面数据添加到页面字典
             if (id != -1)
             {
-                Debug.Log(2);
-
                 EventPageData newPageData = new EventPageData(id);
-                Debug.Log(3);
-
                 //如果没有对应的父事件，则初始化对应的事件数据
                 if (!eventDic.ContainsKey(newPageData.parentEventID))
                 {
-                    Debug.Log(4);
-
+                    //TODO：这里不执行
                     //初始化事件数据
                     EventData newEvent = new EventData(newPageData.parentEventID);
                     newEvent.eventName = newPageData.parentEventName;
@@ -156,7 +151,6 @@ public class GameEventManager : UnitySingleton<GameEventManager>
                     eventDic[newPageData.pageID].pageDataList.Add(newPageData);
                 }
                 eventPageDic.Add(newPageData.pageID, newPageData);
-                Debug.Log(5);
             }
         }
         Debug.Log(eventPageDic.Count);
