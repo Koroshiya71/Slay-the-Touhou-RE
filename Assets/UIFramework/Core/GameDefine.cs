@@ -14,6 +14,7 @@ public enum E_MessageType
     UseCard,//使用卡牌
     DisplayCard,//展示卡牌
     DrawCard,//抽牌
+    ShowEventPage,//显示事件页面
 }
 //物品的分类
 //public enum E_GoodsType
@@ -56,7 +57,8 @@ public enum E_UiId
     BattleUI,
     MapUI,
     DisplayCardUI,
-    EventUI
+    EventUI,
+
 }
 public class GameDefine
 {
