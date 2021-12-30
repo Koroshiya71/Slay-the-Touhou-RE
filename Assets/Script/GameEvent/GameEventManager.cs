@@ -28,8 +28,6 @@ public class EventPageData
 
     //选项数量
     public int choiceNum;
-    //选项描述列表
-    public List<string> choiceDesList = new List<string>();
     //选项结果列表
     public List<EventResultData> resultList = new List<EventResultData>();
 
@@ -54,9 +52,7 @@ public class EventPageData
             //根据字符串初始化
             EventResultData newData = new EventResultData(results[0], int.Parse(results[1]), int.Parse(results[2]), int.Parse(results[3]));
             resultList.Add(newData);
-
         }
-        Debug.Log("init");
 
     }
     //读取数据
@@ -81,32 +77,25 @@ public class EventData
     //前置事件ID
     public int preEventID;
     //页面列表
-    public List<EventPageData> pageDataList;
+    public List<EventPageData> pageDataList = new List<EventPageData>();
     //构造函数
     public EventData(int ID)
     {
         eventID = ID;
 
     }
-    //读取数据
-    private string ReadCfgEventData(string key, int id)
-    {
-        string data = DataController.Instance.ReadCfg(key, id, DataController.Instance.dicEventData);
-        return data;
-    }
 }
 
 public class EventResultData
 {
     //效果ID
-    int effectID;
+    public int effectID;
     //效果值
-    int effectValue;
+    public int effectValue;
     //选择描述
-    string choiceDes;
+    public string choiceDes;
     //下个页面ID
-    int nextPageID;
-
+    public int nextPageID;
     //构造函数
     public EventResultData(string des, int nextPage, int effect, int value)
     {
@@ -144,6 +133,7 @@ public class GameEventManager : UnitySingleton<GameEventManager>
                     EventData newEvent = new EventData(newPageData.parentEventID);
                     newEvent.eventName = newPageData.parentEventName;
                     newEvent.pageDataList.Add(newPageData);
+                    eventDic.Add(newEvent.eventID, newEvent);
                 }
                 //否则直接添加即可
                 else
@@ -151,26 +141,37 @@ public class GameEventManager : UnitySingleton<GameEventManager>
                     eventDic[newPageData.pageID].pageDataList.Add(newPageData);
                 }
                 eventPageDic.Add(newPageData.pageID, newPageData);
+
             }
         }
-        Debug.Log(eventPageDic.Count);
-        Debug.Log(eventDic.Count);
     }
     void Start()
     {
 
     }
 
+    //触发事件效果（效果ID，效果值）
+    public void TriggerEventEffect(EventResultData data)
+    {
+        EventDispatcher.TriggerEvent < int，string> (E_MessageType.ShowEventPage, data.nextPageID, data.nextPageID);
+
+    }
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.E))
         {
             UIManager.Instance.ShowUI(E_UiId.EventUI);
-            EventDispatcher.TriggerEvent<int>(E_MessageType.ShowEventPage, 10011);
+            EventDispatcher.TriggerEvent < int，string> (E_MessageType.ShowEventPage, 10011, "");
         }
     }
     private void Awake()
     {
         EventDispatcher.AddListener(E_MessageType.GameStart, InitGameEventManager);
+    }
+    //读取结果描述数据
+    private string ReadCfgEventData(string key, int id)
+    {
+        string data = DataController.Instance.ReadCfg(key, id, DataController.Instance.dicEventData);
+        return data;
     }
 }

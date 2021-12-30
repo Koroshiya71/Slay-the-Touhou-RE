@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 
-public class ActionImg : MonoBehaviour,IPointerEnterHandler,IPointerExitHandler
+public class ActionImg : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     //所属的Enemy对象
     private Enemy thisEnemy;
@@ -13,7 +13,7 @@ public class ActionImg : MonoBehaviour,IPointerEnterHandler,IPointerExitHandler
     private void Awake()
     {
         //获取所属的敌人对象，并初始禁用这些文字的显示
-        thisEnemy=GetComponentInParent<Enemy>();
+        thisEnemy = GetComponentInParent<Enemy>();
     }
 
     public void OnPointerEnter(PointerEventData eventData)

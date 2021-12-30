@@ -39,38 +39,42 @@ public class EventUI : BaseUI
         this.uiId = E_UiId.EventUI;
         this.uiType.uiRootType = E_UIRootType.KeepAbove;
     }
-    public void ShowPage(int pageId)
+    public void ShowPage(int pageId, string add = "")
     {
         EventPageData data = GameEventManager.Instance.eventPageDic[pageId];
         //读取页面图片
         img_Event.sprite = ResourcesManager.Instance.LoadResources<Sprite>(data.resourcePath);
         //读取描述和选项
-        text_Des.text = data.pageDes;
-        for (int i = 0; i < data.choiceDesList.Count; i++)
+        text_Des.text = data.pageDes + add;
+        //先将按钮全部禁用
+        foreach (var btn in btn_Choices)
+        {
+            btn.gameObject.SetActive(false);
+        }
+        for (int i = 0; i < data.resultList.Count; i++)
         {
             if (i <= 1)
             {
+
                 //显示对应的按钮
-                btn_Choices[i + 1].enabled = true;
-                text_Choices[i + 1].text = data.choiceDesList[i];
+                btn_Choices[i + 1].gameObject.SetActive(true);
+                text_Choices[i + 1].text = data.resultList[i].choiceDes;
                 //TODO：注册对应的事件点击监听
             }
             else
             {
+
                 //显示对应的按钮
-                btn_Choices[i].enabled = true;
-                text_Choices[i].text = data.choiceDesList[i];
+                btn_Choices[i + 1].gameObject.SetActive(true);
+                text_Choices[i].text = data.resultList[i].choiceDes;
                 //TODO：注册对应的事件点击监听
             }
         }
-        for (int i = data.choiceDesList.Count; i < 3; i++)
-        {
-            btn_Choices[i].enabled = false;
-        }
+
     }
     public override void AddMessageListener()
     {
         base.AddMessageListener();
-        EventDispatcher.AddListener<int>(E_MessageType.ShowEventPage, ShowPage);
+        EventDispatcher.AddListener<int, string>(E_MessageType.ShowEventPage, ShowPage);
     }
 }
