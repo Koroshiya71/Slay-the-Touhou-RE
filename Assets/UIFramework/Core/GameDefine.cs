@@ -15,6 +15,7 @@ public enum E_MessageType
     DisplayCard,//展示卡牌
     DrawCard,//抽牌
     ShowEventPage,//显示事件页面
+    EventTrigger,//事件触发
 }
 //物品的分类
 //public enum E_GoodsType

@@ -15,7 +15,8 @@ public class EventUI : BaseUI
     private List<Button> btn_Choices = new List<Button>();
     //选择按钮文本列表
     private List<Text> text_Choices = new List<Text>();
-
+    //当前choiceResult列表
+    private List<EventResultData> resultList = new List<EventResultData>();
     protected override void InitUiOnAwake()
     {
         base.InitUiOnAwake();
@@ -42,33 +43,94 @@ public class EventUI : BaseUI
     public void ShowPage(int pageId, string add = "")
     {
         EventPageData data = GameEventManager.Instance.eventPageDic[pageId];
+
         //读取页面图片
         img_Event.sprite = ResourcesManager.Instance.LoadResources<Sprite>(data.resourcePath);
         //读取描述和选项
         text_Des.text = data.pageDes + add;
+        resultList.Clear();
+        foreach (var item in btn_Choices)
+        {
+            item.onClick.RemoveAllListeners();
+        }
+        for (int i = 0; i < data.resultList.Count; i++)
+        {
+            resultList.Add(data.resultList[i]);
+        }
         //先将按钮全部禁用
         foreach (var btn in btn_Choices)
         {
             btn.gameObject.SetActive(false);
         }
-        for (int i = 0; i < data.resultList.Count; i++)
+        switch (data.choiceNum)
         {
-            if (i <= 1)
-            {
+            case 1:
+                text_Choices[1].text = data.resultList[0].choiceDes;
+                btn_Choices[1].onClick.AddListener(delegate
+                {
+                    TriggerEvent(resultList[0]);
+                });
+                btn_Choices[1].gameObject.SetActive(true);
+                break;
+            case 2:
+                text_Choices[1].text = data.resultList[0].choiceDes;
+                text_Choices[2].text = data.resultList[1].choiceDes;
 
-                //显示对应的按钮
-                btn_Choices[i + 1].gameObject.SetActive(true);
-                text_Choices[i + 1].text = data.resultList[i].choiceDes;
-                //TODO：注册对应的事件点击监听
-            }
-            else
-            {
+                btn_Choices[1].onClick.AddListener(delegate
+                    {
+                        TriggerEvent(resultList[0]);
+                    });
+                btn_Choices[2].onClick.AddListener(delegate
+                {
+                    TriggerEvent(resultList[1]);
+                });
+                btn_Choices[1].gameObject.SetActive(true);
+                btn_Choices[2].gameObject.SetActive(true);
 
-                //显示对应的按钮
-                btn_Choices[i + 1].gameObject.SetActive(true);
-                text_Choices[i].text = data.resultList[i].choiceDes;
-                //TODO：注册对应的事件点击监听
-            }
+                break;
+            case 3:
+                text_Choices[0].text = data.resultList[0].choiceDes;
+                text_Choices[1].text = data.resultList[1].choiceDes;
+                text_Choices[2].text = data.resultList[2].choiceDes;
+
+                btn_Choices[0].onClick.AddListener(delegate
+                    {
+                        TriggerEvent(resultList[0]);
+                    });
+                btn_Choices[1].onClick.AddListener(delegate
+                {
+                    TriggerEvent(resultList[1]);
+                });
+                btn_Choices[2].onClick.AddListener(delegate
+                    {
+                        TriggerEvent(resultList[2]);
+                    });
+                btn_Choices[0].gameObject.SetActive(true);
+                btn_Choices[1].gameObject.SetActive(true);
+                btn_Choices[2].gameObject.SetActive(true);
+                break;
+        }
+
+    }
+    public void TriggerEvent(EventResultData data)
+    {
+        string effectString = "";
+        //如果有效果描述，则需要在描述上增加
+        if (data.effectID >= 1002)
+        {
+            effectString += "\n（" + data.effectDes.Replace("value",data.effectValue.ToString()) + "）";
+        }
+        switch (data.effectID)
+        {
+            case 1000://关闭页面
+                UIManager.Instance.HideSingleUI(E_UiId.EventUI);
+                break;
+            case 1001://无事发生
+                break;
+        }
+        if (data.nextPageID != 0)
+        {
+            EventDispatcher.TriggerEvent<int, string>(E_MessageType.ShowEventPage, data.nextPageID, effectString);
         }
 
     }

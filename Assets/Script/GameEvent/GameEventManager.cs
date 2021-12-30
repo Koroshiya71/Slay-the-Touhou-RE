@@ -51,6 +51,7 @@ public class EventPageData
 
             //根据字符串初始化
             EventResultData newData = new EventResultData(results[0], int.Parse(results[1]), int.Parse(results[2]), int.Parse(results[3]));
+            newData.effectDes = GameEventManager.Instance.ReadCfgEventResultData("EffectDes", newData.effectID);
             resultList.Add(newData);
         }
 
@@ -96,6 +97,8 @@ public class EventResultData
     public string choiceDes;
     //下个页面ID
     public int nextPageID;
+    //效果描述
+    public string effectDes;
     //构造函数
     public EventResultData(string des, int nextPage, int effect, int value)
     {
@@ -115,53 +118,53 @@ public class GameEventManager : UnitySingleton<GameEventManager>
     //初始化事件管理器
     public void InitGameEventManager()
     {
-        //初始化所有页面和事件数据
-        foreach (var pageData in DataController.Instance.dicEventData["ID"])
+
+        string[] ids = new string[DataController.Instance.dicEventData["ID"].Keys.Count];
+        DataController.Instance.dicEventData["ID"].Keys.CopyTo(ids, 0);
+        Debug.Log(ids.Length);
+        for (int i = 0; i < ids.Length; i++)
         {
-
-
-            int id = int.Parse(pageData.Key);
+            int id = int.Parse(ids[i]);
             //将所有页面数据添加到页面字典
             if (id != -1)
             {
+
                 EventPageData newPageData = new EventPageData(id);
+
                 //如果没有对应的父事件，则初始化对应的事件数据
                 if (!eventDic.ContainsKey(newPageData.parentEventID))
                 {
-                    //TODO：这里不执行
                     //初始化事件数据
                     EventData newEvent = new EventData(newPageData.parentEventID);
                     newEvent.eventName = newPageData.parentEventName;
                     newEvent.pageDataList.Add(newPageData);
                     eventDic.Add(newEvent.eventID, newEvent);
                 }
+
                 //否则直接添加即可
                 else
                 {
-                    eventDic[newPageData.pageID].pageDataList.Add(newPageData);
-                }
-                eventPageDic.Add(newPageData.pageID, newPageData);
 
+                    eventDic[newPageData.parentEventID].pageDataList.Add(newPageData);
+                }
+
+                eventPageDic.Add(newPageData.pageID, newPageData);
             }
+
         }
+
     }
     void Start()
     {
 
     }
 
-    //触发事件效果（效果ID，效果值）
-    public void TriggerEventEffect(EventResultData data)
-    {
-        EventDispatcher.TriggerEvent < int，string> (E_MessageType.ShowEventPage, data.nextPageID, data.nextPageID);
-
-    }
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.E))
         {
             UIManager.Instance.ShowUI(E_UiId.EventUI);
-            EventDispatcher.TriggerEvent < int，string> (E_MessageType.ShowEventPage, 10011, "");
+            EventDispatcher.TriggerEvent<int, string>(E_MessageType.ShowEventPage, 10011, "");
         }
     }
     private void Awake()
@@ -169,6 +172,12 @@ public class GameEventManager : UnitySingleton<GameEventManager>
         EventDispatcher.AddListener(E_MessageType.GameStart, InitGameEventManager);
     }
     //读取结果描述数据
+    public string ReadCfgEventResultData(string key, int id)
+    {
+        string data = DataController.Instance.ReadCfg(key, id, DataController.Instance.dicEventResultData);
+        return data;
+    }
+    //读取页面数据
     private string ReadCfgEventData(string key, int id)
     {
         string data = DataController.Instance.ReadCfg(key, id, DataController.Instance.dicEventData);
