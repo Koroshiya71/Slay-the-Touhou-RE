@@ -68,7 +68,7 @@ public class EventUI : BaseUI
                 text_Choices[1].text = data.resultList[0].choiceDes;
                 btn_Choices[1].onClick.AddListener(delegate
                 {
-                    TriggerEvent(resultList[0]);
+                    GameEventManager.Instance.TriggerEvent(resultList[0]);
                 });
                 btn_Choices[1].gameObject.SetActive(true);
                 break;
@@ -78,11 +78,11 @@ public class EventUI : BaseUI
 
                 btn_Choices[1].onClick.AddListener(delegate
                     {
-                        TriggerEvent(resultList[0]);
+                        GameEventManager.Instance.TriggerEvent(resultList[0]);
                     });
                 btn_Choices[2].onClick.AddListener(delegate
                 {
-                    TriggerEvent(resultList[1]);
+                    GameEventManager.Instance.TriggerEvent(resultList[1]);
                 });
                 btn_Choices[1].gameObject.SetActive(true);
                 btn_Choices[2].gameObject.SetActive(true);
@@ -95,15 +95,15 @@ public class EventUI : BaseUI
 
                 btn_Choices[0].onClick.AddListener(delegate
                     {
-                        TriggerEvent(resultList[0]);
+                        GameEventManager.Instance.TriggerEvent(resultList[0]);
                     });
                 btn_Choices[1].onClick.AddListener(delegate
                 {
-                    TriggerEvent(resultList[1]);
+                    GameEventManager.Instance.TriggerEvent(resultList[1]);
                 });
                 btn_Choices[2].onClick.AddListener(delegate
                     {
-                        TriggerEvent(resultList[2]);
+                        GameEventManager.Instance.TriggerEvent(resultList[2]);
                     });
                 btn_Choices[0].gameObject.SetActive(true);
                 btn_Choices[1].gameObject.SetActive(true);
@@ -112,28 +112,7 @@ public class EventUI : BaseUI
         }
 
     }
-    public void TriggerEvent(EventResultData data)
-    {
-        string effectString = "";
-        //如果有效果描述，则需要在描述上增加
-        if (data.effectID >= 1002)
-        {
-            effectString += "\n（" + data.effectDes.Replace("value",data.effectValue.ToString()) + "）";
-        }
-        switch (data.effectID)
-        {
-            case 1000://关闭页面
-                UIManager.Instance.HideSingleUI(E_UiId.EventUI);
-                break;
-            case 1001://无事发生
-                break;
-        }
-        if (data.nextPageID != 0)
-        {
-            EventDispatcher.TriggerEvent<int, string>(E_MessageType.ShowEventPage, data.nextPageID, effectString);
-        }
-
-    }
+   
     public override void AddMessageListener()
     {
         base.AddMessageListener();

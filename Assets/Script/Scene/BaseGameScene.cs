@@ -18,8 +18,10 @@ public class BaseGameScene : MonoBehaviour
     protected Button gameSceneButton;
     //该场景的战斗数据
     protected BattleData battleData = null;
+    //该场景的事件数据
+    protected EventData eventData = null;
     //是否可以选择
-    protected bool isActive=false;
+    protected bool isActive = false;
     //初始化场景
     protected virtual void InitGameScene()
     {
@@ -54,7 +56,7 @@ public class BaseGameScene : MonoBehaviour
                 {
                     battleData =
                         BattleManager.Instance.battleDataDic[
-                            Random.Range(1, BattleManager.Instance.battleDataDic.Count+1)];
+                            Random.Range(1, BattleManager.Instance.battleDataDic.Count + 1)];
                     if (battleData.BattleType == BattleType.Normal)
                         break;
                 }
@@ -63,7 +65,19 @@ public class BaseGameScene : MonoBehaviour
                     BattleManager.Instance.InitBattle(battleData);
                 });
                 break;
-            //
+            //如果场景类型为事件，则随机选取一个事件
+            case SceneType.Event:
+                eventData =
+                    GameEventManager.Instance.eventDic[
+                        GameEventManager.Instance.eventIDList1[
+                        Random.Range(0, GameEventManager.Instance.eventIDList1.Count)]];
+                gameSceneButton.onClick.AddListener(delegate
+                {
+                    UIManager.Instance.ShowUI(E_UiId.EventUI);
+                    EventDispatcher.TriggerEvent<int, string>(E_MessageType.ShowEventPage, eventData.pageDataList[0].pageID, "");
+                });
+                break;
+                //
         }
     }
     //改变场景可选状态
@@ -83,7 +97,7 @@ public class BaseGameScene : MonoBehaviour
     }
     void Update()
     {
-        
+
     }
 
     protected virtual void Awake()

@@ -7,6 +7,7 @@ using System;
 public enum E_MessageType
 {
     GameStart,//游戏开始
+    InitGameSceneManager,//初始化事件管理器
     BattleStart,//战斗开始
     TurnStart,//回合开始
     TurnEnd,//回合结束

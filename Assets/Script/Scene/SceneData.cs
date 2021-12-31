@@ -11,33 +11,32 @@ public enum SceneType
     Lounge,
     BossCombat
 }
-public class SceneData 
+public class SceneData
 {
     //该场景位于第几层
     private int layer;
 
     public int Layer => layer;
 
-    
+
     //场景类型
     private SceneType sceneType;
 
     public SceneType SceneType => sceneType;
     //图片素材路径
     private string resourcePath;
+    public string ResourcePath => resourcePath;
 
-    public string ResourcePath => resourcePath; 
-    
     //构造函数
     public SceneData(int index)
     {
-        int sceneSeed = Random.Range(0,5);
-        layer = index / 6+1;
-        if (layer==1)
+        int sceneSeed = Random.Range(0, 5);
+        layer = index / 6 + 1;
+        if (layer == 1)
         {
             sceneType = SceneType.NormalCombat;
         }
-        else 
+        else
         {
             //根据随机数生成场景类型
             //TODO:暂时为等概率随机，待设定各种场景的产生概率

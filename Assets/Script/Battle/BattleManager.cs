@@ -198,18 +198,19 @@ public class BattleManager : UnitySingleton<BattleManager>
         GameSceneManager.Instance.UpdateGameSceneState();
     }
 
-    private void Update() {
+    private void Update()
+    {
         //GM调试命令
-        if(Input.GetKeyDown(KeyCode.R))
+        if (Input.GetKeyDown(KeyCode.R))
         {
-            foreach(var enemy in inBattleEnemyList)
+            for (int i = 0; i < inBattleEnemyList.Count; i++)
             {
-                enemy.Die();
+                inBattleEnemyList[i].Die();
             }
             BattleEnd();
         }
     }
-    
+
     private void Awake()
     {
         InitBattleManager();

@@ -114,6 +114,8 @@ public class GameEventManager : UnitySingleton<GameEventManager>
     public Dictionary<int, EventPageData> eventPageDic = new Dictionary<int, EventPageData>();
     //事件字典<id，事件数据>
     public Dictionary<int, EventData> eventDic = new Dictionary<int, EventData>();
+    //地图1可用eventID
+    public List<int> eventIDList1 = new List<int>();
 
     //初始化事件管理器
     public void InitGameEventManager()
@@ -121,7 +123,6 @@ public class GameEventManager : UnitySingleton<GameEventManager>
 
         string[] ids = new string[DataController.Instance.dicEventData["ID"].Keys.Count];
         DataController.Instance.dicEventData["ID"].Keys.CopyTo(ids, 0);
-        Debug.Log(ids.Length);
         for (int i = 0; i < ids.Length; i++)
         {
             int id = int.Parse(ids[i]);
@@ -139,6 +140,7 @@ public class GameEventManager : UnitySingleton<GameEventManager>
                     newEvent.eventName = newPageData.parentEventName;
                     newEvent.pageDataList.Add(newPageData);
                     eventDic.Add(newEvent.eventID, newEvent);
+                    eventIDList1.Add(newEvent.eventID);
                 }
 
                 //否则直接添加即可
@@ -152,13 +154,39 @@ public class GameEventManager : UnitySingleton<GameEventManager>
             }
 
         }
-
+        EventDispatcher.TriggerEvent(E_MessageType.InitGameSceneManager);
     }
     void Start()
     {
 
     }
+    //触发事件效果
+    public void TriggerEvent(EventResultData data)
+    {
+        string effectString = "";
+        //如果有效果描述，则需要在描述上增加
+        if (data.effectID >= 1002)
+        {
+            effectString += "\n（" + data.effectDes.Replace("value", data.effectValue.ToString()) + "）";
+        }
+        switch (data.effectID)
+        {
+            case 1000://关闭页面
+                UIManager.Instance.HideSingleUI(E_UiId.EventUI);
+                //当前所在层数+1
+                GameSceneManager.Instance.currentLayer++;
+                GameSceneManager.Instance.UpdateGameSceneState();
+                break;
+            case 1001://无事发生
+                break;
 
+        }
+        if (data.nextPageID != 0)
+        {
+            EventDispatcher.TriggerEvent<int, string>(E_MessageType.ShowEventPage, data.nextPageID, effectString);
+        }
+
+    }
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.E))

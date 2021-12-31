@@ -17,7 +17,7 @@ public class GameSceneManager : UnitySingleton<GameSceneManager>
     //父物体
     private Transform contentParent;
     //游戏中的所有场景
-    public List<BaseGameScene> inGameSceneList=new List<BaseGameScene>();
+    public List<BaseGameScene> inGameSceneList = new List<BaseGameScene>();
 
 
     //初始化游戏场景管理器
@@ -48,15 +48,15 @@ public class GameSceneManager : UnitySingleton<GameSceneManager>
         foreach (var gameScene in inGameSceneList)
         {
             //根据当前层数更新交互状态
-            if (gameScene.sceneData.Layer==currentLayer)
+            if (gameScene.sceneData.Layer == currentLayer)
             {
                 //如果是第一层，则全部都可交互
-                if (currentLayer==1)
+                if (currentLayer == 1)
                 {
                     gameScene.ChangeGameSceneState(true);
                 }
                 //如果该场景的地址与上一个点击过的地址%6后的差的绝对值小于等于1则可以交互
-                if (Mathf.Abs((inGameSceneList.IndexOf(gameScene)%6)-(lastIndex%6))<=1)
+                if (Mathf.Abs((inGameSceneList.IndexOf(gameScene) % 6) - (lastIndex % 6)) <= 1)
                 {
                     gameScene.ChangeGameSceneState(true);
                 }
@@ -69,16 +69,16 @@ public class GameSceneManager : UnitySingleton<GameSceneManager>
     }
     void Start()
     {
-        
+
     }
 
     private void Awake()
     {
-        EventDispatcher.AddListener(E_MessageType.GameStart,InitGameSceneManager);
+        EventDispatcher.AddListener(E_MessageType.InitGameSceneManager, InitGameSceneManager);
     }
 
     void Update()
     {
-        
+
     }
 }
