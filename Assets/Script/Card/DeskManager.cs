@@ -96,7 +96,7 @@ public class DeskManager : UnitySingleton<DeskManager>
         //否则则根据卡牌数据初始化
         else
         {
-            HandCardManager.Instance.GetCardByID(data.CardID);
+            HandCardManager.Instance.GetCardByID(data.cardID);
         }
         drawCardDeskList.Remove(data);
         EventDispatcher.TriggerEvent(E_MessageType.DrawCard);

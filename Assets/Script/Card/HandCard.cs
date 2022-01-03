@@ -41,7 +41,7 @@ public class HandCard : BaseCard
     protected override Sprite GetCardOutLine()
     {
         string outLineName = "";
-        switch (cardData.CardType)
+        switch (cardData.cardType)
         {
             case CardType.TiShu:
                 outLineName += "体术";
@@ -51,7 +51,7 @@ public class HandCard : BaseCard
                 break;
         }
 
-        switch (cardData.CardRare)
+        switch (cardData.cardRare)
         {
             case CardRare.Normal:
                 outLineName += "普通";
@@ -115,7 +115,7 @@ public class HandCard : BaseCard
     //当鼠标点击时的回调
     protected override void OnDown()
     {
-        if (cardData.CardCost > BattleManager.Instance.CurrentEnergy )
+        if (cardData.cardCost > BattleManager.Instance.CurrentEnergy )
         {
             return;
         }
@@ -136,7 +136,7 @@ public class HandCard : BaseCard
 
         //如果卡牌位置满足条件则可以使用
         if (transform.localPosition.y>=100&&
-            !(cardData.CardTarget == CardTarget.SingleEnemy && BattleManager.Instance.selectedTarget == null))
+            !(cardData.cardTarget == CardTarget.SingleEnemy && BattleManager.Instance.selectedTarget == null))
         {
             useEffect.SetActive(true);
             return true;
@@ -149,10 +149,10 @@ public class HandCard : BaseCard
     public void UseCard()
     {
         BaseBattleUnit target=null;
-        foreach (var effect in cardData.CardEffectDic)
+        foreach (var effect in cardData.cardEffectDic)
         {
             //根据卡牌的目标类型选择目标
-            switch (cardData.CardTarget)
+            switch (cardData.cardTarget)
             {
                 case CardTarget.MyPlayer:
                     target = Player.Instance;
@@ -162,7 +162,7 @@ public class HandCard : BaseCard
             }
             BattleManager.Instance.TakeCardEffect(effect.Key,effect.Value.EffectValue,target);
         }
-        BattleManager.Instance.EditEnergy(BattleManager.Instance.CurrentEnergy-cardData.CardCost);
+        BattleManager.Instance.EditEnergy(BattleManager.Instance.CurrentEnergy-cardData.cardCost);
         for (int i = handCardList.IndexOf(this.gameObject) + 1; i < handCardList.Count; i++)
         {
             handCardList[i].GetComponent<HandCard>().cardAnimator.SetBool("Daging", false);

@@ -111,7 +111,7 @@ public class Enemy : BaseBattleUnit
     {
         //卡牌选中时启用选择特效
         if (other.CompareTag("HandCard") &&
-            HandCardManager.Instance.selectedCard.mCardData.CardTarget == CardTarget.SingleEnemy)
+            HandCardManager.Instance.selectedCard.mCardData.cardTarget == CardTarget.SingleEnemy)
         {
             BattleManager.Instance.selectedTarget = this;
         }
@@ -121,7 +121,7 @@ public class Enemy : BaseBattleUnit
     {
         //卡牌选中时启用选择特效
         if (other.CompareTag("HandCard") &&
-            HandCardManager.Instance.selectedCard.mCardData.CardTarget == CardTarget.SingleEnemy)
+            HandCardManager.Instance.selectedCard.mCardData.cardTarget == CardTarget.SingleEnemy)
         {
             BattleManager.Instance.selectedTarget = this;
         }

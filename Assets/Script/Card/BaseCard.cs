@@ -40,31 +40,31 @@ public class BaseCard : MonoBehaviour
         img_Main = GameTool.GetTheChildComponent<Image>(gameObject, "Card_Main");
 
         //如果包含下划线，则说明Sprite来自图标组组
-        if (cardData.CardImgRes.Contains("_"))
+        if (cardData.cardImgRes.Contains("_"))
         {
-            string path = cardData.CardImgRes.Split('_')[0];
+            string path = cardData.cardImgRes.Split('_')[0];
             var sprites = Resources.LoadAll<Sprite>(path);
-            var index = int.Parse(cardData.CardImgRes.Split('_')[1]);
+            var index = int.Parse(cardData.cardImgRes.Split('_')[1]);
             img_Main.sprite = sprites[index];
         }
         else
         {
-            img_Main.sprite = ResourcesManager.Instance.LoadResources<Sprite>(cardData.CardImgRes);
+            img_Main.sprite = ResourcesManager.Instance.LoadResources<Sprite>(cardData.cardImgRes);
 
         }
         img_OutLine = GameTool.GetTheChildComponent<Image>(gameObject, "Card_OutLine");
         img_OutLine.sprite = GetCardOutLine();
         text_CardEffect = GameTool.GetTheChildComponent<Text>(gameObject, "Text_CardEffect");
-        text_CardEffect.text = cardData.CardDes;
+        text_CardEffect.text = cardData.cardDes;
         cardAnimator = GetComponent<Animator>();
         text_CardName = GameTool.GetTheChildComponent<Text>(gameObject, "Text_CardName");
-        text_CardName.text = cardData.CardName;
+        text_CardName.text = cardData.cardName;
 
-        if (cardData.CardType!=CardType.SpellCard)
+        if (cardData.cardType!=CardType.SpellCard)
         {
             if (cardID>=1000&&cardID<2000)
             {
-                switch (cardData.CardType)
+                switch (cardData.cardType)
                 {
                     case CardType.TiShu:
                         GameTool.GetTheChildComponent<Text>(gameObject, "Text_CardType").
@@ -97,24 +97,24 @@ public class BaseCard : MonoBehaviour
     {
         cardData = new CardData(data);
 
-        this.cardID = data.CardID;
+        this.cardID = data.cardID;
         //获取各种UI、脚本、组件
         canvasGroup = GetComponent<CanvasGroup>();
         img_Main = GameTool.GetTheChildComponent<Image>(gameObject, "Card_Main");
-        img_Main.sprite = ResourcesManager.Instance.LoadResources<Sprite>(cardData.CardImgRes);
+        img_Main.sprite = ResourcesManager.Instance.LoadResources<Sprite>(cardData.cardImgRes);
         img_OutLine = GameTool.GetTheChildComponent<Image>(gameObject, "Card_OutLine");
         img_OutLine.sprite = GetCardOutLine();
         text_CardEffect = GameTool.GetTheChildComponent<Text>(gameObject, "Text_CardEffect");
-        text_CardEffect.text = cardData.CardDes;
+        text_CardEffect.text = cardData.cardDes;
         cardAnimator = GetComponent<Animator>();
         text_CardName = GameTool.GetTheChildComponent<Text>(gameObject, "Text_CardName");
-        text_CardName.text = cardData.CardName;
+        text_CardName.text = cardData.cardName;
 
-        if (cardData.CardType != CardType.SpellCard)
+        if (cardData.cardType != CardType.SpellCard)
         {
             if (cardID >= 1000 && cardID < 2000)
             {
-                switch (cardData.CardType)
+                switch (cardData.cardType)
                 {
                     case CardType.TiShu:
                         GameTool.GetTheChildComponent<Text>(gameObject, "Text_CardType").

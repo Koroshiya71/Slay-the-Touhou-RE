@@ -7,8 +7,8 @@ using GameCore;
 public class BaseBattleUnit : MonoBehaviour
 {
     //生命值相关
-    protected int maxHp = 50;
-    protected int currentHp = 50;
+    public int maxHp = 50;
+    public int currentHp = 50;
     protected Slider slider_Hp;
     protected Text text_Hp;
 

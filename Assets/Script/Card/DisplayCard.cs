@@ -8,7 +8,7 @@ public class DisplayCard : BaseCard
     protected override Sprite GetCardOutLine()
     {
         string outLineName = "";
-        switch (cardData.CardType)
+        switch (cardData.cardType)
         {
             case CardType.TiShu:
                 outLineName += "体术";
@@ -18,7 +18,7 @@ public class DisplayCard : BaseCard
                 break;
         }
 
-        switch (cardData.CardRare)
+        switch (cardData.cardRare)
         {
             case CardRare.Normal:
                 outLineName += "普通";

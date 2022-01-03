@@ -179,6 +179,7 @@ GameObject:
   - component: {fileID: 2866397888423907500}
   - component: {fileID: 4145815253739928787}
   - component: {fileID: 5792704667173095788}
+  - component: {fileID: 4424164718824997337}
   m_Layer: 0
   m_Name: UnitySingletonObj
   m_TagString: Untagged
@@ -312,6 +313,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ad06701056ac00441a24e9c84677f9da, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  eventIDList1: 
+--- !u!114 &4424164718824997337
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4927724440062425714}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 685ee97f4e4af1043a8db01afc063091, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &4927724440435983436

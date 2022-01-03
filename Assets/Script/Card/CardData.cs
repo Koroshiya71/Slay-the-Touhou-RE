@@ -85,54 +85,35 @@ public class CardEffectData
 }
 
 //卡牌数据类
+[Serializable]
 public class CardData
 {
     //卡牌ID
-    private int cardID;
+    public int cardID;
     //卡牌名称
-    private string cardName;
+    public string cardName;
     //卡图路径
-    private string cardImgRes;
+    public string cardImgRes;
     //卡牌费用
-    private int cardCost;
+    public int cardCost;
     //卡牌描述
-    private string cardDes;
+    public string cardDes;
     //卡牌类型
-    private CardType cardType;
+    public CardType cardType;
     //卡牌稀有度
-    private CardRare cardRare;
+    public CardRare cardRare;
 
     //卡牌目标
-    private CardTarget cardTarget;
+    public CardTarget cardTarget;
     //卡牌用途
-    private CardUseType cardUseType;
+    public CardUseType cardUseType;
 
     //卡牌效果字典<ID,卡牌效果>
-    private Dictionary<int, CardEffectData> cardEffectDic=new Dictionary<int, CardEffectData>();
+    public Dictionary<int, CardEffectData> cardEffectDic=new Dictionary<int, CardEffectData>();
 
     //卡牌数据是否有被修改过
-    private bool hasModified=false;
+    public bool hasModified=false;
 
-    ///属性
-    public int CardID => cardID;
-
-    public string CardName => cardName;
-
-    public string CardImgRes => cardImgRes;
-
-    public int CardCost => cardCost;
-
-    public string CardDes => cardDes;
-
-    public CardType CardType => cardType;
-
-    public CardRare CardRare => cardRare;
-
-    public CardTarget CardTarget => cardTarget;
-
-    public CardUseType CardUseType => cardUseType;
-
-    public Dictionary<int, CardEffectData> CardEffectDic => cardEffectDic;
 
     public bool HasModified => hasModified;
     //构造函数
@@ -203,7 +184,6 @@ public class CardData
         {
             int effectID = int.Parse(ReadCfgCardData("EffectID" + i, cardID));
             int effectValue = int.Parse(ReadCfgCardData("EffectValue" + i, cardID));
-            
             cardEffectDic.Add(effectID,new CardEffectData(effectID,effectValue));
             if (i>1)
             {
@@ -214,22 +194,28 @@ public class CardData
                 Replace("value", effectValue.ToString());
             cardDes += effectDes;
         }
+
+
+   
+    }
+    public CardData()
+    {
     }
     //克隆方法
     public CardData(CardData data)
     {
         hasModified = false;
-        this.cardID = data.CardID;
-        this.cardName = data.CardName;
-        this.cardImgRes = data.CardImgRes;
-        this.cardCost = data.CardCost;
-        this.cardDes = data.CardDes;
-        this.cardType = data.CardType;
-        this.cardRare = data.CardRare;
+        this.cardID = data.cardID;
+        this.cardName = data.cardName;
+        this.cardImgRes = data.cardImgRes;
+        this.cardCost = data.cardCost;
+        this.cardDes = data.cardDes;
+        this.cardType = data.cardType;
+        this.cardRare = data.cardRare;
         this.cardTarget = data.cardTarget;
         this.cardUseType = data.cardUseType;
         this.cardEffectDic = new Dictionary<int, CardEffectData>();
-        foreach (var effectElement in data.CardEffectDic)
+        foreach (var effectElement in data.cardEffectDic)
         {
             cardEffectDic.Add(effectElement.Key,effectElement.Value);
         }
