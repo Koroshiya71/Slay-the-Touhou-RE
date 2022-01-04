@@ -209,7 +209,7 @@ public class BaseBattleUnit : MonoBehaviour
     //初始化数据
     protected virtual void InitDataOnAwake(int id)
     {
-
+        
     }
     #endregion
 

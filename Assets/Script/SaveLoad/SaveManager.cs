@@ -9,10 +9,8 @@ using System.IO;
 [Serializable]
 public class SaveData
 {
-    //当前生命值
-    public int currentHp;
-    //最大生命值
-    public int maxHp;
+    //玩家数据
+    public PlayerData playerData;
     //牌组列表
     public List<CardData> cardDataList = new List<CardData>();
     //地图场景类型列表
@@ -20,8 +18,7 @@ public class SaveData
     //构造函数
     public SaveData(bool isSave)
     {
-        currentHp = GameManager.Instance.playerData.currentHp;
-        maxHp = GameManager.Instance.playerData.maxHp;
+        playerData = GameManager.Instance.playerData;
         foreach (var data in DeskManager.Instance.deskCardList)
         {
             cardDataList.Add(data);
@@ -40,12 +37,15 @@ public class SaveData
 public class SaveManager : UnitySingleton<SaveManager>
 {
 
-
+    //是否是通过读取存档初始化游戏
+    public bool isLoad = false;
+    //Json数据保存路径
+    public static string jsonDataPath = "./Assets/Resources/Json/";
     void Start()
     {
 
     }
-
+    //游戏存档
     public static void SaveGame()
     {
         string s = JsonConvert.SerializeObject(new SaveData(true));

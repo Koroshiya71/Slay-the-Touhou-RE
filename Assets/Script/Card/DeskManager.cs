@@ -3,7 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using GameCore;
 using UnityEngine;
-
+using System.IO;
+using Newtonsoft.Json;
 public class DeskManager : UnitySingleton<DeskManager>
 {
     /// <summary>
@@ -26,21 +27,14 @@ public class DeskManager : UnitySingleton<DeskManager>
     //初始化牌库管理器
     public void InitDeskManager()
     {
-        string[] baseDesk;
-        if (GameTool.HasKey("BaseDesk"))
-        {
-            baseDesk = GameTool.GetString("BaseDesk").Split(';');
-        }
-        else
-        {
-            GameTool.SetString("BaseDesk", "1001;1001;1001;1002;1002;1002");
-            baseDesk = GameTool.GetString("BaseDesk").Split(';');
-        }
+        StreamReader reader = new StreamReader(SaveManager.jsonDataPath + "BaseDesk.json");
+        List<int> baseDesk = JsonConvert.DeserializeObject<List<int>>(reader.ReadToEnd());
 
-        foreach (var cardIDStr in baseDesk)
+        foreach (var cardID in baseDesk)
         {
-            deskCardList.Add(new CardData(int.Parse(cardIDStr)));
+            deskCardList.Add(new CardData(cardID));
         }
+        reader.Close();
     }
     //初始化抽牌堆
     public void InitDrawCardDesk()
