@@ -27,14 +27,27 @@ public class DeskManager : UnitySingleton<DeskManager>
     //初始化牌库管理器
     public void InitDeskManager()
     {
-        StreamReader reader = new StreamReader(SaveManager.jsonDataPath + "BaseDesk.json");
-        List<int> baseDesk = JsonConvert.DeserializeObject<List<int>>(reader.ReadToEnd());
-
-        foreach (var cardID in baseDesk)
+        //如果不是读档，则从数据文件中初始化牌库
+        if (!SaveManager.isLoad)
         {
-            deskCardList.Add(new CardData(cardID));
+            StreamReader reader = new StreamReader(SaveManager.jsonDataPath + "BaseDesk.json");
+            List<int> baseDesk = JsonConvert.DeserializeObject<List<int>>(reader.ReadToEnd());
+            reader.Close();
+
+            foreach (var cardID in baseDesk)
+            {
+                deskCardList.Add(new CardData(cardID));
+            }
         }
-        reader.Close();
+        //否则直接读存储数据
+        else
+        {
+            foreach (var data in SaveManager.Instance.saveData.cardDataList)
+            {
+                deskCardList.Add(data);
+            }
+        }
+
     }
     //初始化抽牌堆
     public void InitDrawCardDesk()

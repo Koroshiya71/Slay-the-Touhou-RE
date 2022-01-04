@@ -120,7 +120,6 @@ public class GameEventManager : UnitySingleton<GameEventManager>
     //初始化事件管理器
     public void InitGameEventManager()
     {
-
         string[] ids = new string[DataController.Instance.dicEventData["ID"].Keys.Count];
         DataController.Instance.dicEventData["ID"].Keys.CopyTo(ids, 0);
         for (int i = 0; i < ids.Length; i++)

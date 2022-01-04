@@ -22,7 +22,11 @@ public class SceneData
     //场景类型
     private SceneType sceneType;
 
-    public SceneType SceneType => sceneType;
+    public SceneType SceneType
+    {
+        get { return sceneType; }
+        set { sceneType = value; }
+    }
     //图片素材路径
     private string resourcePath;
     public string ResourcePath => resourcePath;

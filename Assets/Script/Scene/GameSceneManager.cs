@@ -31,6 +31,10 @@ public class GameSceneManager : UnitySingleton<GameSceneManager>
         for (int i = 0; i < 120; i++)
         {
             GameObject newSceneGO = Instantiate(gameScenePrefab);
+            if (SaveManager.isLoad)
+            {
+                newSceneGO.GetComponent<BaseGameScene>().sceneData.SceneType = SaveManager.Instance.saveData.sceneTypeList[i];
+            }
             newSceneGO.transform.SetParent(contentParent);
             newSceneGO.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
             newSceneGO.transform.position = new Vector2(220 + i % 6 * 300, 100 + i / 6 * 200);

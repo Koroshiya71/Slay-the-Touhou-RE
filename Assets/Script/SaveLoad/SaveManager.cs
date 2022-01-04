@@ -15,6 +15,10 @@ public class SaveData
     public List<CardData> cardDataList = new List<CardData>();
     //地图场景类型列表
     public List<SceneType> sceneTypeList = new List<SceneType>();
+    //当前层数
+    public int mapLayer;
+    //上次选择的地址
+    public int mapIndex;
     //构造函数
     public SaveData(bool isSave)
     {
@@ -27,6 +31,8 @@ public class SaveData
         {
             sceneTypeList.Add(sceneType.sceneData.SceneType);
         }
+        mapLayer = GameSceneManager.Instance.currentLayer;
+        mapIndex = GameSceneManager.Instance.lastIndex;
     }
 
     public SaveData()
@@ -38,9 +44,11 @@ public class SaveManager : UnitySingleton<SaveManager>
 {
 
     //是否是通过读取存档初始化游戏
-    public bool isLoad = false;
+    public static bool isLoad = false;
     //Json数据保存路径
     public static string jsonDataPath = "./Assets/Resources/Json/";
+    //存档数据
+    public SaveData saveData = new SaveData();
     void Start()
     {
 
@@ -53,6 +61,12 @@ public class SaveManager : UnitySingleton<SaveManager>
         StreamWriter writer = new StreamWriter("./Assets/Resources/Json/SaveData.json");
         writer.Write(s);
         writer.Close();
+    }
+    //读取存档数据
+    public void LoadData()
+    {
+        StreamReader reader = new StreamReader(jsonDataPath + "SaveData.json");
+        saveData = JsonConvert.DeserializeObject<SaveData>(reader.ReadToEnd());
     }
     void Update()
     {
