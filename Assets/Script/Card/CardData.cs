@@ -75,7 +75,10 @@ public class CardEffectData
         effectValue = value;
         effectDes = ReadCardEffectData("EffectDes", id);
     }
-
+    public CardEffectData()
+    {
+        
+    }
     //根据cfg数据表读取卡牌效果数据
     private string ReadCardEffectData(string key, int id)
     {

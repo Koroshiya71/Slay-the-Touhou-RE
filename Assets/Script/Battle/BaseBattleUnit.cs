@@ -7,8 +7,8 @@ using GameCore;
 public class BaseBattleUnit : MonoBehaviour
 {
     //生命值相关
-    public int maxHp = 50;
-    public int currentHp = 50;
+    public int maxHp;
+    public int currentHp;
     protected Slider slider_Hp;
     protected Text text_Hp;
 
@@ -162,7 +162,11 @@ public class BaseBattleUnit : MonoBehaviour
         //初始化血量和血条UI
         slider_Hp = GameTool.GetTheChildComponent<Slider>(gameObject, "Slider_Hp");
         text_Hp = GameTool.GetTheChildComponent<Text>(gameObject, "Text_Hp");
-        currentHp = maxHp;
+        if (currentHp == 0)
+        {
+            currentHp = maxHp;
+
+        }
         text_Hp.text = currentHp + " / " + maxHp;
 
         //初始化护盾值和护盾UI
@@ -205,7 +209,7 @@ public class BaseBattleUnit : MonoBehaviour
     //初始化数据
     protected virtual void InitDataOnAwake(int id)
     {
-        
+
     }
     #endregion
 

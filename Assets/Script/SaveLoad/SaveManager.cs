@@ -4,24 +4,31 @@ using System.Collections.Generic;
 using GameCore;
 using UnityEngine;
 using Newtonsoft.Json;
-//´æµµÊı¾İ
+using System.IO;
+//å­˜æ¡£æ•°æ®
 [Serializable]
 public class SaveData
 {
-    //µ±Ç°ÉúÃüÖµ
+    //å½“å‰ç”Ÿå‘½å€¼
     public int currentHp;
-    //×î´óÉúÃüÖµ
+    //æœ€å¤§ç”Ÿå‘½å€¼
     public int maxHp;
-    //ÅÆ×éDataÁĞ±í
+    //ç‰Œç»„åˆ—è¡¨
     public List<CardData> cardDataList = new List<CardData>();
-    //¹¹Ôìº¯Êı
-    public SaveData(bool fromGame)
+    //åœ°å›¾åœºæ™¯ç±»å‹åˆ—è¡¨
+    public List<SceneType> sceneTypeList = new List<SceneType>();
+    //æ„é€ å‡½æ•°
+    public SaveData(bool isSave)
     {
-        currentHp = Player.Instance.currentHp;
-        maxHp = Player.Instance.maxHp;
+        currentHp = GameManager.Instance.playerData.currentHp;
+        maxHp = GameManager.Instance.playerData.maxHp;
         foreach (var data in DeskManager.Instance.deskCardList)
         {
             cardDataList.Add(data);
+        }
+        foreach (var sceneType in GameSceneManager.Instance.inGameSceneList)
+        {
+            sceneTypeList.Add(sceneType.sceneData.SceneType);
         }
     }
 
@@ -32,19 +39,20 @@ public class SaveData
 }
 public class SaveManager : UnitySingleton<SaveManager>
 {
-    
+
 
     void Start()
     {
-        
+
     }
 
     public static void SaveGame()
     {
-        string s = JsonConvert.SerializeObject(new CardData(1001));
-        Debug.Log(s);
-        CardData data = JsonConvert.DeserializeObject<CardData>(s);
-        Debug.Log(data.cardName);
+        string s = JsonConvert.SerializeObject(new SaveData(true));
+        GameTool.SetString("HasSave", "True");
+        StreamWriter writer = new StreamWriter("./Assets/Resources/Json/SaveData.json");
+        writer.Write(s);
+        writer.Close();
     }
     void Update()
     {
