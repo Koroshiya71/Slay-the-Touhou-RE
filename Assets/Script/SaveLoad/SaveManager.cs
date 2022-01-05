@@ -61,12 +61,15 @@ public class SaveManager : UnitySingleton<SaveManager>
         StreamWriter writer = new StreamWriter("./Assets/Resources/Json/SaveData.json");
         writer.Write(s);
         writer.Close();
+        Debug.Log("保存游戏");
     }
     //读取存档数据
     public void LoadData()
     {
+        isLoad = true;
         StreamReader reader = new StreamReader(jsonDataPath + "SaveData.json");
         saveData = JsonConvert.DeserializeObject<SaveData>(reader.ReadToEnd());
+        reader.Close();
     }
     void Update()
     {

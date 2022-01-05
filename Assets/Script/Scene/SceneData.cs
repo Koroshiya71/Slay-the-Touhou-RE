@@ -28,7 +28,7 @@ public class SceneData
         set { sceneType = value; }
     }
     //图片素材路径
-    private string resourcePath;
+    public string resourcePath;
     public string ResourcePath => resourcePath;
 
     //构造函数

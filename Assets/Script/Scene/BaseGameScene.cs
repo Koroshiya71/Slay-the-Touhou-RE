@@ -23,7 +23,7 @@ public class BaseGameScene : MonoBehaviour
     //是否可以选择
     protected bool isActive = false;
     //初始化场景
-    protected virtual void InitGameScene()
+    public virtual void InitGameScene()
     {
         //获取Image和Button组件
         sceneImage = GetComponent<Image>();
@@ -40,7 +40,32 @@ public class BaseGameScene : MonoBehaviour
         InitClickEvent();
 
     }
-
+    //重新获取场景图片
+    public virtual void ResetSprite()
+    {
+        switch (sceneData.SceneType)
+        {
+            case SceneType.NormalCombat:
+                sceneData.resourcePath = "Image/" + "UIImage/" + "GameScene/" + "NormalCombat";
+                break;
+            case SceneType.EliteCombat:
+                sceneData.resourcePath = "Image/" + "UIImage/" + "GameScene/" + "EliteCombat";
+                break;
+            case SceneType.Store:
+                sceneData.resourcePath = "Image/" + "UIImage/" + "GameScene/" + "Store";
+                break;
+            case SceneType.Lounge:
+                sceneData.resourcePath = "Image/" + "UIImage/" + "GameScene/" + "Lounge";
+                break;
+            case SceneType.BossCombat:
+                sceneData.resourcePath = "Image/" + "UIImage/" + "GameScene/" + "BossCombat";
+                break;
+            case SceneType.Event:
+                sceneData.resourcePath = "Image/" + "UIImage/" + "GameScene/" + "Event";
+                break;
+        }
+        sceneImage.sprite = ResourcesManager.Instance.LoadResources<Sprite>(sceneData.ResourcePath);
+    }
     //根据事件类型注册事件
     protected virtual void InitClickEvent()
     {

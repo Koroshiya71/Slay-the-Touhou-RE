@@ -27,21 +27,25 @@ public class GameSceneManager : UnitySingleton<GameSceneManager>
         gameScenePrefab = ResourcesManager.Instance.LoadResources<GameObject>("Prefabs/" + "Scene/" + "GameScene");
         maxSceneNum = 20;
         contentParent = GameObject.Find("Content").transform;
+        //从第一层开始
+        currentLayer = 1;
         //生成场景
         for (int i = 0; i < 120; i++)
         {
             GameObject newSceneGO = Instantiate(gameScenePrefab);
             if (SaveManager.isLoad)
             {
-                newSceneGO.GetComponent<BaseGameScene>().sceneData.SceneType = SaveManager.Instance.saveData.sceneTypeList[i];
+                var newScene = newSceneGO.GetComponent<BaseGameScene>();
+                newScene.sceneData.SceneType = SaveManager.Instance.saveData.sceneTypeList[i];
+                newScene.ResetSprite();
+                currentLayer = SaveManager.Instance.saveData.mapLayer;
+                lastIndex = SaveManager.Instance.saveData.mapIndex;
             }
             newSceneGO.transform.SetParent(contentParent);
             newSceneGO.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
             newSceneGO.transform.position = new Vector2(220 + i % 6 * 300, 100 + i / 6 * 200);
-
         }
-        //从第一层开始
-        currentLayer = 1;
+
 
         UpdateGameSceneState();
     }

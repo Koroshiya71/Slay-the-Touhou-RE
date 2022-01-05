@@ -10,13 +10,21 @@ public class MainUI : BaseUI
 {
     //开始游戏按钮
     private Button btn_StartGame;
-
+    //载入进度按钮
+    private Button btn_LoadGame;
     //获取UI组件并添加回调函数
     protected override void InitUiOnAwake()
     {
         base.InitUiOnAwake();
         btn_StartGame = GameTool.GetTheChildComponent<Button>(gameObject, "Btn_StartGame");
         btn_StartGame.onClick.AddListener(LoadGameScene);
+
+        btn_LoadGame = GameTool.GetTheChildComponent<Button>(gameObject, "Btn_LoadGame");
+        btn_LoadGame.onClick.AddListener(delegate
+        {
+            SaveManager.Instance.LoadData();
+            LoadGameScene();
+        });
     }
 
 
