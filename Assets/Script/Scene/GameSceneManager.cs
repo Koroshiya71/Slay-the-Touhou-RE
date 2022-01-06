@@ -40,6 +40,8 @@ public class GameSceneManager : UnitySingleton<GameSceneManager>
                 newScene.ResetSprite();
                 currentLayer = SaveManager.Instance.saveData.mapLayer;
                 lastIndex = SaveManager.Instance.saveData.mapIndex;
+                newScene.ChangeGameSceneState(false);
+
             }
             newSceneGO.transform.SetParent(contentParent);
             newSceneGO.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
@@ -62,13 +64,13 @@ public class GameSceneManager : UnitySingleton<GameSceneManager>
                 if (currentLayer == 1)
                 {
                     gameScene.ChangeGameSceneState(true);
+
                 }
                 //如果该场景的地址与上一个点击过的地址%6后的差的绝对值小于等于1则可以交互
                 if (Mathf.Abs((inGameSceneList.IndexOf(gameScene) % 6) - (lastIndex % 6)) <= 1)
                 {
                     gameScene.ChangeGameSceneState(true);
                 }
-
                 continue;
             }
             //不满足上面条件的则无法交互
