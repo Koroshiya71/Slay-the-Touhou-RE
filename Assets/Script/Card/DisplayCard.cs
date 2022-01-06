@@ -13,6 +13,9 @@ public class DisplayCard : BaseCard
             case CardType.TiShu:
                 outLineName += "体术";
                 break;
+            case CardType.FangYu:
+                outLineName += "防御";
+                break;
             default:
                 outLineName += "体术";
                 break;

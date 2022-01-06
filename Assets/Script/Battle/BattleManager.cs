@@ -25,6 +25,7 @@ public class BattleManager : UnitySingleton<BattleManager>
 
     //是否是本场战斗的第一回合
     public bool isInit = true;
+
     /// <summary>
     /// 敌人相关
     /// </summary>
@@ -198,6 +199,11 @@ public class BattleManager : UnitySingleton<BattleManager>
         GameSceneManager.Instance.UpdateGameSceneState();
     }
 
+    //残心检测
+    public bool CheckCanxin(CardData data)
+    {
+        return currentEnergy == data.cardCost;
+    }
     private void Update()
     {
         //GM调试命令

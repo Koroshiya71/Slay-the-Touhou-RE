@@ -47,8 +47,6 @@ public class GameSceneManager : UnitySingleton<GameSceneManager>
             newSceneGO.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
             newSceneGO.transform.position = new Vector2(220 + i % 6 * 300, 100 + i / 6 * 200);
         }
-
-
         UpdateGameSceneState();
     }
 

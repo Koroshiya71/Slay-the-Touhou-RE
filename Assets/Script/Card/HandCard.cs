@@ -8,7 +8,7 @@ using GameCore;
 
 public class HandCard : BaseCard
 {
-    
+
     //使用卡牌时的特效
     private GameObject useEffect;
     //手牌管理器的手牌列表
@@ -46,6 +46,9 @@ public class HandCard : BaseCard
             case CardType.TiShu:
                 outLineName += "体术";
                 break;
+            case CardType.FangYu:
+                outLineName += "防御";
+                break;
             default:
                 outLineName += "体术";
                 break;
@@ -68,13 +71,13 @@ public class HandCard : BaseCard
     protected override void InitEvent()
     {
         base.InitEvent();
-        
-        
+
+
     }
     //当鼠标进入卡牌时的回调
     protected override void OnEnter()
     {
-        cardAnimator.SetBool("Hover",true);
+        cardAnimator.SetBool("Hover", true);
         HandCardManager.Instance.selectedCard = this;
         isSelecting = true;
         for (int i = handCardList.IndexOf(this.gameObject) + 1; i < handCardList.Count; i++)
@@ -82,7 +85,7 @@ public class HandCard : BaseCard
             handCardList[i].GetComponent<HandCard>().cardAnimator.SetBool("Daging", true);
         }
     }
-   
+
     //当鼠标离开卡牌时的回调
     protected override void OnExit()
     {
@@ -109,13 +112,13 @@ public class HandCard : BaseCard
                 return;
             }
             transform.localPosition = originPos;
-            transform.localEulerAngles=originRot;
+            transform.localEulerAngles = originRot;
         }
     }
     //当鼠标点击时的回调
     protected override void OnDown()
     {
-        if (cardData.cardCost > BattleManager.Instance.CurrentEnergy )
+        if (cardData.cardCost > BattleManager.Instance.CurrentEnergy)
         {
             return;
         }
@@ -135,7 +138,7 @@ public class HandCard : BaseCard
     {
 
         //如果卡牌位置满足条件则可以使用
-        if (transform.localPosition.y>=100&&
+        if (transform.localPosition.y >= 100 &&
             !(cardData.cardTarget == CardTarget.SingleEnemy && BattleManager.Instance.selectedTarget == null))
         {
             useEffect.SetActive(true);
@@ -148,7 +151,7 @@ public class HandCard : BaseCard
     //使用卡牌
     public void UseCard()
     {
-        BaseBattleUnit target=null;
+        BaseBattleUnit target = null;
         foreach (var effect in cardData.cardEffectDic)
         {
             //根据卡牌的目标类型选择目标
@@ -160,9 +163,9 @@ public class HandCard : BaseCard
                 case CardTarget.SingleEnemy:
                     break;
             }
-            BattleManager.Instance.TakeCardEffect(effect.Key,effect.Value.EffectValue,target);
+            BattleManager.Instance.TakeCardEffect(effect.Key, effect.Value.EffectValue, target);
         }
-        BattleManager.Instance.EditEnergy(BattleManager.Instance.CurrentEnergy-cardData.cardCost);
+        BattleManager.Instance.EditEnergy(BattleManager.Instance.CurrentEnergy - cardData.cardCost);
         for (int i = handCardList.IndexOf(this.gameObject) + 1; i < handCardList.Count; i++)
         {
             handCardList[i].GetComponent<HandCard>().cardAnimator.SetBool("Daging", false);
@@ -192,7 +195,7 @@ public class HandCard : BaseCard
     //检查是否激活事件检测
     public void CheckEventActive()
     {
-        if (HandCardManager.Instance.selectedCard==null)
+        if (HandCardManager.Instance.selectedCard == null)
         {
             ActiveUIEventListen();
             return;
@@ -214,7 +217,7 @@ public class HandCard : BaseCard
         if (isDragging)
         {
             transform.position = Input.mousePosition;
-            transform.rotation=Quaternion.Euler(0,0,0);
+            transform.rotation = Quaternion.Euler(0, 0, 0);
         }
     }
 }

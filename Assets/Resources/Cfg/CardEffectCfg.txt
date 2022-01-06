@@ -1,5 +1,7 @@
-﻿ID,EffectDes
-//效果ID,//效果描述
--1,-1
-1001,造成value点伤害
-1002,获得value点护甲
+ID,EffectDes,IsCanXin,IsLianZhan
+//效果ID,//效果描述,//残心,//连斩
+-1,-1,-1,-1
+1001,造成value点伤害,0,0
+1002,获得value点护甲,0,0
+1003,残心：获得value点能量,1,0
+1004,残心：对随机敌人造成value点伤害,1,0
