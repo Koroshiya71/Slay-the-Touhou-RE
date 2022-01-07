@@ -30,6 +30,7 @@ public class DeskManager : UnitySingleton<DeskManager>
         //如果不是读档，则从数据文件中初始化牌库
         if (!SaveManager.isLoad)
         {
+
             StreamReader reader = new StreamReader(SaveManager.jsonDataPath + "BaseDesk.json");
             List<int> baseDesk = JsonConvert.DeserializeObject<List<int>>(reader.ReadToEnd());
             reader.Close();
@@ -38,12 +39,16 @@ public class DeskManager : UnitySingleton<DeskManager>
             {
                 deskCardList.Add(new CardData(cardID));
             }
+
         }
         //否则直接读存储数据
         else
         {
+
             foreach (var data in SaveManager.Instance.saveData.cardDataList)
             {
+                Debug.Log(deskCardList.Count);
+
                 deskCardList.Add(data);
             }
         }

@@ -163,7 +163,8 @@ public class HandCard : BaseCard
                 case CardTarget.SingleEnemy:
                     break;
             }
-            BattleManager.Instance.TakeCardEffect(effect.Key, effect.Value.EffectValue, target);
+            BattleManager.Instance.TakeCardEffect(effect.Key, effect.Value.EffectValue, target, BattleManager.Instance.CheckCanxin(cardData));
+
         }
         BattleManager.Instance.EditEnergy(BattleManager.Instance.CurrentEnergy - cardData.cardCost);
         for (int i = handCardList.IndexOf(this.gameObject) + 1; i < handCardList.Count; i++)

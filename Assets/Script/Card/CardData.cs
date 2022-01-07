@@ -78,7 +78,8 @@ public class CardEffectData
         effectValue = value;
         effectDes = ReadCardEffectData("EffectDes", id);
         isCanXin = ReadCardEffectData("IsCanXin", id) == "1";
-        isLianZhan = ReadCardEffectData("isLianZhan", id) == "1";
+
+        isLianZhan = ReadCardEffectData("IsLianZhan", id) == "1";
 
     }
     public CardEffectData()

@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using GameCore;
@@ -154,7 +153,7 @@ public class BattleManager : UnitySingleton<BattleManager>
     }
 
     //根据卡牌效果ID和效果值触发效果
-    public void TakeCardEffect(int effectID, int effectValue, BaseBattleUnit target = null)
+    public void TakeCardEffect(int effectID, int effectValue, BaseBattleUnit target = null, bool isCanXin = false, bool isLianZhan = false)
     {
         //如果没有特别指定目标则默认指定当前选中的目标
         if (target == null)
@@ -176,6 +175,23 @@ public class BattleManager : UnitySingleton<BattleManager>
                 {
                     target.GetShield(effectValue);
                 }
+                break;
+            //残心：获得能量
+            case 1003:
+                if (!isCanXin)
+                {
+                    break;
+                }
+                BattleManager.Instance.currentEnergy += effectValue;
+                break;
+            //残心：对随机敌人造成伤害
+            case 1004:
+                if (!isCanXin)
+                {
+                    break;
+                }
+                target = BattleManager.Instance.inBattleEnemyList[Random.Range(0, BattleManager.Instance.inBattleEnemyList.Count)];
+                target.TakeDamage(effectValue);
                 break;
         }
     }
