@@ -1,7 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using GameCore;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class BattleManager : UnitySingleton<BattleManager>
 {
@@ -21,7 +23,8 @@ public class BattleManager : UnitySingleton<BattleManager>
 
     //战斗数据总字典<id,战斗数据>
     public Dictionary<int, BattleData> battleDataDic = new Dictionary<int, BattleData>();
-
+    //回合开始时触发的效果委托
+    public Action turnStartEffectDelegate;
     //是否是本场战斗的第一回合
     public bool isInit = true;
 
@@ -79,13 +82,28 @@ public class BattleManager : UnitySingleton<BattleManager>
         //开始回合
         StartCoroutine(TurnStart());
     }
+    //回合开始效果携程
+    public IEnumerator TurnStartAction()
+    {
+        turnStartEffectDelegate.Invoke();
+        //清空回合开始委托
+        turnStartEffectDelegate = null;
+        yield return new WaitForSeconds(0.5f);
+        
+    }
     //回合开始
     public IEnumerator TurnStart()
     {
         EventDispatcher.TriggerEvent(E_MessageType.TurnStart);
         yield return new WaitForSeconds(0.5f);
+        
         //初始化能量
         currentEnergy = maxEnergy;
+        //触发回合开始效果
+        if (turnStartEffectDelegate != null)
+        {
+            yield return StartCoroutine(TurnStartAction());
+        }
         //抽牌
         for (int i = 0; i < turnDrawCardNum; i++)
         {
@@ -105,10 +123,8 @@ public class BattleManager : UnitySingleton<BattleManager>
         foreach (var enemy in inBattleEnemyList)
         {
             //每个敌人行动间隔一段时间
-            //TODO：跟进每个敌人的动画时间决定这个间隔
             yield return new WaitForSeconds(0.5f);
             enemy.TakeAction();
-            //TODO：添加播放动画的功能
         }
         yield return new WaitForSeconds(0.5f);
         foreach (var enemy in inBattleEnemyList)
@@ -123,6 +139,8 @@ public class BattleManager : UnitySingleton<BattleManager>
         GameObject enemyGO = Instantiate(enemyPrefab);
         enemyGO.transform.SetParent(GameObject.Find("Enemies").transform);
         enemyGO.transform.localPosition = enemyPosList[inBattleEnemyList.Count];
+        enemyGO.transform.localScale = new Vector3(1,1,1);
+
         Enemy newEnemy = enemyGO.GetComponent<Enemy>();
         newEnemy.Init(enemyID);
         inBattleEnemyList.Add(newEnemy);
@@ -182,7 +200,10 @@ public class BattleManager : UnitySingleton<BattleManager>
                 {
                     break;
                 }
-                BattleManager.Instance.currentEnergy += effectValue;
+                turnStartEffectDelegate += delegate
+                {
+                    currentEnergy += effectValue;
+                };
                 break;
             //残心：对随机敌人造成伤害
             case 1004:
@@ -190,8 +211,13 @@ public class BattleManager : UnitySingleton<BattleManager>
                 {
                     break;
                 }
-                target = BattleManager.Instance.inBattleEnemyList[Random.Range(0, BattleManager.Instance.inBattleEnemyList.Count)];
-                target.TakeDamage(effectValue);
+
+                turnStartEffectDelegate += delegate
+                {
+                    target = BattleManager.Instance.inBattleEnemyList[
+                        Random.Range(0, BattleManager.Instance.inBattleEnemyList.Count)];
+                    target.TakeDamage(effectValue);
+                };
                 break;
         }
     }
