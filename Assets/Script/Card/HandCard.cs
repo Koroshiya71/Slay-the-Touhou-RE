@@ -174,10 +174,10 @@ public class HandCard : BaseCard
         //弃牌处理
         DeskManager.Instance.disCardDeskList.Add(this.cardData);
         HandCardManager.Instance.RemoveCard(this.gameObject);
-
-
         HandCardManager.Instance.selectedCard = null;
         EventDispatcher.TriggerEvent(E_MessageType.UseCard);
+        //连斩数+1
+        BattleManager.Instance.currentTurnCombo++;
     }
 
     //取消UI事件检测

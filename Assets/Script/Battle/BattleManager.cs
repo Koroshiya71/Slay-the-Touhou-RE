@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using GameCore;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 public class BattleManager : UnitySingleton<BattleManager>
@@ -27,7 +28,8 @@ public class BattleManager : UnitySingleton<BattleManager>
     public Action turnStartEffectDelegate;
     //是否是本场战斗的第一回合
     public bool isInit = true;
-
+    //本回合使用的卡牌数
+    public int currentTurnCombo = 0;
     /// <summary>
     /// 敌人相关
     /// </summary>
@@ -60,8 +62,6 @@ public class BattleManager : UnitySingleton<BattleManager>
         currentEnergy = maxEnergy;
 
     }
-
-
     //初始化战斗
     public void InitBattle(BattleData battleData)
     {
@@ -97,8 +97,9 @@ public class BattleManager : UnitySingleton<BattleManager>
         EventDispatcher.TriggerEvent(E_MessageType.TurnStart);
         yield return new WaitForSeconds(0.5f);
         
-        //初始化能量
+        //初始化能量、连斩数
         currentEnergy = maxEnergy;
+        currentTurnCombo = 0;
         //触发回合开始效果
         if (turnStartEffectDelegate != null)
         {
@@ -219,6 +220,7 @@ public class BattleManager : UnitySingleton<BattleManager>
                     target.TakeDamage(effectValue);
                 };
                 break;
+            //附加恐惧
         }
     }
 
@@ -246,10 +248,15 @@ public class BattleManager : UnitySingleton<BattleManager>
     {
         return currentEnergy == data.cardCost;
     }
+    //连斩检测（连斩数）
+    public bool CheckCombo(int combo)
+    {
+        return currentTurnCombo > combo;
+    }
     private void Update()
     {
         //GM调试命令
-        if (Input.GetKeyDown(KeyCode.R))
+        if (Input.GetKeyDown(KeyCode.R))//结束游戏
         {
             for (int i = 0; i < inBattleEnemyList.Count; i++)
             {
