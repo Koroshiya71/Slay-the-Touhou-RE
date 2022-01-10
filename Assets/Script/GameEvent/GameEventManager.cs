@@ -178,7 +178,15 @@ public class GameEventManager : UnitySingleton<GameEventManager>
                 break;
             case 1001://无事发生
                 break;
-
+            case 1002://下一场战斗获得【焕发】
+                BattleManager.Instance.turnStartEffectDelegate += delegate
+                {
+                    StateManager.AddStateToTarget(Player.Instance, 1003, data.effectValue);
+                };
+                break;
+            case 1003://恢复生命值
+                Player.Instance.Heal(data.effectValue);
+                break;
         }
         if (data.nextPageID != 0)
         {

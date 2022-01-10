@@ -82,7 +82,7 @@ public class StateManager : UnitySingleton<StateManager>
             newState.UpdateStateUI();
             if (target.isPlayer)
             {
-                newState.transform.localPosition = new Vector3(-15 + target.stateDic.Count % 5 * 20, -25 - 20 * target.stateDic.Count / 5);
+                newState.transform.localPosition = new Vector3(-35 + target.stateDic.Count % 5 * 20, -55 - 20 * target.stateDic.Count / 5);
             }
             else
             {

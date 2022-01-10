@@ -93,7 +93,18 @@ public class BaseBattleUnit : MonoBehaviour
         currentShield += shield;
         UpdateUI();
     }
-
+    //恢复生命值
+    public virtual void Heal(int hp)
+    {
+        if (currentHp + hp <= maxHp)
+        {
+            currentHp += hp;
+        }
+        else
+        {
+            currentHp=maxHp;
+        }
+    }
     #region 状态相关
     //回合结束更新状态字典
     public void UpdateStateDic()
@@ -209,7 +220,7 @@ public class BaseBattleUnit : MonoBehaviour
     //初始化数据
     protected virtual void InitDataOnAwake(int id)
     {
-        
+
     }
     #endregion
 
