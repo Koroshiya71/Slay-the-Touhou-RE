@@ -89,14 +89,14 @@ public class BattleManager : UnitySingleton<BattleManager>
         //清空回合开始委托
         turnStartEffectDelegate = null;
         yield return new WaitForSeconds(0.5f);
-        
+
     }
     //回合开始
     public IEnumerator TurnStart()
     {
         EventDispatcher.TriggerEvent(E_MessageType.TurnStart);
         yield return new WaitForSeconds(0.5f);
-        
+
         //初始化能量、连斩数
         currentEnergy = maxEnergy;
         currentTurnCombo = 0;
@@ -140,7 +140,7 @@ public class BattleManager : UnitySingleton<BattleManager>
         GameObject enemyGO = Instantiate(enemyPrefab);
         enemyGO.transform.SetParent(GameObject.Find("Enemies").transform);
         enemyGO.transform.localPosition = enemyPosList[inBattleEnemyList.Count];
-        enemyGO.transform.localScale = new Vector3(1,1,1);
+        enemyGO.transform.localScale = new Vector3(1, 1, 1);
 
         Enemy newEnemy = enemyGO.GetComponent<Enemy>();
         newEnemy.Init(enemyID);
@@ -186,6 +186,7 @@ public class BattleManager : UnitySingleton<BattleManager>
                 if (target != null)
                 {
                     target.TakeDamage(effectValue);
+                    Debug.Log(123);
                 }
                 break;
             //获得护甲
@@ -212,7 +213,6 @@ public class BattleManager : UnitySingleton<BattleManager>
                 {
                     break;
                 }
-
                 turnStartEffectDelegate += delegate
                 {
                     target = BattleManager.Instance.inBattleEnemyList[
@@ -221,6 +221,11 @@ public class BattleManager : UnitySingleton<BattleManager>
                 };
                 break;
             //附加恐惧
+            case 1005:
+                StateManager.AddStateToTarget(target, 1002, effectValue);
+                break;
+            default:
+                break;
         }
     }
 
@@ -237,7 +242,7 @@ public class BattleManager : UnitySingleton<BattleManager>
         //清除玩家身上所有状态
         Player.Instance.ClearAllState();
         //清空回合开始效果
-        turnStartEffectDelegate=null;
+        turnStartEffectDelegate = null;
         //隐藏战斗UI
         UIManager.Instance.HideSingleUI(E_UiId.BattleUI);
         //显示地图界面
@@ -253,7 +258,7 @@ public class BattleManager : UnitySingleton<BattleManager>
     //连斩检测（连斩数）
     public bool CheckCombo(int combo)
     {
-        return currentTurnCombo > combo;
+        return currentTurnCombo >= combo;
     }
     private void Update()
     {

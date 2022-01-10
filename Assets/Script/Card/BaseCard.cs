@@ -9,17 +9,18 @@ using UnityEngine.UI;
 public class BaseCard : MonoBehaviour
 {
     //卡牌数据
-    protected CardData cardData=new CardData();
+    protected CardData cardData = new CardData();
     public CardData mCardData => cardData;
     //卡牌ID
-    public int cardID=1001;
+    public int cardID = 1001;
     //卡图
     protected Image img_Main;
     //卡牌名称
     protected Text text_CardName;
     //卡牌外边框
     protected Image img_OutLine;
-    
+    //卡牌消耗文本
+    protected Text text_cardCost;
     //卡牌效果描述文本
     protected Text text_CardEffect;
     //事件触发器
@@ -59,16 +60,17 @@ public class BaseCard : MonoBehaviour
         cardAnimator = GetComponent<Animator>();
         text_CardName = GameTool.GetTheChildComponent<Text>(gameObject, "Text_CardName");
         text_CardName.text = cardData.cardName;
-
-        if (cardData.cardType!=CardType.SpellCard)
+        text_cardCost = GameTool.GetTheChildComponent<Text>(gameObject, "Text_CardCost");
+        text_cardCost.text=cardData.cardCost.ToString();
+        if (cardData.cardType != CardType.SpellCard)
         {
-            if (cardID>=1000&&cardID<2000)
+            if (cardID >= 1000 && cardID < 2000)
             {
                 switch (cardData.cardType)
                 {
                     case CardType.TiShu:
                         GameTool.GetTheChildComponent<Text>(gameObject, "Text_CardType").
-                            text = "妖梦~" +"体术" ;
+                            text = "妖梦~" + "体术";
                         break;
                     case CardType.JiNeng:
                         GameTool.GetTheChildComponent<Text>(gameObject, "Text_CardType").
@@ -87,7 +89,7 @@ public class BaseCard : MonoBehaviour
                             text = "妖梦~" + "弹幕";
                         break;
                 }
-                
+
             }
         }
     }
@@ -150,7 +152,7 @@ public class BaseCard : MonoBehaviour
     //初始化事件
     protected virtual void InitEvent()
     {
-        eventListener=EventTriggerListener.Get(GameTool.FindTheChild(gameObject,"EventTrigger").gameObject);
+        eventListener = EventTriggerListener.Get(GameTool.FindTheChild(gameObject, "EventTrigger").gameObject);
         eventListener.onEnter += delegate
         {
             OnEnter();
@@ -180,17 +182,17 @@ public class BaseCard : MonoBehaviour
     //当鼠标选中卡牌时的回调
     protected virtual void OnEnter()
     {
-        
+
     }
     //当鼠标离开卡牌时的回调
     protected virtual void OnExit()
     {
-        
+
     }
     //当鼠标抬起时的回调
     protected virtual void OnUp()
     {
-       
+
     }
     //当鼠标点击时的回调
     protected virtual void OnDown()

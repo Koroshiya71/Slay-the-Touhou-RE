@@ -95,6 +95,8 @@ public class StateManager : UnitySingleton<StateManager>
         {
             //如果已有，则直接叠加层数即可
             target.stateDic[id].stateData.stateStack += stack;
+            newState.UpdateStateUI();
+
         }
 
     }

@@ -163,13 +163,23 @@ public class HandCard : BaseCard
                 case CardTarget.SingleEnemy:
                     break;
             }
-            if (cardData.cardEffectDic.ContainsKey(1006)&&BattleManager.Instance.CheckCombo(2))
+            //如果有连斩M：额外触发N次这个效果，则触发对应的效果N次
+            if (cardData.cardEffectDic.ContainsKey(1006) && BattleManager.Instance.CheckCombo(cardData.cardEffectDic[1006].combo))
             {
-                
+                for (int i = 0; i <= cardData.cardEffectDic[1006].EffectValue; i++)
+                {
+                    BattleManager.Instance.TakeCardEffect(effect.Key, effect.Value.EffectValue, target, BattleManager.Instance.CheckCanxin(cardData));
+                }
             }
-            BattleManager.Instance.TakeCardEffect(effect.Key, effect.Value.EffectValue, target, BattleManager.Instance.CheckCanxin(cardData));
+            else
+            {
+                BattleManager.Instance.TakeCardEffect(effect.Key, effect.Value.EffectValue, target, BattleManager.Instance.CheckCanxin(cardData));
+            }
 
         }
+        //连斩数+1
+        BattleManager.Instance.currentTurnCombo++;
+        //消耗能量
         BattleManager.Instance.EditEnergy(BattleManager.Instance.CurrentEnergy - cardData.cardCost);
         for (int i = handCardList.IndexOf(this.gameObject) + 1; i < handCardList.Count; i++)
         {
@@ -180,8 +190,7 @@ public class HandCard : BaseCard
         HandCardManager.Instance.RemoveCard(this.gameObject);
         HandCardManager.Instance.selectedCard = null;
         EventDispatcher.TriggerEvent(E_MessageType.UseCard);
-        //连斩数+1
-        BattleManager.Instance.currentTurnCombo++;
+
     }
 
     //取消UI事件检测
