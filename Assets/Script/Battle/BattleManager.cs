@@ -236,6 +236,8 @@ public class BattleManager : UnitySingleton<BattleManager>
         DeskManager.Instance.ResetDesks();
         //清除玩家身上所有状态
         Player.Instance.ClearAllState();
+        //清空回合开始效果
+        turnStartEffectDelegate=null;
         //隐藏战斗UI
         UIManager.Instance.HideSingleUI(E_UiId.BattleUI);
         //显示地图界面

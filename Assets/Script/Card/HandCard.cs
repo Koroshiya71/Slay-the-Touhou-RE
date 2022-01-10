@@ -163,6 +163,10 @@ public class HandCard : BaseCard
                 case CardTarget.SingleEnemy:
                     break;
             }
+            if (cardData.cardEffectDic.ContainsKey(1006)&&BattleManager.Instance.CheckCombo(2))
+            {
+                
+            }
             BattleManager.Instance.TakeCardEffect(effect.Key, effect.Value.EffectValue, target, BattleManager.Instance.CheckCanxin(cardData));
 
         }

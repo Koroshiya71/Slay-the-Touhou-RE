@@ -62,9 +62,9 @@ public class CardEffectData
     private string effectDes;
     //效果值
     private int effectValue;
-    //是否残心、连斩
+    //残心、连斩
     public bool isCanXin = false;
-    public bool isLianZhan = false;
+    public int combo = 0;
     /// <summary>
     /// 属性
     /// </summary>
@@ -78,9 +78,14 @@ public class CardEffectData
         effectValue = value;
         effectDes = ReadCardEffectData("EffectDes", id);
         isCanXin = ReadCardEffectData("IsCanXin", id) == "1";
-
-        isLianZhan = ReadCardEffectData("IsLianZhan", id) == "1";
-
+        combo = int.Parse(ReadCardEffectData("LianZhan", id));
+        effectDes = effectDes.
+                Replace("value", effectValue.ToString());
+        if (combo!=0)
+        {
+            effectDes = effectDes.
+                Replace("combo", combo.ToString());
+        }
     }
     public CardEffectData()
     {
@@ -169,6 +174,9 @@ public class CardData
             case "普通":
                 cardRare = CardRare.Normal;
                 break;
+            case "稀有":
+                cardRare = CardRare.Rare;
+                break;
             default:
                 cardRare = CardRare.Normal;
                 break;
@@ -194,14 +202,15 @@ public class CardData
         {
             int effectID = int.Parse(ReadCfgCardData("EffectID" + i, cardID));
             int effectValue = int.Parse(ReadCfgCardData("EffectValue" + i, cardID));
+
             cardEffectDic.Add(effectID, new CardEffectData(effectID, effectValue));
             if (i > 1)
             {
                 cardDes += "，";
             }
 
-            string effectDes = cardEffectDic[effectID].EffectDes.
-                Replace("value", effectValue.ToString());
+            string effectDes = cardEffectDic[effectID].EffectDes;
+
             cardDes += effectDes;
         }
 

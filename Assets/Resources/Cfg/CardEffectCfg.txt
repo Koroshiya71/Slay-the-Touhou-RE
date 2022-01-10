@@ -1,4 +1,4 @@
-﻿ID,EffectDes,IsCanXin,IsLianZhan
+ID,EffectDes,IsCanXin,LianZhan
 //效果ID,//效果描述,//残心,//连斩
 -1,-1,-1,-1
 1001,造成value点伤害,0,0
@@ -6,4 +6,4 @@
 1003,残心：获得value点能量,1,0
 1004,残心：对随机敌人造成value点伤害,1,0
 1005,附加value层恐惧,0,0
-1006,连斩：额外生效value次,0,1
+1006,连斩combo：额外生效value次,0,2
