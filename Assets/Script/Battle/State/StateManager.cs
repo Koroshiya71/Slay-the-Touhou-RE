@@ -67,6 +67,10 @@ public class StateManager : UnitySingleton<StateManager>
     //给玩家附加状态(状态ID，层数)
     public static void AddStateToTarget(BaseBattleUnit target, int id, int stack)
     {
+        if (target == null)
+        {
+            return;
+        }
         //判断是否已有该状态
         if (!target.stateDic.ContainsKey(id))
         {
@@ -93,6 +97,7 @@ public class StateManager : UnitySingleton<StateManager>
         }
         else
         {
+            var newState = Instantiate(stateObj).GetComponent<State>();
             //如果已有，则直接叠加层数即可
             target.stateDic[id].stateData.stateStack += stack;
             newState.UpdateStateUI();

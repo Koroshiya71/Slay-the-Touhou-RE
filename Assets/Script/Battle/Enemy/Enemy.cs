@@ -119,9 +119,9 @@ public class Enemy : BaseBattleUnit
 
     protected override void OnTriggerStay2D(Collider2D other)
     {
+        
         //卡牌选中时启用选择特效
-        if (other.CompareTag("HandCard") &&
-            HandCardManager.Instance.selectedCard.mCardData.cardTarget == CardTarget.SingleEnemy)
+        if (other.CompareTag("HandCard") && HandCardManager.Instance.selectedCard.mCardData.cardTarget == CardTarget.SingleEnemy)
         {
             BattleManager.Instance.selectedTarget = this;
         }
