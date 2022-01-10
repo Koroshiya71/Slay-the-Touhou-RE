@@ -87,6 +87,11 @@ public class HandCardManager : UnitySingleton<HandCardManager>
         handCardGoList = new List<GameObject>();
         currentCardNum = 0;
     }
+    //更新手牌数值
+    public void UpdateCardData()
+    {
+
+    }
     //调整卡牌位置和旋转
     public void MoveAndRotateCard()
     {

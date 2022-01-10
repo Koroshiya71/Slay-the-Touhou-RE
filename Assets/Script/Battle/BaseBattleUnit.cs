@@ -39,7 +39,7 @@ public class BaseBattleUnit : MonoBehaviour
     {
     }
 
-    //受到伤害
+    //受到伤害（伤害值，伤害来源）
     public virtual void TakeDamage(int damage)
     {
         //灵体检测
@@ -47,6 +47,7 @@ public class BaseBattleUnit : MonoBehaviour
         {
             damage = (int)(0.7f * damage);
         }
+
         //如果有护盾，优先扣除护盾
         if (currentShield >= damage)
         {
@@ -90,6 +91,11 @@ public class BaseBattleUnit : MonoBehaviour
     //获得护甲
     public virtual void GetShield(int shield)
     {
+        //焕发检测
+        if (StateManager.CheckState(this, 1003))
+        {
+            shield = (int)(shield * 1.3f);
+        }
         currentShield += shield;
         UpdateUI();
     }
@@ -102,7 +108,7 @@ public class BaseBattleUnit : MonoBehaviour
         }
         else
         {
-            currentHp=maxHp;
+            currentHp = maxHp;
         }
     }
     #region 状态相关

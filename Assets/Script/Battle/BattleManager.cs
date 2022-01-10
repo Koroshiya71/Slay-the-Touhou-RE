@@ -172,12 +172,17 @@ public class BattleManager : UnitySingleton<BattleManager>
     }
 
     //根据卡牌效果ID和效果值触发效果
-    public void TakeCardEffect(int effectID, int effectValue, BaseBattleUnit target = null, bool isCanXin = false, bool isLianZhan = false)
+    public void TakeCardEffect(int effectID, int effectValue, BaseBattleUnit target = null, bool isCanXin = false, bool isLianZhan = false )
     {
         //如果没有特别指定目标则默认指定当前选中的目标
         if (target == null)
         {
             target = selectedTarget;
+        }
+        //安全校验
+        if (target == null)
+        {
+            return;
         }
         switch (effectID)
         {
@@ -186,7 +191,6 @@ public class BattleManager : UnitySingleton<BattleManager>
                 if (target != null)
                 {
                     target.TakeDamage(effectValue);
-                    Debug.Log(123);
                 }
                 break;
             //获得护甲

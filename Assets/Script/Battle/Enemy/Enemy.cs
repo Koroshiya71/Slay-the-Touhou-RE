@@ -119,7 +119,10 @@ public class Enemy : BaseBattleUnit
 
     protected override void OnTriggerStay2D(Collider2D other)
     {
-        
+        if (HandCardManager.Instance.selectedCard == null)
+        {
+            return;
+        }
         //卡牌选中时启用选择特效
         if (other.CompareTag("HandCard") && HandCardManager.Instance.selectedCard.mCardData.cardTarget == CardTarget.SingleEnemy)
         {
@@ -157,6 +160,7 @@ public class Enemy : BaseBattleUnit
     //显示行动描述
     public void ShowActionDes()
     {
+        
         text_ActionDes.text = currentAction.ActionDes.Replace("value", currentAction.ActionValue.ToString());
         text_ActionDes.enabled = true;
     }

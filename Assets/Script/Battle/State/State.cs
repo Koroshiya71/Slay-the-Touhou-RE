@@ -37,6 +37,10 @@ public class State : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     //更新UI
     public void UpdateStateUI()
     {
+        if (stateData == null)
+        {
+            return;
+        }
         if (stateData.showStack)
         {
             text_Stack.text = stateData.stateStack.ToString();

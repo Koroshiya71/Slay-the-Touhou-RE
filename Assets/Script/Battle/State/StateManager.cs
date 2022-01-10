@@ -67,23 +67,19 @@ public class StateManager : UnitySingleton<StateManager>
     //给玩家附加状态(状态ID，层数)
     public static void AddStateToTarget(BaseBattleUnit target, int id, int stack)
     {
-        if (target == null)
-        {
-            return;
-        }
+        var newState = Instantiate(stateObj).GetComponent<State>();
+        var newData = newState.stateData = new StateData(id, stack);
+
         //判断是否已有该状态
         if (!target.stateDic.ContainsKey(id))
         {
             //如果没有，则新增一个状态到字典中
-            var newState = Instantiate(stateObj).GetComponent<State>();
-            var newData = newState.stateData = new StateData(id, stack);
 
             //获取Sprite并设定父物体、位置、缩放
             newState.GetComponent<Image>().sprite = newData.stateSprite;
             newState.transform.SetParent(target.transform);
             newState.transform.localScale = new Vector3(1, 1, 1);
-            //更新其UI状态
-            newState.UpdateStateUI();
+
             if (target.isPlayer)
             {
                 newState.transform.localPosition = new Vector3(-35 + target.stateDic.Count % 5 * 20, -55 - 20 * target.stateDic.Count / 5);
@@ -94,14 +90,15 @@ public class StateManager : UnitySingleton<StateManager>
             }
             //添加到玩家状态字典
             target.stateDic.Add(newData.stateID, newState);
+            //更新其UI状态
+            newState.UpdateStateUI();
         }
         else
         {
-            var newState = Instantiate(stateObj).GetComponent<State>();
             //如果已有，则直接叠加层数即可
             target.stateDic[id].stateData.stateStack += stack;
-            newState.UpdateStateUI();
-
+            //更新其UI状态
+            target.stateDic[id].UpdateStateUI();
         }
 
     }
