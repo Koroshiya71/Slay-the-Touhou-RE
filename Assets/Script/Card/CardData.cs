@@ -71,11 +71,14 @@ public class CardEffectData
     public int EffectID => effectID;
     public int EffectValue => effectValue;
     public string EffectDes => effectDes;
+    //实际效果值
+    public int actualValue;
 
     public CardEffectData(int id, int value)
     {
         effectID = id;
         effectValue = value;
+        actualValue = value; 
         effectDes = ReadCardEffectData("EffectDes", id);
         isCanXin = ReadCardEffectData("IsCanXin", id) == "1";
         combo = int.Parse(ReadCardEffectData("LianZhan", id));

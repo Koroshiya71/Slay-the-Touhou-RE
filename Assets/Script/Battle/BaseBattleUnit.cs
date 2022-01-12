@@ -87,6 +87,7 @@ public class BaseBattleUnit : MonoBehaviour
             text_Shield.enabled = true;
             text_Shield.text = currentShield.ToString();
         }
+        
     }
     //获得护甲
     public virtual void GetShield(int shield)

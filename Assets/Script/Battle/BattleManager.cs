@@ -110,6 +110,13 @@ public class BattleManager : UnitySingleton<BattleManager>
         {
             DeskManager.Instance.DrawCard();
         }
+
+        //更新卡牌和敌人行动数值
+        foreach (var enemy in inBattleEnemyList)
+        {
+            enemy.hasCheckList.Clear();
+        }
+        UpdateCardAndActionValue();
     }
     //回合结束按钮点击回调
     public void OnTurnEndButtonDown()
@@ -155,11 +162,11 @@ public class BattleManager : UnitySingleton<BattleManager>
 
             //对玩家造成value点伤害
             case 1001:
-                Player.Instance.TakeDamage(actData.ActionValue);
+                Player.Instance.TakeDamage(actData.actualValue);
                 break;
             //自身获得value层灵体
             case 1002:
-                StateManager.AddStateToTarget(unit, 1001, actData.ActionValue);
+                StateManager.AddStateToTarget(unit, 1001, actData.actualValue);
                 break;
         }
     }
@@ -170,7 +177,22 @@ public class BattleManager : UnitySingleton<BattleManager>
         currentEnergy = newEnergy;
 
     }
-
+    //刷新卡牌数值和行为数值
+    public void UpdateCardAndActionValue()
+    {
+        //todo:更新卡牌数据
+        foreach (var enemy in inBattleEnemyList)
+        {
+            //恐惧检测
+            if (StateManager.CheckState(enemy,1002)&&
+                (enemy.currentAction.ActionType==ActionType.Attack)&&!enemy.hasCheckList.Contains(1002))
+            {
+                enemy.hasCheckList.Add(1002);
+                enemy.currentAction.actualValue = (int) (enemy.currentAction.actualValue * 0.7f);
+            }
+            enemy.UpdateUI();
+        }
+    }
     //根据卡牌效果ID和效果值触发效果
     public void TakeCardEffect(int effectID, int effectValue, BaseBattleUnit target = null, bool isCanXin = false, bool isLianZhan = false )
     {

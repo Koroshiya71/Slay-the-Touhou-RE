@@ -82,11 +82,11 @@ public class StateManager : UnitySingleton<StateManager>
 
             if (target.isPlayer)
             {
-                newState.transform.localPosition = new Vector3(-35 + target.stateDic.Count % 5 * 20, -55 - 20 * target.stateDic.Count / 5);
+                newState.transform.localPosition = new Vector3(-35 + target.stateDic.Count % 5 * 20, -55 - 20 * (target.stateDic.Count / 5));
             }
             else
             {
-                newState.transform.localPosition = new Vector3(-40 + target.stateDic.Count % 5 * 20, -55 - 20 * target.stateDic.Count / 5);
+                newState.transform.localPosition = new Vector3(-40 + target.stateDic.Count % 5 * 20, -55 - 20 * (target.stateDic.Count / 5));
             }
             //添加到玩家状态字典
             target.stateDic.Add(newData.stateID, newState);
@@ -100,7 +100,7 @@ public class StateManager : UnitySingleton<StateManager>
             //更新其UI状态
             target.stateDic[id].UpdateStateUI();
         }
-
+        BattleManager.Instance.UpdateCardAndActionValue();
     }
 
     //检查目标身上是否有该状态

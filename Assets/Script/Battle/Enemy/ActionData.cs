@@ -31,7 +31,7 @@ public class ActionData
     public int ActionValue => actionValue;
     public string ActionDes => actionDes;
     public bool NeedTarget => needTarget;
-
+    public int actualValue;
     public int ActionID
     {
         get => actionID;
@@ -48,6 +48,7 @@ public class ActionData
         actionID = id;
         actionDes = ReadActionCfgData("ActionEffectDes", id);
         actionValue = value;
+        actualValue = value;
         string tempStr = ReadActionCfgData("ActionType", id);
         switch (tempStr)
         {

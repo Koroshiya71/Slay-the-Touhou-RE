@@ -37,13 +37,15 @@ public class Enemy : BaseBattleUnit
     protected Text text_ActionValue;
 
     //当前即将执行的行动
-    protected ActionData currentAction;
+    public ActionData currentAction;
 
     //启用的行为模式
     protected string activeActionMode;
 
     //当前正在执行行为列表中的第几个行为
     protected int currentActionNo;
+    //已经检测过的状态ID列表
+    public List<int> hasCheckList = new List<int>();
 
     #region 初始化
 
@@ -184,6 +186,8 @@ public class Enemy : BaseBattleUnit
     //更新行动
     public void UpdateCurrentAction()
     {
+        //更新前还原数值
+        currentAction.actualValue = currentAction.ActionValue;
         //获取行动列表中的第一个行为
         currentActionNo %= activeActionMode.Length;
         currentAction = enemyData.EnemyActionDic
@@ -199,7 +203,7 @@ public class Enemy : BaseBattleUnit
             case ActionType.Attack:
                 img_EnemyAction.sprite =
                     ResourcesManager.Instance.LoadResources<Sprite>("Image/" + "UIImage/" + "EnemyAction/" + "Attack");
-                text_ActionValue.text = currentAction.ActionValue.ToString();
+                text_ActionValue.text = currentAction.actualValue.ToString();
                 text_ActionValue.enabled = true;
                 break;
             case ActionType.Buff:
@@ -209,21 +213,47 @@ public class Enemy : BaseBattleUnit
                 break;
         }
 
-        text_ActionDes.text = currentAction.ActionDes.Replace("value", currentAction.ActionValue.ToString());
+        text_ActionDes.text = currentAction.ActionDes.Replace("value", currentAction.actualValue.ToString());
         text_ActionDes.enabled = false;
     }
+    
     //死亡方法
     public override void Die()
     {
         //移除队列并销毁
         BattleManager.Instance.inBattleEnemyList.Remove(this);
         Destroy(this.gameObject);
-
+        
         //如果该敌人死亡后敌人数量为0，触发战斗结束方法
         if (BattleManager.Instance.inBattleEnemyList.Count == 0)
         {
             BattleManager.Instance.BattleEnd();
         }
+    }
+    //更新UI
+    public override void UpdateUI()
+    {
+        base.UpdateUI();
+        //更新Action UI
+        text_ActionDes.enabled = false;
+        text_ActionValue.enabled = false;
+        switch (currentAction.ActionType)
+        {
+            case ActionType.Attack:
+                img_EnemyAction.sprite =
+                    ResourcesManager.Instance.LoadResources<Sprite>("Image/" + "UIImage/" + "EnemyAction/" + "Attack");
+                text_ActionValue.text = currentAction.actualValue.ToString();
+                text_ActionValue.enabled = true;
+                break;
+            case ActionType.Buff:
+                img_EnemyAction.sprite =
+                    ResourcesManager.Instance.LoadResources<Sprite>("Image/" + "UIImage/" + "EnemyAction/" + "Buff");
+                text_ActionValue.enabled = false;
+                break;
+        }
+
+        text_ActionDes.text = currentAction.ActionDes.Replace("value", currentAction.actualValue.ToString());
+        text_ActionDes.enabled = false;
     }
 
     #endregion
