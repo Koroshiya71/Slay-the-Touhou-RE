@@ -24,7 +24,7 @@ public class GameManager : UnitySingleton<GameManager>
     public PlayerData playerData = new PlayerData();
     private void Awake()
     {
-        StreamReader reader = new StreamReader("./Assets/Resources/Json/PlayerInit.json");
+        StreamReader reader = new StreamReader(SaveManager.jsonDataPath+"PlayerInit.json");
         playerData = JsonConvert.DeserializeObject<PlayerData>(reader.ReadToEnd());
     }
     // Start is called before the first frame update

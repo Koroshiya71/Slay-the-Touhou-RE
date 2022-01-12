@@ -180,7 +180,20 @@ public class BattleManager : UnitySingleton<BattleManager>
     //刷新卡牌数值和行为数值
     public void UpdateCardAndActionValue()
     {
-        //todo:更新卡牌数据
+        //更新卡牌数值
+        //恐惧检测
+        if (StateManager.CheckState(Player.Instance,1002))
+        {
+            foreach (var handCardGo in HandCardManager.Instance.handCardGoList)
+            {
+                var cardData = handCardGo.GetComponent<HandCard>().CardData;
+                if (cardData.cardEffectDic.ContainsKey(1001))
+                {
+                    
+                }
+            }
+        }
+        //更新敌人行为数值
         foreach (var enemy in inBattleEnemyList)
         {
             //恐惧检测

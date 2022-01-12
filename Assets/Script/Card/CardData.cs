@@ -31,7 +31,14 @@ public enum CardRare
     //史诗
     Epic
 }
-
+//卡牌效果类型
+public enum CardEffectType
+{
+    Damage,//伤害
+    Shield,//护甲
+    Buff,//效果
+    Special,//特殊（以上基本效果以外的其他东西）
+}
 //卡牌使用方式
 public enum CardTarget
 {
@@ -65,6 +72,8 @@ public class CardEffectData
     //残心、连斩
     public bool isCanXin = false;
     public int combo = 0;
+    //效果类型
+    public CardEffectType effectType;
     /// <summary>
     /// 属性
     /// </summary>
@@ -78,7 +87,7 @@ public class CardEffectData
     {
         effectID = id;
         effectValue = value;
-        actualValue = value; 
+        actualValue = value;
         effectDes = ReadCardEffectData("EffectDes", id);
         isCanXin = ReadCardEffectData("IsCanXin", id) == "1";
         combo = int.Parse(ReadCardEffectData("LianZhan", id));
@@ -89,6 +98,8 @@ public class CardEffectData
             effectDes = effectDes.
                 Replace("combo", combo.ToString());
         }
+
+        string typeStr = ReadCardEffectData("EffectType", id);
     }
     public CardEffectData()
     {

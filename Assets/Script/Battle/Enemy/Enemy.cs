@@ -44,8 +44,7 @@ public class Enemy : BaseBattleUnit
 
     //当前正在执行行为列表中的第几个行为
     protected int currentActionNo;
-    //已经检测过的状态ID列表
-    public List<int> hasCheckList = new List<int>();
+    
 
     #region 初始化
 
@@ -113,7 +112,7 @@ public class Enemy : BaseBattleUnit
     {
         //卡牌选中时启用选择特效
         if (other.CompareTag("HandCard") &&
-            HandCardManager.Instance.selectedCard.mCardData.cardTarget == CardTarget.SingleEnemy)
+            HandCardManager.Instance.selectedCard.CardData.cardTarget == CardTarget.SingleEnemy)
         {
             BattleManager.Instance.selectedTarget = this;
         }
@@ -126,7 +125,7 @@ public class Enemy : BaseBattleUnit
             return;
         }
         //卡牌选中时启用选择特效
-        if (other.CompareTag("HandCard") && HandCardManager.Instance.selectedCard.mCardData.cardTarget == CardTarget.SingleEnemy)
+        if (other.CompareTag("HandCard") && HandCardManager.Instance.selectedCard.CardData.cardTarget == CardTarget.SingleEnemy)
         {
             BattleManager.Instance.selectedTarget = this;
         }

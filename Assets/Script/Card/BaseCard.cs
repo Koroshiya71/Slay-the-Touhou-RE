@@ -10,7 +10,7 @@ public class BaseCard : MonoBehaviour
 {
     //卡牌数据
     protected CardData cardData = new CardData();
-    public CardData mCardData => cardData;
+    public CardData CardData => cardData;
     //卡牌ID
     public int cardID = 1001;
     //卡图

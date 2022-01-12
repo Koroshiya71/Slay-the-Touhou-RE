@@ -89,4 +89,9 @@ public class GameSceneManager : UnitySingleton<GameSceneManager>
     {
 
     }
+
+    public void TestJson()
+    {
+
+    }
 }

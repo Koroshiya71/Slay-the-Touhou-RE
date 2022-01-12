@@ -80,7 +80,7 @@ public class HandCardManager : UnitySingleton<HandCardManager>
         {
             var handCard = handCardGoList[i];
             //将卡牌数据加入弃牌堆
-            DeskManager.Instance.disCardDeskList.Add(handCard.GetComponent<HandCard>().mCardData);
+            DeskManager.Instance.disCardDeskList.Add(handCard.GetComponent<HandCard>().CardData);
             Destroy(handCard);
         }
         //清空手牌列表
