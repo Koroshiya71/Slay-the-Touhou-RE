@@ -9,41 +9,51 @@ public enum CardType
 {
     //体术
     TiShu,
+
     //弹幕
     DanMu,
+
     //法术
     FaShu,
+
     //防御
     FangYu,
+
     //技能
     JiNeng,
+
     //符卡
     SpellCard
 }
+
 //卡牌稀有度
 public enum CardRare
 {
-
     //普通
     Normal,
+
     //稀有
     Rare,
+
     //史诗
     Epic
 }
+
 //卡牌效果类型
 public enum CardEffectType
 {
-    Damage,//伤害
-    Shield,//护甲
-    Buff,//效果
-    Special,//特殊（以上基本效果以外的其他东西）
+    Damage, //伤害
+    Shield, //护甲
+    Buff, //效果
+    Special, //特殊（以上基本效果以外的其他东西）
 }
+
 //卡牌使用方式
 public enum CardTarget
 {
     //需要单体敌人作为目标
     SingleEnemy,
+
     //玩家自身
     MyPlayer
 }
@@ -53,13 +63,17 @@ public enum CardUseType
 {
     //普通卡牌
     NormalCard,
+
     //符卡
     SpellCard,
+
     //仅用于展示的卡牌
     OnlyDisplayCard,
+
     //用于选择的卡牌
     ChooseCard
 }
+
 public class CardEffectData
 {
     //效果ID
@@ -67,19 +81,31 @@ public class CardEffectData
 
     //效果描述
     private string effectDes;
+
     //效果值
     private int effectValue;
+
     //残心、连斩
     public bool isCanXin = false;
+
     public int combo = 0;
+
     //效果类型
     public CardEffectType effectType;
+
     /// <summary>
     /// 属性
     /// </summary>
     public int EffectID => effectID;
+
     public int EffectValue => effectValue;
-    public string EffectDes => effectDes;
+
+    public string EffectDes
+    {
+        get => effectDes;
+        set => effectDes = value;
+    }
+
     //实际效果值
     public int actualValue;
 
@@ -91,20 +117,34 @@ public class CardEffectData
         effectDes = ReadCardEffectData("EffectDes", id);
         isCanXin = ReadCardEffectData("IsCanXin", id) == "1";
         combo = int.Parse(ReadCardEffectData("LianZhan", id));
-        effectDes = effectDes.
-                Replace("value", effectValue.ToString());
-        if (combo!=0)
+        effectDes = effectDes.Replace("value", actualValue.ToString());
+        if (combo != 0)
         {
-            effectDes = effectDes.
-                Replace("combo", combo.ToString());
+            effectDes = effectDes.Replace("combo", combo.ToString());
         }
 
         string typeStr = ReadCardEffectData("EffectType", id);
+        switch (typeStr)
+        {
+            case "伤害":
+                effectType = CardEffectType.Damage;
+                break;
+            case "效果":
+                effectType = CardEffectType.Buff;
+                break;
+            case "护甲":
+                effectType = CardEffectType.Shield;
+                break;
+            case "特殊":
+                effectType = CardEffectType.Special;
+                break;
+        }
     }
+
     public CardEffectData()
     {
-
     }
+
     //根据cfg数据表读取卡牌效果数据
     private string ReadCardEffectData(string key, int id)
     {
@@ -119,21 +159,28 @@ public class CardData
 {
     //卡牌ID
     public int cardID;
+
     //卡牌名称
     public string cardName;
+
     //卡图路径
     public string cardImgRes;
+
     //卡牌费用
     public int cardCost;
+
     //卡牌描述
     public string cardDes;
+
     //卡牌类型
     public CardType cardType;
+
     //卡牌稀有度
     public CardRare cardRare;
 
     //卡牌目标
     public CardTarget cardTarget;
+
     //卡牌用途
     public CardUseType cardUseType;
 
@@ -145,9 +192,12 @@ public class CardData
 
 
     public bool HasModified => hasModified;
+
     //构造函数
-    public CardData(int cardID = 1001, string cardName = "斩击", string cardImgRes = "Image/Card/CardImg/斩击", int cardCost = 1,
-        string cardDes = "造成6点伤害", CardType cardType = CardType.TiShu, CardRare cardRare = CardRare.Normal, CardTarget cardTarget = CardTarget.SingleEnemy,
+    public CardData(int cardID = 1001, string cardName = "斩击", string cardImgRes = "Image/Card/CardImg/斩击",
+        int cardCost = 1,
+        string cardDes = "造成6点伤害", CardType cardType = CardType.TiShu, CardRare cardRare = CardRare.Normal,
+        CardTarget cardTarget = CardTarget.SingleEnemy,
         CardUseType cardUseType = CardUseType.NormalCard)
     {
         this.cardID = cardID;
@@ -182,6 +232,7 @@ public class CardData
                 cardType = CardType.TiShu;
                 break;
         }
+
         tempStr = ReadCfgCardData("Rare", cardID);
         switch (tempStr)
         {
@@ -195,6 +246,7 @@ public class CardData
                 cardRare = CardRare.Normal;
                 break;
         }
+
         tempStr = ReadCfgCardData("Target", cardID);
         switch (tempStr)
         {
@@ -227,13 +279,12 @@ public class CardData
 
             cardDes += effectDes;
         }
-
-
-
     }
+
     public CardData()
     {
     }
+
     //克隆方法
     public CardData(CardData data)
     {
@@ -253,10 +304,10 @@ public class CardData
             cardEffectDic.Add(effectElement.Key, effectElement.Value);
         }
     }
+
     private string ReadCfgCardData(string key, int id)
     {
         string data = DataController.Instance.ReadCfg(key, id, DataController.Instance.dicCardData);
         return data;
     }
-
 }

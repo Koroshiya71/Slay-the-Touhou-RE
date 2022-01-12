@@ -19,7 +19,6 @@ public class GameSceneManager : UnitySingleton<GameSceneManager>
     //游戏中的所有场景
     public List<BaseGameScene> inGameSceneList = new List<BaseGameScene>();
 
-
     //初始化游戏场景管理器
     public void InitGameSceneManager()
     {

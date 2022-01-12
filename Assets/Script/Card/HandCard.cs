@@ -168,12 +168,12 @@ public class HandCard : BaseCard
             {
                 for (int i = 0; i <= cardData.cardEffectDic[1006].EffectValue; i++)
                 {
-                    BattleManager.Instance.TakeCardEffect(effect.Key, effect.Value.EffectValue, target, BattleManager.Instance.CheckCanxin(cardData));
+                    BattleManager.Instance.TakeCardEffect(effect.Key, effect.Value.actualValue, target, BattleManager.Instance.CheckCanxin(cardData));
                 }
             }
             else
             {
-                BattleManager.Instance.TakeCardEffect(effect.Key, effect.Value.EffectValue, target, BattleManager.Instance.CheckCanxin(cardData));
+                BattleManager.Instance.TakeCardEffect(effect.Key, effect.Value.actualValue, target, BattleManager.Instance.CheckCanxin(cardData));
             }
 
         }

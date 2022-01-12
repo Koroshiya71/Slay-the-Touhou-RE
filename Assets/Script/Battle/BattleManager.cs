@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using GameCore;
 using UnityEngine;
 using UnityEngine.Serialization;
+using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
 public class BattleManager : UnitySingleton<BattleManager>
@@ -24,12 +25,16 @@ public class BattleManager : UnitySingleton<BattleManager>
 
     //战斗数据总字典<id,战斗数据>
     public Dictionary<int, BattleData> battleDataDic = new Dictionary<int, BattleData>();
+
     //回合开始时触发的效果委托
     public Action turnStartEffectDelegate;
+
     //是否是本场战斗的第一回合
     public bool isInit = true;
+
     //本回合使用的卡牌数
     public int currentTurnCombo = 0;
+
     /// <summary>
     /// 敌人相关
     /// </summary>
@@ -38,6 +43,7 @@ public class BattleManager : UnitySingleton<BattleManager>
 
     //敌人数组
     public List<Enemy> inBattleEnemyList = new List<Enemy>();
+
     //敌人位置数组
     public List<Vector3> enemyPosList = new List<Vector3>();
 
@@ -49,9 +55,9 @@ public class BattleManager : UnitySingleton<BattleManager>
         //初始化敌人位置列表
         enemyPosList = new List<Vector3>()
         {
-            new Vector3(250,-50,0),
-            new Vector3(125,-50,0),
-            new Vector3(375,-50,0),
+            new Vector3(250, -50, 0),
+            new Vector3(125, -50, 0),
+            new Vector3(375, -50, 0),
         };
         //初始化抽牌数
         turnDrawCardNum = 5;
@@ -60,8 +66,8 @@ public class BattleManager : UnitySingleton<BattleManager>
         //初始化能量
         maxEnergy = 3;
         currentEnergy = maxEnergy;
-
     }
+
     //初始化战斗
     public void InitBattle(BattleData battleData)
     {
@@ -77,11 +83,13 @@ public class BattleManager : UnitySingleton<BattleManager>
         {
             CreateEnemy(enemyID);
         }
+
         //初始化
         isInit = false;
         //开始回合
         StartCoroutine(TurnStart());
     }
+
     //回合开始效果携程
     public IEnumerator TurnStartAction()
     {
@@ -89,8 +97,8 @@ public class BattleManager : UnitySingleton<BattleManager>
         //清空回合开始委托
         turnStartEffectDelegate = null;
         yield return new WaitForSeconds(0.5f);
-
     }
+
     //回合开始
     public IEnumerator TurnStart()
     {
@@ -105,6 +113,7 @@ public class BattleManager : UnitySingleton<BattleManager>
         {
             yield return StartCoroutine(TurnStartAction());
         }
+
         //抽牌
         for (int i = 0; i < turnDrawCardNum; i++)
         {
@@ -112,17 +121,21 @@ public class BattleManager : UnitySingleton<BattleManager>
         }
 
         //更新卡牌和敌人行动数值
+        Player.Instance.hasCheckList.Clear();
         foreach (var enemy in inBattleEnemyList)
         {
             enemy.hasCheckList.Clear();
         }
+
         UpdateCardAndActionValue();
     }
+
     //回合结束按钮点击回调
     public void OnTurnEndButtonDown()
     {
         StartCoroutine(TurnEnd());
     }
+
     //回合结束携程
     public IEnumerator TurnEnd()
     {
@@ -134,13 +147,16 @@ public class BattleManager : UnitySingleton<BattleManager>
             yield return new WaitForSeconds(0.5f);
             enemy.TakeAction();
         }
+
         yield return new WaitForSeconds(0.5f);
         foreach (var enemy in inBattleEnemyList)
         {
             enemy.UpdateCurrentAction();
         }
+
         StartCoroutine(TurnStart());
     }
+
     //创建敌人
     public void CreateEnemy(int enemyID)
     {
@@ -153,13 +169,12 @@ public class BattleManager : UnitySingleton<BattleManager>
         newEnemy.Init(enemyID);
         inBattleEnemyList.Add(newEnemy);
     }
+
     //触发敌人行动效果
     public void TriggerActionEffect(BaseBattleUnit unit, ActionData actData)
     {
-
         switch (actData.ActionID)
         {
-
             //对玩家造成value点伤害
             case 1001:
                 Player.Instance.TakeDamage(actData.actualValue);
@@ -175,50 +190,73 @@ public class BattleManager : UnitySingleton<BattleManager>
     public void EditEnergy(int newEnergy)
     {
         currentEnergy = newEnergy;
-
     }
+
     //刷新卡牌数值和行为数值
     public void UpdateCardAndActionValue()
     {
         //更新卡牌数值
         //恐惧检测
-        if (StateManager.CheckState(Player.Instance,1002))
+        if (StateManager.CheckState(Player.Instance, 1002) && !Player.Instance.hasCheckList.Contains(1002))
         {
             foreach (var handCardGo in HandCardManager.Instance.handCardGoList)
             {
                 var cardData = handCardGo.GetComponent<HandCard>().CardData;
-                if (cardData.cardEffectDic.ContainsKey(1001))
+
+                foreach (var data in cardData.cardEffectDic.Values)
                 {
-                    
+                    if (data.effectType == CardEffectType.Damage)
+                    {
+                        data.actualValue = (int) (0.7f * data.EffectValue);
+                        //替换描述
+                        UpdateEffectDes(handCardGo,cardData,data);
+                        Player.Instance.hasCheckList.Add(1002);
+                    }
                 }
             }
         }
+
         //更新敌人行为数值
         foreach (var enemy in inBattleEnemyList)
         {
             //恐惧检测
-            if (StateManager.CheckState(enemy,1002)&&
-                (enemy.currentAction.ActionType==ActionType.Attack)&&!enemy.hasCheckList.Contains(1002))
+            if (StateManager.CheckState(enemy, 1002) &&
+                (enemy.currentAction.ActionType == ActionType.Attack) && !enemy.hasCheckList.Contains(1002))
             {
                 enemy.hasCheckList.Add(1002);
                 enemy.currentAction.actualValue = (int) (enemy.currentAction.actualValue * 0.7f);
             }
+
             enemy.UpdateUI();
         }
     }
+
+    //根据效果类型更新卡牌描述
+    public void UpdateEffectDes(GameObject card,CardData cardData, CardEffectData data)
+    {
+        //替换描述
+        cardData.cardDes = cardData.cardDes.Replace(
+            data.EffectDes, data.EffectDes.Replace(
+                data.EffectValue.ToString(), data.actualValue.ToString()));
+        GameTool.GetTheChildComponent<Text>(card, "Text_CardEffect").text = cardData.cardDes;
+    }
+
     //根据卡牌效果ID和效果值触发效果
-    public void TakeCardEffect(int effectID, int effectValue, BaseBattleUnit target = null, bool isCanXin = false, bool isLianZhan = false )
+    public void TakeCardEffect(int effectID, int effectValue, BaseBattleUnit target = null, bool isCanXin = false,
+        bool isLianZhan = false)
     {
         //如果没有特别指定目标则默认指定当前选中的目标
         if (target == null)
         {
             target = selectedTarget;
         }
+
         //安全校验
         if (target == null)
         {
             return;
         }
+
         switch (effectID)
         {
             //对目标造成单体伤害
@@ -227,6 +265,7 @@ public class BattleManager : UnitySingleton<BattleManager>
                 {
                     target.TakeDamage(effectValue);
                 }
+
                 break;
             //获得护甲
             case 1002:
@@ -234,6 +273,7 @@ public class BattleManager : UnitySingleton<BattleManager>
                 {
                     target.GetShield(effectValue);
                 }
+
                 break;
             //残心：获得能量
             case 1003:
@@ -241,10 +281,8 @@ public class BattleManager : UnitySingleton<BattleManager>
                 {
                     break;
                 }
-                turnStartEffectDelegate += delegate
-                {
-                    currentEnergy += effectValue;
-                };
+
+                turnStartEffectDelegate += delegate { currentEnergy += effectValue; };
                 break;
             //残心：对随机敌人造成伤害
             case 1004:
@@ -252,6 +290,7 @@ public class BattleManager : UnitySingleton<BattleManager>
                 {
                     break;
                 }
+
                 turnStartEffectDelegate += delegate
                 {
                     target = BattleManager.Instance.inBattleEnemyList[
@@ -294,21 +333,28 @@ public class BattleManager : UnitySingleton<BattleManager>
     {
         return currentEnergy == data.cardCost;
     }
+
     //连斩检测（连斩数）
     public bool CheckCombo(int combo)
     {
         return currentTurnCombo >= combo;
     }
+
     private void Update()
     {
         //GM调试命令
-        if (Input.GetKeyDown(KeyCode.R))//结束游戏
+        if (Input.GetKeyDown(KeyCode.R)) //结束战斗
         {
             for (int i = 0; i < inBattleEnemyList.Count; i++)
             {
                 inBattleEnemyList[i].Die();
             }
+
             BattleEnd();
+        }
+        if (Input.GetKeyDown(KeyCode.K)) //为玩家附加一层恐惧
+        {
+            StateManager.AddStateToTarget(Player.Instance,1002,1);
         }
     }
 
