@@ -235,8 +235,9 @@ public class Enemy : BaseBattleUnit
         {
             BattleManager.Instance.BattleEnd();
         }
+        
     }
-
+    
     //更新UI
     public override void UpdateUI()
     {

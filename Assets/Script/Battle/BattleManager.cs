@@ -193,7 +193,7 @@ public class BattleManager : UnitySingleton<BattleManager>
             //对玩家造成value点伤害
             case 1001:
             case 2001:
-                Player.Instance.TakeDamage(actData.actualValue);
+                Player.Instance.TakeDamage(actData.actualValue,null);
                 break;
             //自身获得value层灵体
             case 1002:
@@ -211,7 +211,7 @@ public class BattleManager : UnitySingleton<BattleManager>
                 break;
             //给予自身value层护甲重伤
             case 1006:
-                StateManager.AddStateToTarget(unit,1005,actData.actualValue);
+                StateManager.AddStateToTarget(unit,1004,actData.actualValue);
                 break;
         }
     }
@@ -226,26 +226,55 @@ public class BattleManager : UnitySingleton<BattleManager>
     public void UpdateCardAndActionValue()
     {
         //更新卡牌数值
-        //恐惧检测
-        if (StateManager.CheckState(Player.Instance, 1002) && !Player.Instance.hasCheckList.Contains(1002))
+        //伤害类效果检测
+        foreach (var handCardGo in HandCardManager.Instance.handCardGoList)
         {
-            foreach (var handCardGo in HandCardManager.Instance.handCardGoList)
-            {
-                var cardData = handCardGo.GetComponent<HandCard>().CardData;
+            var cardData = handCardGo.GetComponent<HandCard>().CardData;
 
-                foreach (var data in cardData.cardEffectDic.Values)
+            foreach (var data in cardData.cardEffectDic.Values)
+            {
+                if (data.effectType == CardEffectType.Damage)
                 {
-                    if (data.effectType == CardEffectType.Damage)
+                    //恐慌检测
+                    if (StateManager.CheckState(Player.Instance, 1002))
                     {
                         data.actualValue = (int) (0.7f * data.EffectValue);
-                        //替换描述
-                        UpdateEffectDes(handCardGo,cardData,data);
                         Player.Instance.hasCheckList.Add(1002);
                     }
+
+                    //替换描述
+                    UpdateEffectDes(handCardGo, cardData, data);
                 }
             }
         }
 
+        //护甲类效果检测
+        foreach (var handCardGo in HandCardManager.Instance.handCardGoList)
+        {
+            var cardData = handCardGo.GetComponent<HandCard>().CardData;
+
+            foreach (var data in cardData.cardEffectDic.Values)
+            {
+                if (data.effectType == CardEffectType.Shield)
+                {
+                    //焕发检测
+                    if (StateManager.CheckState(Player.Instance, 1003))
+                    {
+                        data.actualValue = (int)(1.3f * data.EffectValue);
+                        Player.Instance.hasCheckList.Add(1003);
+                    }
+                    //重伤检测
+                    if (StateManager.CheckState(Player.Instance, 1005))
+                    {
+                        data.actualValue = (int)(0.7f * data.EffectValue);
+                        Player.Instance.hasCheckList.Add(1005);
+                    }
+                    //替换描述
+                    UpdateEffectDes(handCardGo, cardData, data);
+                    Player.Instance.hasCheckList.Add(1002);
+                }
+            }
+        }
         //更新敌人行为数值
         foreach (var enemy in inBattleEnemyList)
         {
@@ -293,7 +322,7 @@ public class BattleManager : UnitySingleton<BattleManager>
             case 1001:
                 if (target != null)
                 {
-                    target.TakeDamage(effectValue);
+                    target.TakeDamage(effectValue,Player.Instance);
                 }
 
                 break;
@@ -325,7 +354,7 @@ public class BattleManager : UnitySingleton<BattleManager>
                 {
                     target = BattleManager.Instance.inBattleEnemyList[
                         Random.Range(0, BattleManager.Instance.inBattleEnemyList.Count)];
-                    target.TakeDamage(effectValue);
+                    target.TakeDamage(effectValue,Player.Instance);
                 };
                 break;
             //附加恐惧
@@ -380,9 +409,9 @@ public class BattleManager : UnitySingleton<BattleManager>
                 inBattleEnemyList[0].Die();
             }
         }
-        if (Input.GetKeyDown(KeyCode.K)) //为玩家附加一层恐惧
+        if (Input.GetKeyDown(KeyCode.Z)) //为玩家附加一层重伤
         {
-            StateManager.AddStateToTarget(Player.Instance,1002,1);
+            StateManager.AddStateToTarget(Player.Instance,1005,1);
         }
     }
 

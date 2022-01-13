@@ -41,7 +41,7 @@ public class BaseBattleUnit : MonoBehaviour
     }
 
     //受到伤害（伤害值，伤害来源）
-    public virtual void TakeDamage(int damage)
+    public virtual void TakeDamage(int damage,BaseBattleUnit source)
     {
         //灵体检测
         if (StateManager.CheckState(this, 1001))
@@ -66,7 +66,17 @@ public class BaseBattleUnit : MonoBehaviour
         UpdateUI();
         if (currentHp <= 0)
         {
+            CheckDieEffect(source);
             Die();
+        }
+    }
+    //死亡效果检测（死亡者）
+    public void CheckDieEffect(BaseBattleUnit killer)
+    {
+        //死亡重伤
+        if (stateDic.ContainsKey(1004))
+        {
+            StateManager.AddStateToTarget(killer, 1005, 2);
         }
     }
     //更新UI
@@ -93,11 +103,7 @@ public class BaseBattleUnit : MonoBehaviour
     //获得护甲
     public virtual void GetShield(int shield)
     {
-        //焕发检测
-        if (StateManager.CheckState(this, 1003))
-        {
-            shield = (int)(shield * 1.3f);
-        }
+        Debug.Log(shield);
         currentShield += shield;
         UpdateUI();
     }
