@@ -61,7 +61,7 @@ public enum E_UiId
     MapUI,
     DisplayCardUI,
     EventUI,
-
+    ChooseCardUI
 }
 public class GameDefine
 {
@@ -76,8 +76,7 @@ public class GameDefine
         { E_UiId.MapUI,"UIPrefab/"+"MapUI"},
         { E_UiId.DisplayCardUI,"UIPrefab/"+"DisplayCardUI"},
         { E_UiId.EventUI,"UIPrefab/"+"EventUI"},
-
-
+        { E_UiId.EventUI,"UIPrefab/"+"ChooseCardUI"},
     };
     public static Type GetUIScriptType(E_UiId uiId)
     {
@@ -108,6 +107,9 @@ public class GameDefine
                 break;
             case E_UiId.EventUI:
                 scriptType = typeof(EventUI);
+                break;
+            case E_UiId.ChooseCardUI:
+                scriptType = typeof(ChooseCardUI);
                 break;
             default:
                 break;

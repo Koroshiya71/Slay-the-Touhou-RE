@@ -103,7 +103,6 @@ public class BaseBattleUnit : MonoBehaviour
     //获得护甲
     public virtual void GetShield(int shield)
     {
-        Debug.Log(shield);
         currentShield += shield;
         UpdateUI();
     }
