@@ -83,11 +83,11 @@ public class BattleManager : UnitySingleton<BattleManager>
         {
             CreateEnemy(enemyID);
         }
-
         //初始化
         isInit = false;
+
         //开始回合
-        StartCoroutine(TurnStart());
+        StartCoroutine(TurnStart(true));
     }
 
     //回合开始效果携程
@@ -100,8 +100,23 @@ public class BattleManager : UnitySingleton<BattleManager>
     }
 
     //回合开始
-    public IEnumerator TurnStart()
+    public IEnumerator TurnStart(bool isFirst=false)
     {
+        //如果是第一回合，则检测敌人有无开始战斗行动
+        if (isFirst)
+        {
+            foreach (var enemy in inBattleEnemyList)
+            {
+                if (enemy.enemyData.battleStartActionList.Count>0)
+                {
+                    foreach (var action in enemy.enemyData.battleStartActionList)
+                    {
+                        yield return new WaitForSeconds(0.5f);
+                        TriggerActionEffect(enemy,action);
+                    }
+                }
+            }
+        }
         EventDispatcher.TriggerEvent(E_MessageType.TurnStart);
         yield return new WaitForSeconds(0.5f);
 
@@ -177,6 +192,7 @@ public class BattleManager : UnitySingleton<BattleManager>
         {
             //对玩家造成value点伤害
             case 1001:
+            case 2001:
                 Player.Instance.TakeDamage(actData.actualValue);
                 break;
             //自身获得value层灵体
@@ -192,6 +208,10 @@ public class BattleManager : UnitySingleton<BattleManager>
                 break;
             //给予目标value层重伤
             case 1005:
+                break;
+            //给予自身value层护甲重伤
+            case 1006:
+                StateManager.AddStateToTarget(unit,1005,actData.actualValue);
                 break;
         }
     }

@@ -25,7 +25,8 @@ public class EnemyData
     private Dictionary<int, ActionData> enemyActionDic = new Dictionary<int, ActionData>();
     //敌人行动顺序列表
     private List<string> actionModeList = new List<string>();
-
+    //敌人战斗开始时的行动
+    public List<ActionData> battleStartActionList = new List<ActionData>();
     //敌人类型
     private EnemyType enemyType;
 
@@ -72,7 +73,13 @@ public class EnemyData
         {
             actionModeList.Add(ReadEnemyCfgData("ActMode" + i, enemyID));
         }
-
+        //将开始战斗行动添加到列表中
+        int startActionId = int.Parse(ReadEnemyCfgData("ActionStart", enemyID));
+        int startActionValue = int.Parse(ReadEnemyCfgData("ActionStartValue", enemyID));
+        if (startActionId!=-1)
+        {
+            battleStartActionList.Add(new ActionData(startActionId,startActionValue));
+        }
         //设置敌人类型
         switch (tempStr)
         {

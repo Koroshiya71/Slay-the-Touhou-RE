@@ -1,6 +1,8 @@
-ID,Name,ResourcePath,StateType,StateDes,ReduceOverTime,ShowStack
+﻿ID,Name,ResourcePath,StateType,StateDes,ReduceOverTime,ShowStack
 //状态ID,//状态名称,//状态素材路径,//状态类型,//状态描述,//是否每回合递减,//是否显示层数
 -1,-1,-1,-1,-1,-1,-1
 1001,灵体,Image\UIImage\StateImg\LingTi,Buff,受到的伤害减少30%,1,1
 1002,恐惧,Image\UIImage\StateImg\KongJu,Debuff,造成的伤害减少30%,1,1
 1003,焕发,Image\UIImage\StateImg\HuanFa,Buff,获得的护甲增加30%,1,1
+1004,亡语重伤,Image\UIImage\StateImg\HuanFa,Buff,死亡时对击杀者赋予value层重伤,0,0
+1005,重伤,Image\UIImage\StateImg\HuanFa,Debuff,获得的护甲减少30%,1,1
