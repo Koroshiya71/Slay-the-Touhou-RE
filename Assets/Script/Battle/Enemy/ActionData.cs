@@ -9,7 +9,8 @@ public enum ActionType
     AttackAndBuff, //攻击并提供强化
     Buff, //强化或回复
     Weaken, //削弱
-    Shield //获取护甲
+    Shield,//获取护甲
+    Special,//特殊
 }
 public class ActionData
 {
@@ -56,6 +57,15 @@ public class ActionData
                 break;
             case "强化":
                 actionType = ActionType.Buff;
+                break;
+            case "护甲":
+                actionType = ActionType.Shield;
+                break;
+            case "特殊":
+                actionType = ActionType.Special;
+                break;
+            case "削弱":
+                actionType = ActionType.Weaken;
                 break;
         }
         tempStr = ReadActionCfgData("NeedTarget", id);

@@ -1,5 +1,8 @@
-ID,ActionType,ActionEffectDes,NeedTarget
+﻿ID,ActionType,ActionEffectDes,NeedTarget
 //行动效果ID,//行为类型,//行动效果描述,//是否需要目标
 -1,-1,-1,-1
 1001,攻击,对目标造成value点伤害,1
-1002,强化,自身获得value层灵体,0
+1002,强化,获得value层灵体,0
+1003,护甲,获得value点护甲,0
+1004,特殊,什么都不做,0
+1005,削弱,给予击杀者两层【重伤】,1

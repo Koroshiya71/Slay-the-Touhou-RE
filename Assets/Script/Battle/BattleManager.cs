@@ -183,6 +183,16 @@ public class BattleManager : UnitySingleton<BattleManager>
             case 1002:
                 StateManager.AddStateToTarget(unit, 1001, actData.actualValue);
                 break;
+            //获得value点护甲
+            case 1003:
+                unit.GetShield(actData.actualValue);
+                break;
+            //什么都不做
+            case 1004:
+                break;
+            //给予目标value层重伤
+            case 1005:
+                break;
         }
     }
 
@@ -345,12 +355,10 @@ public class BattleManager : UnitySingleton<BattleManager>
         //GM调试命令
         if (Input.GetKeyDown(KeyCode.R)) //结束战斗
         {
-            for (int i = 0; i < inBattleEnemyList.Count; i++)
+            while (inBattleEnemyList.Count!=0)
             {
-                inBattleEnemyList[i].Die();
+                inBattleEnemyList[0].Die();
             }
-
-            BattleEnd();
         }
         if (Input.GetKeyDown(KeyCode.K)) //为玩家附加一层恐惧
         {

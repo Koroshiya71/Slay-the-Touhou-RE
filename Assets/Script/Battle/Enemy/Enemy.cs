@@ -24,6 +24,7 @@ public class Enemy : BaseBattleUnit
 
     //敌人状态字典
     public Dictionary<int, StateData> enemyStateDic = new Dictionary<int, StateData>();
+
     /// <summary>
     /// 敌人行动相关
     /// </summary>
@@ -44,7 +45,7 @@ public class Enemy : BaseBattleUnit
 
     //当前正在执行行为列表中的第几个行为
     protected int currentActionNo;
-    
+
 
     #region 初始化
 
@@ -58,11 +59,8 @@ public class Enemy : BaseBattleUnit
         //从行动模式列表中随机选择一个行动模式
         activeActionMode = enemyData.ActionModeList[Random.Range(0, enemyData.ActionModeList.Count)];
         currentActionNo = 0;
-        //获取行动列表中的第一个行为
-        currentAction = enemyData.EnemyActionDic
-            .ElementAt(Convert.ToInt32(activeActionMode[currentActionNo].ToString()) - 1).Value;
+        
 
-        currentActionNo++;
     }
 
     //初始化界面
@@ -82,23 +80,10 @@ public class Enemy : BaseBattleUnit
 
         text_ActionDes = GameTool.GetTheChildComponent<Text>(gameObject, "Text_ActionDes");
         text_ActionValue = GameTool.GetTheChildComponent<Text>(gameObject, "Text_ActionValue");
-        text_ActionDes.enabled = false;
-        text_ActionValue.enabled = false;
-        switch (currentAction.ActionType)
-        {
-            case ActionType.Attack:
-                img_EnemyAction.sprite =
-                    ResourcesManager.Instance.LoadResources<Sprite>("Image/" + "UIImage/" + "EnemyAction/" + "Attack");
-                text_ActionValue.text = currentAction.ActionValue.ToString();
-                text_ActionValue.enabled = true;
-                break;
-            case ActionType.Buff:
-                img_EnemyAction.sprite =
-                        ResourcesManager.Instance.LoadResources<Sprite>("Image/" + "UIImage/" + "EnemyAction/" + "Buff");
-                text_ActionValue.enabled = false;
-                break;
-        }
-
+        
+        //更新当前行动
+        currentAction = new ActionData(1004, 0);
+        UpdateCurrentAction();
         text_ActionDes.text = currentAction.ActionDes.Replace("value", currentAction.ActionValue.ToString());
         text_ActionDes.enabled = false;
     }
@@ -124,8 +109,10 @@ public class Enemy : BaseBattleUnit
         {
             return;
         }
+
         //卡牌选中时启用选择特效
-        if (other.CompareTag("HandCard") && HandCardManager.Instance.selectedCard.CardData.cardTarget == CardTarget.SingleEnemy)
+        if (other.CompareTag("HandCard") &&
+            HandCardManager.Instance.selectedCard.CardData.cardTarget == CardTarget.SingleEnemy)
         {
             BattleManager.Instance.selectedTarget = this;
         }
@@ -161,7 +148,6 @@ public class Enemy : BaseBattleUnit
     //显示行动描述
     public void ShowActionDes()
     {
-        
         text_ActionDes.text = currentAction.ActionDes.Replace("value", currentAction.ActionValue.ToString());
         text_ActionDes.enabled = true;
     }
@@ -176,23 +162,28 @@ public class Enemy : BaseBattleUnit
 
 
     #region 行动和状态管理相关
+
     //执行行动
     public void TakeAction()
     {
         BattleManager.Instance.TriggerActionEffect(this, currentAction);
-
     }
+
     //更新行动
     public void UpdateCurrentAction()
     {
         //更新前还原数值
         currentAction.actualValue = currentAction.ActionValue;
-        //获取行动列表中的第一个行为
-        currentActionNo %= activeActionMode.Length;
-        currentAction = enemyData.EnemyActionDic
-            .ElementAt(Convert.ToInt32(activeActionMode[currentActionNo].ToString()) - 1).Value;
+        if (!CheckSpecialAction())
+        {
+            //获取行动列表中的第一个行为
+            currentActionNo %= activeActionMode.Length;
+            currentAction = enemyData.EnemyActionDic
+                .ElementAt(Convert.ToInt32(activeActionMode[currentActionNo].ToString()) - 1).Value;
 
-        currentActionNo++;
+            currentActionNo++;
+        }
+
 
         //更新UI
         text_ActionDes.enabled = false;
@@ -207,28 +198,45 @@ public class Enemy : BaseBattleUnit
                 break;
             case ActionType.Buff:
                 img_EnemyAction.sprite =
-                        ResourcesManager.Instance.LoadResources<Sprite>("Image/" + "UIImage/" + "EnemyAction/" + "Buff");
+                    ResourcesManager.Instance.LoadResources<Sprite>("Image/" + "UIImage/" + "EnemyAction/" + "Buff");
                 text_ActionValue.enabled = false;
+                break;
+            case ActionType.Weaken:
+                img_EnemyAction.sprite =
+                    ResourcesManager.Instance.LoadResources<Sprite>("Image/" + "UIImage/" + "EnemyAction/" + "Weaken");
+                text_ActionValue.enabled = false;
+                break;
+            case ActionType.Special:
+                img_EnemyAction.sprite =
+                    ResourcesManager.Instance.LoadResources<Sprite>("Image/" + "UIImage/" + "EnemyAction/" + "Special");
+                text_ActionValue.enabled = false;
+                break;
+            case ActionType.Shield:
+                img_EnemyAction.sprite =
+                    ResourcesManager.Instance.LoadResources<Sprite>("Image/" + "UIImage/" + "EnemyAction/" + "Shield");
+                text_ActionValue.enabled = true;
+                text_ActionValue.text = currentAction.actualValue.ToString();
                 break;
         }
 
         text_ActionDes.text = currentAction.ActionDes.Replace("value", currentAction.actualValue.ToString());
         text_ActionDes.enabled = false;
     }
-    
+
     //死亡方法
     public override void Die()
     {
         //移除队列并销毁
         BattleManager.Instance.inBattleEnemyList.Remove(this);
         Destroy(this.gameObject);
-        
+
         //如果该敌人死亡后敌人数量为0，触发战斗结束方法
         if (BattleManager.Instance.inBattleEnemyList.Count == 0)
         {
             BattleManager.Instance.BattleEnd();
         }
     }
+
     //更新UI
     public override void UpdateUI()
     {
@@ -256,6 +264,21 @@ public class Enemy : BaseBattleUnit
     }
 
     #endregion
+
+    //处理特殊的行动,如果跳过了正常行动则return true
+    public bool CheckSpecialAction()
+    {
+        //懒惰妖精血量大于50%不进行攻击
+        if (enemyData.EnemyID == 3)
+        {
+            if (currentHp > (int) (0.5f * maxHp))
+            {
+                currentAction = new ActionData(1004,0);
+                return true; 
+            }
+        }
+        return false;
+    }
 
     protected void Update()
     {

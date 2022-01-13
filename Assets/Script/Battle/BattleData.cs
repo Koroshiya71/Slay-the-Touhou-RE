@@ -39,6 +39,9 @@ public class BattleData
             case "普通战斗":
                 battleType = BattleType.Normal;
                 break;
+            case "精英战斗":
+                battleType = BattleType.Elite;
+                break;
         }
 
         for (int i = 1; i <= int.Parse(ReadBattleCfgData("EnemyNum", id)); i++)

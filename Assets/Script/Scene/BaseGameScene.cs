@@ -102,7 +102,21 @@ public class BaseGameScene : MonoBehaviour
                     EventDispatcher.TriggerEvent<int, string>(E_MessageType.ShowEventPage, eventData.pageDataList[0].pageID, "");
                 });
                 break;
-                //
+            //如果场景类型为精英战斗，则随机选取一个精英战斗
+            case SceneType.EliteCombat:
+                while (true)
+                {
+                    battleData =
+                        BattleManager.Instance.battleDataDic[
+                            Random.Range(1, BattleManager.Instance.battleDataDic.Count + 1)];
+                    if (battleData.BattleType == BattleType.Elite)
+                        break;
+                }
+                gameSceneButton.onClick.AddListener(delegate
+                {
+                    BattleManager.Instance.InitBattle(battleData);
+                });
+                break;
         }
     }
     //改变场景可选状态
