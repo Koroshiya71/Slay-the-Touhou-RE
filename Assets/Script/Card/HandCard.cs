@@ -190,7 +190,11 @@ public class HandCard : BaseCard
         HandCardManager.Instance.RemoveCard(this.gameObject);
         HandCardManager.Instance.selectedCard = null;
         EventDispatcher.TriggerEvent(E_MessageType.UseCard);
-
+        //更新其他卡牌的初始位置
+        foreach (var hcg in HandCardManager.Instance.handCardGoList)
+        {
+            hcg.GetComponent<HandCard>().SaveOriginalPos();
+        }
     }
 
     //取消UI事件检测

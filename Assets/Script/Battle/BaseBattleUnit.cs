@@ -157,6 +157,7 @@ public class BaseBattleUnit : MonoBehaviour
             //销毁游戏物体
             Destroy(clearState.gameObject);
         }
+        //更新图标位置
         UpdateBuffIconPos();
     }
     //清除所有状态
