@@ -5,8 +5,19 @@ using UnityEngine;
 using GameCore;
 using UnityEngine.EventSystems;
 
-public class ChooseCard : BaseCard,IPointerDownHandler
+public class ChooseCard : BaseCard
 {
+    //使用卡牌时的特效
+    private GameObject chooseEffect;
+    //初始化
+    public override void InitCard(CardData data)
+    {
+        base.InitCard(data);
+        //获取特效游戏物体
+        chooseEffect = GameTool.FindTheChild(gameObject, "UseEffect").gameObject;
+        chooseEffect.SetActive(false);
+    }
+
     //获取卡牌外框
     protected override Sprite GetCardOutLine()
     {
@@ -40,8 +51,17 @@ public class ChooseCard : BaseCard,IPointerDownHandler
 
 
     //点击事件监听
-    public void OnPointerDown(PointerEventData eventData)
-    {
 
+    protected override void OnDown()
+    {
+        Debug.Log("click");
+        //如果正在选牌
+        if (DeskManager.Instance.isChoosing)
+        {
+            DeskManager.Instance.hasChosenCardList.Add(cardData);
+            chooseEffect.SetActive(true);
+        }
     }
+
+
 }

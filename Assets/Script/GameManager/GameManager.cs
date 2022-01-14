@@ -47,9 +47,12 @@ public class GameManager : UnitySingleton<GameManager>
         //显示选牌界面
         if (Input.GetKeyDown(KeyCode.S))
         {
-            UIManager.Instance.ShowUI(E_UiId.ChooseCardUI);
-            EventDispatcher.TriggerEvent(E_MessageType.ShowChooseCardUI,new List<CardData>()
-                {new CardData(1001), new CardData(1002), new CardData(1003) });
+            StartCoroutine(DeskManager.Instance.ChooseCardAddToDesk(1, new List<CardData>()
+            {
+                new CardData(1001),
+                new CardData(1002),
+                new CardData(1003)
+            }));
         }
     }
 }

@@ -60,13 +60,9 @@ public class ChooseCardUI : BaseUI
                 newCard.InitCard(dataList[i]);
             }
         }
+        //
     }
-    //将卡牌加入牌组携程
-    public IEnumerator ChooseCardAddToDesk()
-    {
-
-        yield break;
-    }
+    
     //初始化消息监听
     public override void AddMessageListener()
     {

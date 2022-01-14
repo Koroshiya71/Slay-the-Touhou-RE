@@ -23,7 +23,10 @@ public class DeskManager : UnitySingleton<DeskManager>
 
     //本场战斗是否已经初始化过抽牌堆
     public bool hasInitDrawCardDesk = false;
-
+    //是否正在选牌
+    public bool isChoosing = false;
+    //已选牌列表
+    public List<CardData> hasChosenCardList = new List<CardData>();
     //初始化牌库管理器
     public void InitDeskManager()
     {
@@ -112,6 +115,30 @@ public class DeskManager : UnitySingleton<DeskManager>
         }
         drawCardDeskList.Remove(data);
         EventDispatcher.TriggerEvent(E_MessageType.DrawCard);
+    }
+    //将卡牌加入牌组携程(选牌数量，卡牌数据列表)
+    public IEnumerator ChooseCardAddToDesk(int chooseNum,List<CardData> cardDataList)
+    {
+        //显示UI和对应的卡牌
+        isChoosing = true;
+        UIManager.Instance.ShowUI(E_UiId.ChooseCardUI);
+        EventDispatcher.TriggerEvent<List<CardData>>(E_MessageType.ShowChooseCardUI,cardDataList);
+        //等待选牌结束
+        while (hasChosenCardList.Count<chooseNum)
+        {
+            yield return new WaitForFixedUpdate();
+        }
+        //选牌结束后进行相关处理
+        //将牌加入到牌组中
+        foreach (var data in hasChosenCardList)
+        {
+            deskCardList.Add(data);
+        }
+        //隐藏UI
+        UIManager.Instance.HideSingleUI(E_UiId.ChooseCardUI);
+        isChoosing = false;
+        hasChosenCardList.Clear();
+        yield break;
     }
     void Start()
     {
