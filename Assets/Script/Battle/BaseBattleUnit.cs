@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using GameCore;
@@ -156,6 +157,7 @@ public class BaseBattleUnit : MonoBehaviour
             //销毁游戏物体
             Destroy(clearState.gameObject);
         }
+        UpdateBuffIconPos();
     }
     //清除所有状态
     public void ClearAllState()
@@ -168,7 +170,23 @@ public class BaseBattleUnit : MonoBehaviour
     }
     #endregion
 
-
+    //更新Buff图标位置
+    public void UpdateBuffIconPos()
+    {
+        for(int i=0;i<stateDic.Count;i++)
+        {
+            var buff = stateDic.Values.ToArray()[i];
+            if (isPlayer)
+            {
+                buff.transform.localPosition = new Vector3(-35 + i % 5 * 20, -55 - 20 * (i / 5));
+            }
+            else
+            {
+                buff.transform.localPosition = new Vector3(-40 + i % 5 * 20, -55 - 20 * (i / 5));
+            }
+        }
+        
+    }
 
     //生命值归零时的死亡方法
     public virtual void Die()
