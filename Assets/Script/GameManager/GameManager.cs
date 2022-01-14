@@ -36,6 +36,20 @@ public class GameManager : UnitySingleton<GameManager>
     // Update is called once per frame
     void Update()
     {
-
+        //GM调试命令
+        if (Input.GetKeyDown(KeyCode.R)) //结束战斗
+        {
+            while (BattleManager.Instance.inBattleEnemyList.Count != 0)
+            {
+                BattleManager.Instance.inBattleEnemyList[0].Die();
+            }
+        }
+        //显示选牌界面
+        if (Input.GetKeyDown(KeyCode.S))
+        {
+            UIManager.Instance.ShowUI(E_UiId.ChooseCardUI);
+            EventDispatcher.TriggerEvent(E_MessageType.ShowChooseCardUI,new List<CardData>()
+                {new CardData(1001), new CardData(1002), new CardData(1003) });
+        }
     }
 }

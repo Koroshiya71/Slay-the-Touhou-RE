@@ -86,6 +86,11 @@ public class SaveManager : UnitySingleton<SaveManager>
     //读取存档数据
     public void LoadData()
     {
+        if (GameTool.GetString("HasSave")!="True")
+        {
+            Debug.Log("没有存储数据");
+            return;
+        }
         isLoad = true;
         StreamReader reader = new StreamReader(jsonDataPath + "SaveData.json");
         saveData = JsonConvert.DeserializeObject<SaveData>(reader.ReadToEnd());
@@ -94,9 +99,5 @@ public class SaveManager : UnitySingleton<SaveManager>
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.S))
-        {
-            SaveGame();
-        }
     }
 }

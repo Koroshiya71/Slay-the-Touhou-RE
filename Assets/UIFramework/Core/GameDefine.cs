@@ -18,6 +18,7 @@ public enum E_MessageType
     ShowEventPage,//显示事件页面
     EventTrigger,//事件触发
     LoadGame,//读取存档
+    ShowChooseCardUI,//显示选牌UI
 }
 //物品的分类
 //public enum E_GoodsType
@@ -76,7 +77,7 @@ public class GameDefine
         { E_UiId.MapUI,"UIPrefab/"+"MapUI"},
         { E_UiId.DisplayCardUI,"UIPrefab/"+"DisplayCardUI"},
         { E_UiId.EventUI,"UIPrefab/"+"EventUI"},
-        { E_UiId.EventUI,"UIPrefab/"+"ChooseCardUI"},
+        { E_UiId.ChooseCardUI,"UIPrefab/"+"ChooseCardUI"},
     };
     public static Type GetUIScriptType(E_UiId uiId)
     {

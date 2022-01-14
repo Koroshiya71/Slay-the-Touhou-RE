@@ -401,18 +401,7 @@ public class BattleManager : UnitySingleton<BattleManager>
 
     private void Update()
     {
-        //GM调试命令
-        if (Input.GetKeyDown(KeyCode.R)) //结束战斗
-        {
-            while (inBattleEnemyList.Count!=0)
-            {
-                inBattleEnemyList[0].Die();
-            }
-        }
-        if (Input.GetKeyDown(KeyCode.Z)) //为玩家附加一层重伤
-        {
-            StateManager.AddStateToTarget(Player.Instance,1005,1);
-        }
+        
     }
 
     private void Awake()

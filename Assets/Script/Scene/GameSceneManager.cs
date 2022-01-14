@@ -47,6 +47,8 @@ public class GameSceneManager : UnitySingleton<GameSceneManager>
             newSceneGO.transform.position = new Vector2(220 + i % 6 * 300, 100 + i / 6 * 200);
         }
         UpdateGameSceneState();
+        //保存游戏
+        SaveManager.SaveGame();
     }
 
     //更新场景状态(是否可选)
