@@ -26,6 +26,12 @@ public class DisplayCard : BaseCard
             case CardRare.Normal:
                 outLineName += "普通";
                 break;
+            case CardRare.Rare:
+                outLineName += "稀有";
+                break;
+            case CardRare.Epic:
+                outLineName += "史诗";
+                break;
             default:
                 outLineName += "普通";
                 break;

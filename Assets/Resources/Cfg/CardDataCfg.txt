@@ -1,8 +1,8 @@
-ID,Name,ImgPath,Cost,Type,Rare,Target,EffectNum,EffectID1,EffectValue1,EffectID2,EffectValue2,EffectID3,EffectValue3
+﻿ID,Name,ImgPath,Cost,Type,Rare,Target,EffectNum,EffectID1,EffectValue1,EffectID2,EffectValue2,EffectID3,EffectValue3
 //卡牌ID,//卡牌名称,//卡图路径,//卡牌费用,//卡牌类型,//稀有度,//目标类型,//效果数量,//效果1ID,//效果1数值,//效果2ID,//效果2数值,//效果3ID,//效果3数值
 -1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1
 1001,斩击,Image/Card/CardImg/斩击,1,体术,普通,单体敌人,1,1001,6,1001,6,-1,-1
 1002,格挡,Image/Card/CardImg/格挡,1,防御,普通,玩家,1,1002,5,1002,5,-1,-1
-1003,残月斩,Image/Card/CardImg/残月斩,1,体术,普通,单体敌人,2,1001,7,1003,1,-1,-1
-1004,神妙斩,Image/Card/CardImg/神妙斩,1,防御,普通,玩家,2,1002,6,1004,10,-1,-1
-1005,燕返,Image/Card/CardImg/燕返,0,体术,稀有,单体敌人,3,1001,3,1005,1,1006,1
+1003,残月斩,Image/Card/CardImg/残月斩,1,体术,稀有,单体敌人,2,1001,7,1003,1,-1,-1
+1004,神妙斩,Image/Card/CardImg/神妙斩,1,防御,稀有,玩家,2,1002,6,1004,10,-1,-1
+1005,燕返,Image/Card/CardImg/燕返,0,体术,史诗,玩家,3,1001,3,1005,1,1006,1

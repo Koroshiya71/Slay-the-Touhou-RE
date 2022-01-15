@@ -62,11 +62,16 @@ public class DataController : Singleton<DataController>
     private void LoadCardEffectCfg()
     {
         ExcelData.LoadExcelFormCSV("CardEffectCfg", out dicCardEffect);
+        foreach (var dicElement in dicCardData["ID"])
+        {
+            DeskManager.Instance.allCardDataList.Add(new CardData(int.Parse(dicElement.Key)));
+        }
     }
     //加载卡牌效果配置表
     private void LoadActionDataCfg()
     {
         ExcelData.LoadExcelFormCSV("ActionDataCfg", out dicActionData);
+        
     }
     //加载状态效果配置表
     private void LoadStateDataCfg()

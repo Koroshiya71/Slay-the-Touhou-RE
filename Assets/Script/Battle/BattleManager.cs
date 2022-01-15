@@ -35,6 +35,8 @@ public class BattleManager : UnitySingleton<BattleManager>
     //本回合使用的卡牌数
     public int currentTurnCombo = 0;
 
+    //当前战斗类型
+    public BattleType currentBattleType = BattleType.Normal;
     /// <summary>
     /// 敌人相关
     /// </summary>
@@ -78,7 +80,8 @@ public class BattleManager : UnitySingleton<BattleManager>
         DeskManager.Instance.ResetDesks();
         //战斗UI显示时触发战斗开始事件
         EventDispatcher.TriggerEvent(E_MessageType.BattleStart);
-
+        //记录当前战斗的类型
+        currentBattleType = battleData.BattleType;
         foreach (var enemyID in battleData.EnemyIDList)
         {
             CreateEnemy(enemyID);
@@ -386,8 +389,11 @@ public class BattleManager : UnitySingleton<BattleManager>
         UIManager.Instance.ShowUI(E_UiId.MapUI);
         GameSceneManager.Instance.UpdateGameSceneState();
         //选牌
-    }
 
+        //保存游戏
+        SaveManager.SaveGame();
+    }
+    
     //残心检测
     public bool CheckCanxin(CardData data)
     {

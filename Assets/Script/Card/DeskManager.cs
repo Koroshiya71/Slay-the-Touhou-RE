@@ -17,9 +17,12 @@ public class DeskManager : UnitySingleton<DeskManager>
 
     //抽牌堆列表对象<卡牌数据>
     public List<CardData> drawCardDeskList = new List<CardData>();
+
     //弃牌堆列表对象<卡牌数据>
     public List<CardData> disCardDeskList = new List<CardData>();
 
+    //所有卡牌data列表
+    public List<CardData> allCardDataList = new List<CardData>();
 
     //本场战斗是否已经初始化过抽牌堆
     public bool hasInitDrawCardDesk = false;
@@ -33,7 +36,6 @@ public class DeskManager : UnitySingleton<DeskManager>
         //如果不是读档，则从数据文件中初始化牌库
         if (!SaveManager.isLoad)
         {
-
             StreamReader reader = new StreamReader(SaveManager.jsonDataPath + "BaseDesk.json");
             List<int> baseDesk = JsonConvert.DeserializeObject<List<int>>(reader.ReadToEnd());
             reader.Close();

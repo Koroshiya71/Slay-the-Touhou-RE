@@ -242,6 +242,9 @@ public class CardData
             case "稀有":
                 cardRare = CardRare.Rare;
                 break;
+            case "史诗":
+                cardRare = CardRare.Epic;
+                break;
             default:
                 cardRare = CardRare.Normal;
                 break;
