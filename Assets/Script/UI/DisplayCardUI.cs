@@ -70,7 +70,7 @@ public class DisplayCardUI : BaseUI
                 Transform newCardGo = Instantiate(normalCardPrefab).transform;
                 newCardGo.SetParent(content);
                 newCardGo.localScale = new Vector2(1f, 1f);
-                newCardGo.localPosition = new Vector3(250 + 350 * (i % 5), -200 - 400 * (i / 5));
+                //newCardGo.localPosition = new Vector3(250 + 350 * (i % 5), -200 - 400 * (i / 5));
                 DisplayCard newCard = newCardGo.GetComponent<DisplayCard>();
                 newCard.InitCard(dataList[i].cardID);
                 //添加到列表
@@ -109,7 +109,7 @@ public class DisplayCardUI : BaseUI
                 Transform newCardGo = Instantiate(normalCardPrefab).transform;
                 newCardGo.SetParent(content);
                 newCardGo.localScale = new Vector2(1f, 1f);
-                newCardGo.localPosition = new Vector3(250 + 350 * (i % 5), -200 - 400 * (i / 5));
+                //newCardGo.localPosition = new Vector3(250 + 350 * (i % 5), -200 - 400 * (i / 5));
                 DisplayCard newCard = newCardGo.GetComponent<DisplayCard>();
                 newCard.InitCard(dataList[i].cardID);
                 //添加到列表

@@ -18,6 +18,21 @@ public class PlayerData
 
     }
 }
+//出货率
+public class CardRareClass
+{
+    //普通战斗出货率（普通、稀有、史诗）
+    public List<int> normalCombatRare = new List<int>() {50, 40, 10};
+    //精英战斗出货率（普通、稀有、史诗）
+    public List<int> eliteCombatRare = new List<int>() { 20, 50, 30 };
+    //Boss战出货率（普通、稀有、史诗）
+    public List<int> bossCombatRare = new List<int>() { 0, 0, 100 };
+
+    CardRareClass()
+    {
+
+    }
+}
 public class GameManager : UnitySingleton<GameManager>
 {
     //玩家数据
@@ -44,15 +59,6 @@ public class GameManager : UnitySingleton<GameManager>
                 BattleManager.Instance.inBattleEnemyList[0].Die();
             }
         }
-        //显示选牌界面
-        if (Input.GetKeyDown(KeyCode.S))
-        {
-            StartCoroutine(DeskManager.Instance.ChooseCardAddToDesk(1, new List<CardData>()
-            {
-                new CardData(1001),
-                new CardData(1002),
-                new CardData(1003)
-            }));
-        }
+       
     }
 }
