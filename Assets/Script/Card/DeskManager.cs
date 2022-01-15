@@ -122,9 +122,9 @@ public class DeskManager : UnitySingleton<DeskManager>
         //显示UI和对应的卡牌
         isChoosing = true;
         UIManager.Instance.ShowUI(E_UiId.ChooseCardUI);
-        EventDispatcher.TriggerEvent<List<CardData>>(E_MessageType.ShowChooseCardUI,cardDataList);
+        EventDispatcher.TriggerEvent<List<CardData>,ChooseType>(E_MessageType.ShowChooseCardUI,cardDataList,ChooseType.AddToDesk);
         //等待选牌结束
-        while (hasChosenCardList.Count<chooseNum)
+        while (hasChosenCardList.Count<chooseNum&&isChoosing)
         {
             yield return new WaitForFixedUpdate();
         }
@@ -138,6 +138,7 @@ public class DeskManager : UnitySingleton<DeskManager>
         UIManager.Instance.HideSingleUI(E_UiId.ChooseCardUI);
         isChoosing = false;
         hasChosenCardList.Clear();
+        
         yield break;
     }
     void Start()

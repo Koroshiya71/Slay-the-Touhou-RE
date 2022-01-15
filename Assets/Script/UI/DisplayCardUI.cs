@@ -108,7 +108,7 @@ public class DisplayCardUI : BaseUI
                 //生成卡牌
                 Transform newCardGo = Instantiate(normalCardPrefab).transform;
                 newCardGo.SetParent(content);
-                newCardGo.localScale = new Vector2(1.5f, 1.5f);
+                newCardGo.localScale = new Vector2(1f, 1f);
                 newCardGo.localPosition = new Vector3(250 + 350 * (i % 5), -200 - 400 * (i / 5));
                 DisplayCard newCard = newCardGo.GetComponent<DisplayCard>();
                 newCard.InitCard(dataList[i].cardID);

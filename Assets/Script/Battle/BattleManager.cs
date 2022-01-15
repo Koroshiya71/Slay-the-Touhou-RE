@@ -385,6 +385,7 @@ public class BattleManager : UnitySingleton<BattleManager>
         //显示地图界面
         UIManager.Instance.ShowUI(E_UiId.MapUI);
         GameSceneManager.Instance.UpdateGameSceneState();
+        //选牌
     }
 
     //残心检测
