@@ -103,7 +103,6 @@ public class ChooseCardUI : BaseUI
             }
         }
 
-        Debug.Log(type);
         //根据本次的选牌类型进行相关处理
         switch (type)
         {
@@ -112,7 +111,6 @@ public class ChooseCardUI : BaseUI
                 //先清空点击监听再添加监听
                 btn_Confirm.onClick.RemoveAllListeners();
                 GameTool.GetTheChildComponent<Text>(btn_Confirm.gameObject, "Text").text="跳过";
-                Debug.Log(1);
                 btn_Confirm.onClick.AddListener(delegate
                 {
                     DeskManager.Instance.isChoosing = false;
@@ -120,7 +118,6 @@ public class ChooseCardUI : BaseUI
                 break;
         }
         lastType = type;
-        Debug.Log(lastType);
     }
     
     //初始化消息监听

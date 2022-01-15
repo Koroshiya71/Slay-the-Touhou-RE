@@ -389,7 +389,7 @@ public class BattleManager : UnitySingleton<BattleManager>
         UIManager.Instance.ShowUI(E_UiId.MapUI);
         GameSceneManager.Instance.UpdateGameSceneState();
         //选牌
-
+        GameManager.Instance.GetCardAfterBattle(currentBattleType);
         //保存游戏
         SaveManager.SaveGame();
     }
