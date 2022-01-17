@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using GameCore;
 using UnityEngine;
 
 public class Player : BaseBattleUnit
@@ -20,6 +21,15 @@ public class Player : BaseBattleUnit
         Instance = this;
         isPlayer = true;
     }
-
+    
+    //覆写更新UI方法
+    public override void UpdateUI()
+    {
+        base.UpdateUI();
+        //更新主界面UI
+        GameManager.Instance.playerData.currentHp = currentHp;
+        GameManager.Instance.playerData.maxHp = maxHp;
+        EventDispatcher.TriggerEvent(E_MessageType.UpdateGameMainUI);
+    }
 }
 

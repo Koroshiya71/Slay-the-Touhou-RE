@@ -11,14 +11,12 @@ public enum E_MessageType
     BattleStart,//战斗开始
     TurnStart,//回合开始
     TurnEnd,//回合结束
-    SaveGame,//游戏存档
     UseCard,//使用卡牌
     DisplayCard,//展示卡牌
     DrawCard,//抽牌
     ShowEventPage,//显示事件页面
-    EventTrigger,//事件触发
-    LoadGame,//读取存档
     ShowChooseCardUI,//显示选牌UI
+    UpdateGameMainUI,//更新游戏主UI
 }
 //物品的分类
 //public enum E_GoodsType

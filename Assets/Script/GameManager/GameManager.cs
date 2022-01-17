@@ -15,14 +15,14 @@ public class PlayerData
     public int currentHp = 50;
 
     //金币数
-    public int cold = 99;
+    public int gold = 99;
 
     public PlayerData()
     {
     }
 }
 
-//出货率
+//出货率 
 public class CardRareClass
 {
     //普通战斗出货率（普通、稀有、史诗）
