@@ -50,7 +50,7 @@ public class GameManager : UnitySingleton<GameManager>
     //战斗结束选牌数
     public int chooseCardNumAfterBattle = 3;
 
-    private void Start()
+    private void Awake()
     {
         StreamReader reader;
 

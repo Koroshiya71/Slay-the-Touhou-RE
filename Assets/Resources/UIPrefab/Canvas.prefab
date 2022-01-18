@@ -181,6 +181,7 @@ GameObject:
   - component: {fileID: 5792704667173095788}
   - component: {fileID: 4424164718824997337}
   - component: {fileID: 2917451373250688016}
+  - component: {fileID: 3328707119313386171}
   m_Layer: 0
   m_Name: UnitySingletonObj
   m_TagString: Untagged
@@ -260,9 +261,12 @@ MonoBehaviour:
   selectedTarget: {fileID: 0}
   turnDrawCardNum: 5
   isInit: 1
+  currentTurnCombo: 0
+  currentBattleType: 0
   enemyPrefab: {fileID: 0}
   inBattleEnemyList: []
   enemyPosList: []
+  battleGold: 0
 --- !u!114 &1376955742808030485
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -294,7 +298,11 @@ MonoBehaviour:
   deskCardList: []
   drawCardDeskList: []
   disCardDeskList: []
+  allCardDataList: []
   hasInitDrawCardDesk: 0
+  isChoosing: 0
+  hasChosen: 0
+  hasChosenCardList: []
 --- !u!114 &4145815253739928787
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -332,6 +340,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 685ee97f4e4af1043a8db01afc063091, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  saveData:
+    cardDataList: []
+    sceneTypeList: 
+    mapLayer: 0
+    mapIndex: 0
 --- !u!114 &2917451373250688016
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -342,6 +355,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 61e0ef9ab614f6b4080289f6e76d17eb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  chooseCardNumAfterBattle: 3
+--- !u!114 &3328707119313386171
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4927724440062425714}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e2e5a8ec2b83484182b51e3acf7f8aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &4927724440435983436

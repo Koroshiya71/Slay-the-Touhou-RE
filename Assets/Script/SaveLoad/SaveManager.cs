@@ -75,7 +75,7 @@ public class SaveManager : UnitySingleton<SaveManager>
     //游戏存档
     public static void SaveGame()
     {
-        string s = JsonConvert.SerializeObject(new SaveData(true));
+        string s = JsonConvert.SerializeObject(new SaveData(true), Formatting.Indented, new JsonSerializerSettings { });
         GameTool.SetString("HasSave", "True");
         StreamWriter writer = new StreamWriter(jsonDataPath + "SaveData.json");
         writer.Write(s);
