@@ -114,6 +114,7 @@ public class ChooseCardUI : BaseUI
                 btn_Confirm.onClick.AddListener(delegate
                 {
                     DeskManager.Instance.isChoosing = false;
+
                 });
                 break;
         }

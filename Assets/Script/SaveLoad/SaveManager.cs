@@ -95,6 +95,8 @@ public class SaveManager : UnitySingleton<SaveManager>
         StreamReader reader = new StreamReader(jsonDataPath + "SaveData.json");
         saveData = JsonConvert.DeserializeObject<SaveData>(reader.ReadToEnd());
         reader.Close();
+        GameManager.Instance.playerData = saveData.playerData;
+        EventDispatcher.TriggerEvent(E_MessageType.UpdateGameMainUI);
     }
 
     void Update()

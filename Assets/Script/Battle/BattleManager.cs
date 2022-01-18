@@ -37,6 +37,9 @@ public class BattleManager : UnitySingleton<BattleManager>
 
     //当前战斗类型
     public BattleType currentBattleType = BattleType.Normal;
+
+    
+
     /// <summary>
     /// 敌人相关
     /// </summary>
@@ -56,6 +59,7 @@ public class BattleManager : UnitySingleton<BattleManager>
     {
         //获取敌人预制体和敌人父物体
         enemyPrefab = ResourcesManager.Instance.LoadResources<GameObject>("Prefabs/" + "Battle/" + "Enemy/" + "Enemy");
+       
         //初始化敌人位置列表
         enemyPosList = new List<Vector3>()
         {
@@ -392,12 +396,18 @@ public class BattleManager : UnitySingleton<BattleManager>
         //显示地图界面
         UIManager.Instance.ShowUI(E_UiId.MapUI);
         GameSceneManager.Instance.UpdateGameSceneState();
-        //选牌
-        GameManager.Instance.GetCardAfterBattle(currentBattleType);
         //保存游戏
         SaveManager.SaveGame();
+        //显示战斗奖励界面
+        UIManager.Instance.ShowUI(E_UiId.BattleRewardUI);
+        EventDispatcher.TriggerEvent(E_MessageType.BattleReward);
     }
-    
+    //显示并初始化战斗结果UI
+    public void ShowBattleReward()
+    {
+        UIManager.Instance.ShowUI(E_UiId.BattleRewardUI);
+        
+    }
     //残心检测
     public bool CheckCanxin(CardData data)
     {

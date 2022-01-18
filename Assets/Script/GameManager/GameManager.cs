@@ -50,12 +50,18 @@ public class GameManager : UnitySingleton<GameManager>
     //战斗结束选牌数
     public int chooseCardNumAfterBattle = 3;
 
-    private void Awake()
+    private void Start()
     {
-        //读取玩家初始数值json
-        StreamReader reader = new StreamReader(SaveManager.jsonDataPath + "PlayerInit.json");
-        playerData = JsonConvert.DeserializeObject<PlayerData>(reader.ReadToEnd());
-        reader.Close();
+        StreamReader reader;
+
+        if (!SaveManager.isLoad)
+        {
+            //读取玩家初始数值json
+            reader = new StreamReader(SaveManager.jsonDataPath + "PlayerInit.json");
+            playerData = JsonConvert.DeserializeObject<PlayerData>(reader.ReadToEnd());
+            reader.Close();
+        }
+        
         //读取卡牌掉落稀有度配置
         reader = new StreamReader(SaveManager.jsonDataPath + "RareCard.json");
         cardRare = JsonConvert.DeserializeObject<CardRareClass>(reader.ReadToEnd());
@@ -152,7 +158,12 @@ public class GameManager : UnitySingleton<GameManager>
         //选牌
         StartCoroutine(DeskManager.Instance.ChooseCardAddToDesk(1, chooseDataList));
     }
-
+    //获取金币方法
+    public void GetGold(int goldNum)
+    {
+        playerData.gold += goldNum;
+        EventDispatcher.TriggerEvent(E_MessageType.UpdateGameMainUI);
+    }
     void Update()
     {
         //GM调试命令

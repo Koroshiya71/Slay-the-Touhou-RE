@@ -5,6 +5,8 @@ using GameCore;
 using UnityEngine;
 using System.IO;
 using Newtonsoft.Json;
+using UnityEngine.Serialization;
+
 public class DeskManager : UnitySingleton<DeskManager>
 {
     /// <summary>
@@ -28,6 +30,8 @@ public class DeskManager : UnitySingleton<DeskManager>
     public bool hasInitDrawCardDesk = false;
     //是否正在选牌
     public bool isChoosing = false;
+    [FormerlySerializedAs("hasChoose")] public bool hasChosen = false;
+
     //已选牌列表
     public List<CardData> hasChosenCardList = new List<CardData>();
     //初始化牌库管理器
@@ -123,6 +127,7 @@ public class DeskManager : UnitySingleton<DeskManager>
     {
         //显示UI和对应的卡牌
         isChoosing = true;
+        hasChosen = false;
         UIManager.Instance.ShowUI(E_UiId.ChooseCardUI);
         EventDispatcher.TriggerEvent<List<CardData>,ChooseType>(E_MessageType.ShowChooseCardUI,cardDataList,ChooseType.AddToDesk);
         //等待选牌结束
@@ -131,11 +136,20 @@ public class DeskManager : UnitySingleton<DeskManager>
             yield return new WaitForFixedUpdate();
         }
         //选牌结束后进行相关处理
-        //将牌加入到牌组中
-        foreach (var data in hasChosenCardList)
+        if (hasChosenCardList.Count<=0)
         {
-            deskCardList.Add(data);
+            hasChosen =false;
         }
+        else
+        {
+            hasChosen = true;
+            //将牌加入到牌组中
+            foreach (var data in hasChosenCardList)
+            {
+                deskCardList.Add(data);
+            }
+        }
+        
         //隐藏UI
         UIManager.Instance.HideSingleUI(E_UiId.ChooseCardUI);
         isChoosing = false;

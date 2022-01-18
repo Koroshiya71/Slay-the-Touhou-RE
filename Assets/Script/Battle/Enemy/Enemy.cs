@@ -236,7 +236,7 @@ public class Enemy : BaseBattleUnit
             BattleManager.Instance.BattleEnd();
         }
         //累计战斗金币
-
+        BattleManager.Instance.battleGold += enemyData.dropGold;
     }
     
     //更新UI
