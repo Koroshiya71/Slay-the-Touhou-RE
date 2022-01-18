@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using GameCore;
@@ -12,19 +13,62 @@ public class RelicData
     public string relicDes;
     //遗物计数
     public int relicCount;
+    //遗物图片路径
+    public string relicSpriteRes;
+    //是否要显示计数
+    public bool showCount;
+
+    //构造函数
+    public RelicData()
+    {
+
+    }
 }
 public class RelicManager : UnitySingleton<RelicManager>
 {
     //遗物数据总列表
     public List<RelicData> relicDataList = new List<RelicData>();
-    void Start()
+    //遗物数据字典(id,遗物数据)
+    public Dictionary<int, RelicData> relicDic = new Dictionary<int, RelicData>();
+    //玩家已有遗物字典
+    public Dictionary<int, RelicData> playerRelicDic = new Dictionary<int, RelicData>();
+    //遗物预制体
+    public GameObject relicPrefab;
+    //遗物Content
+    public GameObject relicContent;
+    private void Awake()
     {
-        
+        EventDispatcher.AddListener(E_MessageType.GameStart,InitRelicManager);
     }
 
-    // Update is called once per frame
-    void Update()
+    //获取遗物
+    public void GetRelic(int id)
     {
-        
+        //创建物体
+        GameObject newRelicObj = Instantiate(relicPrefab);
+        Relic newRelic = newRelicObj.GetComponent<Relic>();
+        newRelicObj.transform.SetParent(relicContent.transform);
+        newRelicObj.transform.localScale = new Vector3(1, 1);
+        newRelic.InitRelic(relicDic[id]);
+    }
+   
+    //读取Json文件初始化遗物数据列表和对应字典
+    public void InitRelicManager()
+    {
+        //读取列表
+        StreamReader reader = new StreamReader(SaveManager.jsonDataPath + "relic.json");
+        relicDataList = JsonConvert.DeserializeObject<List<RelicData>>(reader.ReadToEnd());
+        reader.Close();
+        //初始化字典
+        foreach (var relic in relicDataList)
+        {
+            relicDic.Add(relic.relicID,relic);
+        }
+        //获取遗物预制体
+        relicPrefab = ResourcesManager.Instance.LoadResources<GameObject>("Prefabs/Battle/Relic");
+        //获取遗物content
+        relicContent = GameObject.Find("RelicContent");
+        //调试用
+        GetRelic(1001);
     }
 }

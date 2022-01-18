@@ -2,11 +2,8 @@
     {
         "relicID": 1001,
         "relicDes": "test",
-        "relicCount": 0
-    },
-    {
-        "relicID": 1002,
-        "relicDes": "test",
-        "relicCount": 0
+        "relicCount": 0,
+        "relicSpriteRes":"Image/UIImage/Relic/RelicTest",
+        "showCount":false
     }
 ]
