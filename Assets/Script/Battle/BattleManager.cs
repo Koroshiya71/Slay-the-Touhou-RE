@@ -49,6 +49,8 @@ public class BattleManager : UnitySingleton<BattleManager>
     //敌人位置数组
     public List<Vector3> enemyPosList = new List<Vector3>();
 
+    //战斗结算金币数
+    public int battleGold = 0;
     //初始化战斗管理器
     public void InitBattleManager()
     {
@@ -78,6 +80,8 @@ public class BattleManager : UnitySingleton<BattleManager>
         UIManager.Instance.ShowUI(E_UiId.BattleUI);
         //初始化牌库
         DeskManager.Instance.ResetDesks();
+        //战斗金币数归零
+        battleGold = 0;
         //战斗UI显示时触发战斗开始事件
         EventDispatcher.TriggerEvent(E_MessageType.BattleStart);
         //记录当前战斗的类型

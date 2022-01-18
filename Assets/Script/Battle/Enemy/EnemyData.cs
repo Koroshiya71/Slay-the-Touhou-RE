@@ -29,7 +29,8 @@ public class EnemyData
     public List<ActionData> battleStartActionList = new List<ActionData>();
     //敌人类型
     private EnemyType enemyType;
-
+    //掉落金币数
+    public int dropGold;
     /// <summary>
     /// 属性
     /// </summary>
@@ -86,7 +87,12 @@ public class EnemyData
             case "普通":
                 enemyType = EnemyType.Normal;
                 break;
+            case "精英":
+                enemyType = EnemyType.Elite;
+                break;
         }
+        //设置掉落金币数
+        dropGold = int.Parse(ReadEnemyCfgData("Gold", enemyID));
     }
 
     //根据cfg数据表读取敌人数据

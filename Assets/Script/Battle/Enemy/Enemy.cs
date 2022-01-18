@@ -235,7 +235,8 @@ public class Enemy : BaseBattleUnit
         {
             BattleManager.Instance.BattleEnd();
         }
-        
+        //累计战斗金币
+
     }
     
     //更新UI
