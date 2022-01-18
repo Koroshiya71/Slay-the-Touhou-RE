@@ -16,15 +16,10 @@ public class RelicData
 public class RelicManager : UnitySingleton<RelicManager>
 {
     //遗物数据总列表
-    public List<RelicData> relicDataList = new List<RelicData>(){new RelicData()
-    {
-        relicID = 1001,relicDes ="test",relicCount = 0
-    }};
+    public List<RelicData> relicDataList = new List<RelicData>();
     void Start()
     {
-        StreamWriter writer = new StreamWriter(SaveManager.jsonDataPath + "relic.json");
-        writer.Write(JsonConvert.SerializeObject(relicDataList));
-        writer.Close();
+        
     }
 
     // Update is called once per frame
