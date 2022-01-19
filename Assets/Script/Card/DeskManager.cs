@@ -76,6 +76,8 @@ public class DeskManager : UnitySingleton<DeskManager>
             {
                 drawCardDeskList.Add(cardData);
             }
+            //洗牌
+            drawCardDeskList = Shuffle(drawCardDeskList);
         }
         //如果抽牌堆中的卡牌数量不为0,则将所有弃牌堆中的卡牌加入抽牌堆
         else if (disCardDeskList.Count > 1)
@@ -85,6 +87,8 @@ public class DeskManager : UnitySingleton<DeskManager>
                 drawCardDeskList.Add(disCardDeskList[i]);
                 disCardDeskList.Remove(disCardDeskList[i]);
             }
+            //洗牌
+            drawCardDeskList = Shuffle(drawCardDeskList);
         }
         //洗牌
         drawCardDeskList = GameTool.RandomSort(drawCardDeskList);
@@ -184,6 +188,24 @@ public class DeskManager : UnitySingleton<DeskManager>
         hasChosenCardList.Clear();
         
         yield break;
+    }
+    //打乱列表
+    public List<T> Shuffle<T>(List<T> original)
+    {
+        System.Random randomNum = new System.Random();
+        int index = 0;
+        T temp;
+        for (int i = 0; i < original.Count; i++)
+        {
+            index = randomNum.Next(0, original.Count - 1);
+            if (index != i)
+            {
+                temp = original[i];
+                original[i] = original[index];
+                original[index] = temp;
+            }
+        }
+        return original;
     }
     void Start()
     {
