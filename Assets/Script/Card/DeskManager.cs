@@ -110,7 +110,7 @@ public class DeskManager : UnitySingleton<DeskManager>
         }
         //抽取抽牌堆的第一张牌，如果该牌没有被修改过则直接根据ID初始化卡牌
         CardData data = drawCardDeskList[0];
-        if (data.HasModified)
+        if (data.hasModified)
         {
             HandCardManager.Instance.GetCardByData(data);
         }

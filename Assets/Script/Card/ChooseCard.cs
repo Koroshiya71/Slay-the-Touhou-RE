@@ -30,6 +30,12 @@ public class ChooseCard : BaseCard
             case CardType.FangYu:
                 outLineName += "防御";
                 break;
+            case CardType.JiNeng:
+                outLineName += "技能";
+                break;
+            case CardType.FaShu:
+                outLineName += "法术";
+                break;
             default:
                 outLineName += "体术";
                 break;

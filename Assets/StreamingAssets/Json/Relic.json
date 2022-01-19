@@ -4,6 +4,7 @@
         "relicDes": "⑨的人偶\n战斗开始时，对所有敌人造成⑨点伤害",
         "relicCount": 0,
         "relicSpriteRes":"Image/UIImage/Relic/RelicTest",
-        "showCount":false
+        "showCount":false,
+        "price":150
     }
 ]

@@ -64,6 +64,8 @@ public class StateManager : UnitySingleton<StateManager>
 {
     //状态图标预制体
     public static GameObject stateObj;
+    //二刀是否有触发
+    public bool hasDoubleBlade=false;
     //给玩家附加状态(状态ID，层数)
     public static void AddStateToTarget(BaseBattleUnit target, int id, int stack)
     {
@@ -106,6 +108,17 @@ public class StateManager : UnitySingleton<StateManager>
     //检查目标身上是否有该状态
     public static bool CheckState(BaseBattleUnit target, int id)
     {
+        //二刀检测
+        if (id==1006)
+        {
+            if (Instance.hasDoubleBlade)
+            {
+                return false;
+            }
+
+            Debug.Log("触发二刀");
+            Instance.hasDoubleBlade = true;
+        }
         return target.stateDic.ContainsKey(id);
     }
 

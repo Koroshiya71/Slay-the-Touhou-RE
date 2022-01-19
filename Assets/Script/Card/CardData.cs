@@ -189,9 +189,9 @@ public class CardData
 
     //卡牌数据是否有被修改过
     public bool hasModified = false;
+    //卡牌原始费用
+    public int originCost;
 
-
-    public bool HasModified => hasModified;
 
     //构造函数
     public CardData(int cardID = 1001, string cardName = "斩击", string cardImgRes = "Image/Card/CardImg/斩击",
@@ -209,6 +209,7 @@ public class CardData
         this.cardRare = cardRare;
         this.cardTarget = cardTarget;
         this.cardUseType = cardUseType;
+        originCost = cardCost;
     }
 
     public CardData(int cardID)
@@ -219,6 +220,7 @@ public class CardData
         this.cardName = ReadCfgCardData("Name", cardID);
         this.cardImgRes = ReadCfgCardData("ImgPath", cardID);
         this.cardCost = int.Parse(ReadCfgCardData("Cost", cardID));
+        originCost = this.cardCost;
         tempStr = ReadCfgCardData("Type", cardID);
         switch (tempStr)
         {
@@ -227,6 +229,12 @@ public class CardData
                 break;
             case "防御":
                 cardType = CardType.FangYu;
+                break;
+            case "技能":
+                cardType = CardType.JiNeng;
+                break;
+            case "法术":
+                cardType = CardType.FaShu;
                 break;
             default:
                 cardType = CardType.TiShu;
@@ -302,6 +310,8 @@ public class CardData
         this.cardTarget = data.cardTarget;
         this.cardUseType = data.cardUseType;
         this.cardEffectDic = new Dictionary<int, CardEffectData>();
+        originCost = data.originCost;
+
         foreach (var effectElement in data.cardEffectDic)
         {
             cardEffectDic.Add(effectElement.Key, effectElement.Value);

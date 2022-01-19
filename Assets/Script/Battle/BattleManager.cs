@@ -38,7 +38,8 @@ public class BattleManager : UnitySingleton<BattleManager>
     //当前战斗类型
     public BattleType currentBattleType = BattleType.Normal;
 
-    
+    //本场战斗触发的残心数
+    public int battleCanXinCount = 0;
 
     /// <summary>
     /// 敌人相关
@@ -54,12 +55,13 @@ public class BattleManager : UnitySingleton<BattleManager>
 
     //战斗结算金币数
     public int battleGold = 0;
+
     //初始化战斗管理器
     public void InitBattleManager()
     {
         //获取敌人预制体和敌人父物体
         enemyPrefab = ResourcesManager.Instance.LoadResources<GameObject>("Prefabs/" + "Battle/" + "Enemy/" + "Enemy");
-       
+
         //初始化敌人位置列表
         enemyPosList = new List<Vector3>()
         {
@@ -94,10 +96,12 @@ public class BattleManager : UnitySingleton<BattleManager>
         {
             CreateEnemy(enemyID);
         }
+
         //战斗开始遗物检测
         RelicManager.Instance.CheckRelicBattleStartEffect();
         //初始化
         isInit = false;
+        battleCanXinCount = 0;
         //开始回合
         StartCoroutine(TurnStart(true));
     }
@@ -112,29 +116,31 @@ public class BattleManager : UnitySingleton<BattleManager>
     }
 
     //回合开始
-    public IEnumerator TurnStart(bool isFirst=false)
+    public IEnumerator TurnStart(bool isFirst = false)
     {
         //如果是第一回合，则检测敌人有无开始战斗行动
         if (isFirst)
         {
             foreach (var enemy in inBattleEnemyList)
             {
-                if (enemy.enemyData.battleStartActionList.Count>0)
+                if (enemy.enemyData.battleStartActionList.Count > 0)
                 {
                     foreach (var action in enemy.enemyData.battleStartActionList)
                     {
                         yield return new WaitForSeconds(0.5f);
-                        TriggerActionEffect(enemy,action);
+                        TriggerActionEffect(enemy, action);
                     }
                 }
             }
         }
+
         EventDispatcher.TriggerEvent(E_MessageType.TurnStart);
         yield return new WaitForSeconds(0.5f);
 
         //初始化能量、连斩数
         currentEnergy = maxEnergy;
         currentTurnCombo = 0;
+        StateManager.Instance.hasDoubleBlade = false;
         //触发回合开始效果
         if (turnStartEffectDelegate != null)
         {
@@ -205,7 +211,7 @@ public class BattleManager : UnitySingleton<BattleManager>
             //对玩家造成value点伤害
             case 1001:
             case 2001:
-                Player.Instance.TakeDamage(actData.actualValue,null);
+                Player.Instance.TakeDamage(actData.actualValue, null);
                 break;
             //自身获得value层灵体
             case 1002:
@@ -223,7 +229,7 @@ public class BattleManager : UnitySingleton<BattleManager>
                 break;
             //给予自身value层护甲重伤
             case 1006:
-                StateManager.AddStateToTarget(unit,1004,actData.actualValue);
+                StateManager.AddStateToTarget(unit, 1004, actData.actualValue);
                 break;
         }
     }
@@ -238,55 +244,58 @@ public class BattleManager : UnitySingleton<BattleManager>
     public void UpdateCardAndActionValue()
     {
         //更新卡牌数值
-        //伤害类效果检测
         foreach (var handCardGo in HandCardManager.Instance.handCardGoList)
         {
             var cardData = handCardGo.GetComponent<HandCard>().CardData;
 
             foreach (var data in cardData.cardEffectDic.Values)
             {
+                //伤害类效果检测
                 if (data.effectType == CardEffectType.Damage)
                 {
                     //恐慌检测
-                    if (StateManager.CheckState(Player.Instance, 1002))
+                    if (StateManager.CheckState(Player.Instance, 1002) && !Player.Instance.hasCheckList.Contains(1002))
                     {
                         data.actualValue = (int) (0.7f * data.EffectValue);
                         Player.Instance.hasCheckList.Add(1002);
                     }
-
-                    //替换描述
-                    UpdateEffectDes(handCardGo, cardData, data);
                 }
-            }
-        }
 
-        //护甲类效果检测
-        foreach (var handCardGo in HandCardManager.Instance.handCardGoList)
-        {
-            var cardData = handCardGo.GetComponent<HandCard>().CardData;
-
-            foreach (var data in cardData.cardEffectDic.Values)
-            {
+                //护甲类效果检测
                 if (data.effectType == CardEffectType.Shield)
                 {
                     //焕发检测
-                    if (StateManager.CheckState(Player.Instance, 1003))
+                    if (StateManager.CheckState(Player.Instance, 1003) && !Player.Instance.hasCheckList.Contains(1003))
                     {
-                        data.actualValue = (int)(1.3f * data.EffectValue);
+                        data.actualValue = (int) (1.3f * data.EffectValue);
                         Player.Instance.hasCheckList.Add(1003);
                     }
+
                     //重伤检测
-                    if (StateManager.CheckState(Player.Instance, 1005))
+                    if (StateManager.CheckState(Player.Instance, 1005) && !Player.Instance.hasCheckList.Contains(1005))
                     {
-                        data.actualValue = (int)(0.7f * data.EffectValue);
+                        data.actualValue = (int) (0.7f * data.EffectValue);
                         Player.Instance.hasCheckList.Add(1005);
                     }
-                    //替换描述
-                    UpdateEffectDes(handCardGo, cardData, data);
-                    Player.Instance.hasCheckList.Add(1002);
                 }
+
+                //残心减费（备注：卡牌检测默认2000开头）
+                if (data.EffectID == 1008)
+                {
+                    cardData.cardCost = cardData.originCost - battleCanXinCount;
+                    if (cardData.cardCost < 0)
+                    {
+                        cardData.cardCost = 0;
+                    }
+
+                    cardData.hasModified = true;
+                }
+
+                //替换显示
+                UpdateCardUI(handCardGo, cardData, data);
             }
         }
+
         //更新敌人行为数值
         foreach (var enemy in inBattleEnemyList)
         {
@@ -302,14 +311,15 @@ public class BattleManager : UnitySingleton<BattleManager>
         }
     }
 
-    //根据效果类型更新卡牌描述
-    public void UpdateEffectDes(GameObject card,CardData cardData, CardEffectData data)
+    //根据效果类型更新卡牌UI
+    public void UpdateCardUI(GameObject card, CardData cardData, CardEffectData data)
     {
         //替换描述
         cardData.cardDes = cardData.cardDes.Replace(
             data.EffectDes, data.EffectDes.Replace(
                 data.EffectValue.ToString(), data.actualValue.ToString()));
         GameTool.GetTheChildComponent<Text>(card, "Text_CardEffect").text = cardData.cardDes;
+        GameTool.GetTheChildComponent<Text>(card, "Text_CardCost").text = cardData.cardCost.ToString();
     }
 
     //根据卡牌效果ID和效果值触发效果
@@ -334,7 +344,7 @@ public class BattleManager : UnitySingleton<BattleManager>
             case 1001:
                 if (target != null)
                 {
-                    target.TakeDamage(effectValue,Player.Instance);
+                    target.TakeDamage(effectValue, Player.Instance);
                 }
 
                 break;
@@ -366,16 +376,21 @@ public class BattleManager : UnitySingleton<BattleManager>
                 {
                     target = BattleManager.Instance.inBattleEnemyList[
                         Random.Range(0, BattleManager.Instance.inBattleEnemyList.Count)];
-                    target.TakeDamage(effectValue,Player.Instance);
+                    target.TakeDamage(effectValue, Player.Instance);
                 };
                 break;
             //附加恐惧
             case 1005:
                 StateManager.AddStateToTarget(target, 1002, effectValue);
                 break;
+            //附加二刀流
+            case 1007:
+                StateManager.AddStateToTarget(target, 1006, effectValue);
+                break;
             default:
                 break;
         }
+        
     }
 
     //战斗结束
@@ -403,16 +418,26 @@ public class BattleManager : UnitySingleton<BattleManager>
         UIManager.Instance.ShowUI(E_UiId.BattleRewardUI);
         EventDispatcher.TriggerEvent(E_MessageType.BattleReward);
     }
+
     //显示并初始化战斗结果UI
     public void ShowBattleReward()
     {
         UIManager.Instance.ShowUI(E_UiId.BattleRewardUI);
-        
     }
+
     //残心检测
-    public bool CheckCanxin(CardData data)
+    public bool CheckCanXin(CardData data, CardEffectData effect)
     {
-        return currentEnergy == data.cardCost;
+        if (data.cardCost == currentEnergy)
+        {
+            if (effect.isCanXin)
+            {
+                battleCanXinCount++;
+                Debug.Log(battleCanXinCount);
+                return true;
+            }
+        }
+        return false;
     }
 
     //连斩检测（连斩数）
@@ -423,7 +448,6 @@ public class BattleManager : UnitySingleton<BattleManager>
 
     private void Update()
     {
-        
     }
 
     private void Awake()

@@ -34,7 +34,16 @@ public class HandCard : BaseCard
         useEffect.SetActive(false);
         isDragging = false;
     }
-
+    public override void InitCard(CardData data)
+    {
+        base.InitCard(data);
+        //获取手牌列表
+        handCardList = HandCardManager.Instance.handCardGoList;
+        //获取特效游戏物体
+        useEffect = GameTool.FindTheChild(gameObject, "UseEffect").gameObject;
+        useEffect.SetActive(false);
+        isDragging = false;
+    }
     //是否正被选中
     private bool isSelecting;
     //获取卡牌外框
@@ -48,6 +57,12 @@ public class HandCard : BaseCard
                 break;
             case CardType.FangYu:
                 outLineName += "防御";
+                break;
+            case CardType.JiNeng:
+                outLineName += "技能";
+                break;
+            case CardType.FaShu:
+                outLineName += "法术";
                 break;
             default:
                 outLineName += "体术";
@@ -174,14 +189,44 @@ public class HandCard : BaseCard
             {
                 for (int i = 0; i <= cardData.cardEffectDic[1006].EffectValue; i++)
                 {
-                    BattleManager.Instance.TakeCardEffect(effect.Key, effect.Value.actualValue, target, BattleManager.Instance.CheckCanxin(cardData));
+                    BattleManager.Instance.TakeCardEffect(effect.Key, effect.Value.actualValue, target, BattleManager.Instance.CheckCanXin(cardData, effect.Value));
                 }
             }
             else
             {
-                BattleManager.Instance.TakeCardEffect(effect.Key, effect.Value.actualValue, target, BattleManager.Instance.CheckCanxin(cardData));
+                BattleManager.Instance.TakeCardEffect(effect.Key, effect.Value.actualValue, target, BattleManager.Instance.CheckCanXin(cardData,effect.Value));
             }
-
+        }
+        //如果该牌为体术牌且拥有二刀的心得则额外生效一次
+        if (cardData.cardType==CardType.TiShu)
+        {
+            if (StateManager.CheckState(Player.Instance,1006))
+            {
+                foreach (var effect in cardData.cardEffectDic)
+                {
+                    //根据卡牌的目标类型选择目标
+                    switch (cardData.cardTarget)
+                    {
+                        case CardTarget.MyPlayer:
+                            target = Player.Instance;
+                            break;
+                        case CardTarget.SingleEnemy:
+                            break;
+                    }
+                    //如果有连斩M：额外触发N次这个效果，则触发对应的效果N次
+                    if (cardData.cardEffectDic.ContainsKey(1006) && BattleManager.Instance.CheckCombo(cardData.cardEffectDic[1006].combo))
+                    {
+                        for (int i = 0; i <= cardData.cardEffectDic[1006].EffectValue; i++)
+                        {
+                            BattleManager.Instance.TakeCardEffect(effect.Key, effect.Value.actualValue, target, BattleManager.Instance.CheckCanXin(cardData, effect.Value));
+                        }
+                    }
+                    else
+                    {
+                        BattleManager.Instance.TakeCardEffect(effect.Key, effect.Value.actualValue, target, BattleManager.Instance.CheckCanXin(cardData, effect.Value));
+                    }
+                }
+            }
         }
         //连斩数+1
         BattleManager.Instance.currentTurnCombo++;
@@ -201,6 +246,8 @@ public class HandCard : BaseCard
         {
             hcg.GetComponent<HandCard>().SaveOriginalPos();
         }
+        //更新卡牌UI
+        BattleManager.Instance.UpdateCardAndActionValue();
     }
 
     //取消UI事件检测

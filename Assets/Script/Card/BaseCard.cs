@@ -112,6 +112,7 @@ public class BaseCard : MonoBehaviour
         text_CardName = GameTool.GetTheChildComponent<Text>(gameObject, "Text_CardName");
         text_CardName.text = cardData.cardName;
 
+        
         if (cardData.cardType != CardType.SpellCard)
         {
             if (cardID >= 1000 && cardID < 2000)
