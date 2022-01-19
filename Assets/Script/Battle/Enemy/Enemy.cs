@@ -270,10 +270,10 @@ public class Enemy : BaseBattleUnit
     //处理特殊的行动,如果跳过了正常行动则return true
     public bool CheckSpecialAction()
     {
-        //懒惰妖精血量大于50%不进行攻击
+        //懒惰妖精血量大于70%不进行攻击
         if (enemyData.EnemyID == 3)
         {
-            if (currentHp > (int) (0.5f * maxHp))
+            if (currentHp > (int) (0.7f * maxHp))
             {
                 currentAction = new ActionData(1004,0);
                 return true; 

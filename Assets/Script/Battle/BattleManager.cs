@@ -94,9 +94,10 @@ public class BattleManager : UnitySingleton<BattleManager>
         {
             CreateEnemy(enemyID);
         }
+        //战斗开始遗物检测
+        RelicManager.Instance.CheckRelicBattleStartEffect();
         //初始化
         isInit = false;
-
         //开始回合
         StartCoroutine(TurnStart(true));
     }

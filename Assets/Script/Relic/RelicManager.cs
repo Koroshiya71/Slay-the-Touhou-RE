@@ -50,8 +50,14 @@ public class RelicManager : UnitySingleton<RelicManager>
         newRelicObj.transform.SetParent(relicContent.transform);
         newRelicObj.transform.localScale = new Vector3(1, 1);
         newRelic.InitRelic(relicDic[id]);
+        //添加到玩家字典
+        playerRelicDic.Add(id,relicDic[id]);
     }
-   
+   //检测是否拥有某遗物
+   public bool CheckRelic(int id)
+   {
+       return playerRelicDic.ContainsKey(id);
+   }
     //读取Json文件初始化遗物数据列表和对应字典
     public void InitRelicManager()
     {
@@ -70,5 +76,20 @@ public class RelicManager : UnitySingleton<RelicManager>
         relicContent = GameObject.Find("RelicContent");
         //调试用
         GetRelic(1001);
+    }
+    //检测各种遗物的战斗开始效果
+    public void CheckRelicBattleStartEffect()
+    {
+        //⑨的人偶
+        if (CheckRelic(1001))
+        {
+            BattleManager.Instance.turnStartEffectDelegate += delegate
+            {
+                foreach (var enemy in BattleManager.Instance.inBattleEnemyList)
+                {
+                    enemy.TakeDamage(9,Player.Instance);
+                }
+            };
+        }
     }
 }
