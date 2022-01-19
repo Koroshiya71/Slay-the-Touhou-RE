@@ -183,6 +183,13 @@ public class HandCard : BaseCard
                     break;
                 case CardTarget.SingleEnemy:
                     break;
+                //如果是全体敌人则随便选择一个敌人
+                case CardTarget.AllEnemy:
+                    if (BattleManager.Instance.inBattleEnemyList.Count>0)
+                    {
+                        target = BattleManager.Instance.inBattleEnemyList[0];
+                    }
+                    break;
             }
             //如果有连斩M：额外触发N次这个效果，则触发对应的效果N次
             if (cardData.cardEffectDic.ContainsKey(1006) && BattleManager.Instance.CheckCombo(cardData.cardEffectDic[1006].combo))
@@ -211,6 +218,12 @@ public class HandCard : BaseCard
                             target = Player.Instance;
                             break;
                         case CardTarget.SingleEnemy:
+                            break;
+                        //如果是全体敌人则随便选择一个敌人
+                        case CardTarget.AllEnemy:
+                            target = BattleManager.Instance.inBattleEnemyList[0];
+                            break;
+                        default:
                             break;
                     }
                     //如果有连斩M：额外触发N次这个效果，则触发对应的效果N次

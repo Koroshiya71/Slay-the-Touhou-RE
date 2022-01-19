@@ -387,6 +387,30 @@ public class BattleManager : UnitySingleton<BattleManager>
             case 1007:
                 StateManager.AddStateToTarget(target, 1006, effectValue);
                 break;
+            //对所有敌人造成伤害
+            case 1009:
+                for (int i = 0; i < inBattleEnemyList.Count; i++)
+                {
+                    if (inBattleEnemyList[i].TakeDamage(effectValue, Player.Instance))
+                    {
+                        i--;
+                    }
+                }
+                break;
+            //抽牌
+            case 1010:
+                for (int i = 0; i < effectValue; i++)
+                {
+                    DeskManager.Instance.DrawCard();
+                }
+                break;
+            //如果是本回合使用的第一张牌，对目标造成伤害
+            case 1011:
+                if (currentTurnCombo==0)
+                {
+                    target.TakeDamage(effectValue,Player.Instance);
+                }
+                break;
             default:
                 break;
         }
@@ -433,7 +457,6 @@ public class BattleManager : UnitySingleton<BattleManager>
             if (effect.isCanXin)
             {
                 battleCanXinCount++;
-                Debug.Log(battleCanXinCount);
                 return true;
             }
         }

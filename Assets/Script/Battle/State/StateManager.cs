@@ -109,7 +109,7 @@ public class StateManager : UnitySingleton<StateManager>
     public static bool CheckState(BaseBattleUnit target, int id)
     {
         //二刀检测
-        if (id==1006)
+        if (id==1006&& target.stateDic.ContainsKey(id))
         {
             if (Instance.hasDoubleBlade)
             {

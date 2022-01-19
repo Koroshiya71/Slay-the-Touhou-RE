@@ -55,7 +55,9 @@ public enum CardTarget
     SingleEnemy,
 
     //玩家自身
-    MyPlayer
+    MyPlayer,
+    //全部敌人
+    AllEnemy
 }
 
 //卡牌的用途
@@ -265,7 +267,10 @@ public class CardData
                 cardTarget = CardTarget.SingleEnemy;
                 break;
             case "玩家":
-                cardTarget = cardTarget = CardTarget.MyPlayer;
+                cardTarget = CardTarget.MyPlayer;
+                break;
+            case "全体敌人":
+                cardTarget = CardTarget.AllEnemy;
                 break;
             default:
                 cardTarget = CardTarget.SingleEnemy;

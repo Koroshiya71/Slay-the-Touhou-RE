@@ -49,7 +49,6 @@ public class BattleRewardUI : BaseUI
         //如果有金币奖励就显示金币reward
         if (BattleManager.Instance.battleGold>0)
         {
-            Debug.Log(1);
             //如果已有游戏物体则直接重新初始化即可
             if (battleRewardList.Count>rewardNo)
             {
@@ -58,7 +57,6 @@ public class BattleRewardUI : BaseUI
             }
             else
             {
-                Debug.Log(2);
 
                 GameObject goldRewardGo = Instantiate(battleRewardPrefab);
                 goldRewardGo.transform.SetParent(content);
@@ -71,7 +69,6 @@ public class BattleRewardUI : BaseUI
             rewardNo++;
         }
 
-        Debug.Log(3);
         if (battleRewardList.Count > rewardNo)
         {
             battleRewardList[rewardNo].SetActive(true);

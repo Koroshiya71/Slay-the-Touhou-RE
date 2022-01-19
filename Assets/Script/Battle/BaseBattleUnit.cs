@@ -41,8 +41,8 @@ public class BaseBattleUnit : MonoBehaviour
     {
     }
 
-    //受到伤害（伤害值，伤害来源）
-    public virtual void TakeDamage(int damage,BaseBattleUnit source)
+    //受到伤害（伤害值，伤害来源）,返回是否死亡
+    public virtual bool TakeDamage(int damage,BaseBattleUnit source)
     {
         //灵体检测
         if (StateManager.CheckState(this, 1001))
@@ -56,7 +56,7 @@ public class BaseBattleUnit : MonoBehaviour
             //护盾值大于等于伤害值时不造成生命值伤害
             currentShield -= damage;
             UpdateUI();
-            return;
+            return false;
         }
 
         //护盾值小于伤害值时优先使用护盾抵消部分伤害
@@ -69,7 +69,10 @@ public class BaseBattleUnit : MonoBehaviour
         {
             CheckDieEffect(source);
             Die();
+            return true;
         }
+
+        return false;
     }
     //死亡效果检测（死亡者）
     public void CheckDieEffect(BaseBattleUnit killer)
