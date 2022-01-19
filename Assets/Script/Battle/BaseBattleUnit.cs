@@ -141,9 +141,15 @@ public class BaseBattleUnit : MonoBehaviour
             state.UpdateStateUI();
         }
     }
+    
     //检测清除状态
     public void CheckClearState()
     {
+        //更新层数显示
+        foreach (var state in stateDic.Values)
+        {
+            state.UpdateStateUI();
+        }
         //需要清除的状态列表
         List<State> clearList = new List<State>();
         foreach (var state in stateDic.Values)

@@ -473,7 +473,7 @@ GameObject:
   - component: {fileID: 8561898873017959087}
   m_Layer: 5
   m_Name: DisplayCard
-  m_TagString: HandCard
+  m_TagString: DisplayCard
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

@@ -106,10 +106,38 @@ public class DeskManager : UnitySingleton<DeskManager>
         if (drawCardDeskList.Count == 0)
         {
             InitDrawCardDesk();
-
         }
         //抽取抽牌堆的第一张牌，如果该牌没有被修改过则直接根据ID初始化卡牌
         CardData data = drawCardDeskList[0];
+        if (data.hasModified)
+        {
+            HandCardManager.Instance.GetCardByData(data);
+        }
+        //否则则根据卡牌数据初始化
+        else
+        {
+            HandCardManager.Instance.GetCardByID(data.cardID);
+        }
+        drawCardDeskList.Remove(data);
+        EventDispatcher.TriggerEvent(E_MessageType.DrawCard);
+    }
+    //抽取特定卡牌方法
+    public void DrawTargetCard(CardData data)
+    {
+        //从抽牌堆或弃牌堆抽取这张牌
+        if (drawCardDeskList.Contains(data))
+        {
+            drawCardDeskList.Remove(data);
+        }
+        else if (disCardDeskList.Contains(data))
+        {
+            disCardDeskList.Remove(data);
+        }
+        //如果都妹有则跳过
+        else
+        {
+            return;
+        }
         if (data.hasModified)
         {
             HandCardManager.Instance.GetCardByData(data);

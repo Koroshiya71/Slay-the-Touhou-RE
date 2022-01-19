@@ -396,6 +396,7 @@ public class BattleManager : UnitySingleton<BattleManager>
                         i--;
                     }
                 }
+
                 break;
             //抽牌
             case 1010:
@@ -403,18 +404,81 @@ public class BattleManager : UnitySingleton<BattleManager>
                 {
                     DeskManager.Instance.DrawCard();
                 }
+
                 break;
             //如果是本回合使用的第一张牌，对目标造成伤害
             case 1011:
-                if (currentTurnCombo==0)
+                if (currentTurnCombo == 0)
                 {
-                    target.TakeDamage(effectValue,Player.Instance);
+                    target.TakeDamage(effectValue, Player.Instance);
                 }
+
+                break;
+            //附加起势
+            case 1012:
+                StateManager.AddStateToTarget(target, 1007, effectValue);
+                break;
+            //抽取一张连斩牌:
+            case 1013:
+                int count = 300;
+                while (true)
+                {
+                    count--;
+                    bool get = false;
+                    int drawIndex = Random.Range(0, DeskManager.Instance.drawCardDeskList.Count);
+                    int disIndex = Random.Range(0, DeskManager.Instance.disCardDeskList.Count);
+                    CardData cardData = DeskManager.Instance.drawCardDeskList[drawIndex];
+                    if (DeskManager.Instance.drawCardDeskList.Count <= 0)
+                    {
+                        continue;
+                    }
+
+                    foreach (var eff in cardData.cardEffectDic.Values)
+                    {
+                        if (eff.combo > 0)
+                        {
+                            DeskManager.Instance.DrawTargetCard(cardData);
+                            get = true;
+                            break;
+                        }
+                    }
+
+                    if (get)
+                    {
+                        break;
+                    }
+
+                    cardData = DeskManager.Instance.disCardDeskList[disIndex];
+                    if (DeskManager.Instance.disCardDeskList.Count <= 0)
+                    {
+                        continue;
+                    }
+
+                    foreach (var eff in cardData.cardEffectDic.Values)
+                    {
+                        if (eff.combo > 0)
+                        {
+                            DeskManager.Instance.DrawTargetCard(cardData);
+                            get = true;
+                            break;
+                        }
+                    }
+
+                    if (get)
+                    {
+                        break;
+                    }
+
+                    if (count <= 0)
+                    {
+                        break;
+                    }
+                }
+
                 break;
             default:
                 break;
         }
-        
     }
 
     //战斗结束
@@ -460,6 +524,7 @@ public class BattleManager : UnitySingleton<BattleManager>
                 return true;
             }
         }
+
         return false;
     }
 

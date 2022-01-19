@@ -4,6 +4,7 @@
 1001,灵体,Image\UIImage\StateImg\LingTi,Buff,受到的伤害减少30%,1,1
 1002,恐惧,Image\UIImage\StateImg\KongJu,Debuff,造成的伤害减少30%,1,1
 1003,焕发,Image\UIImage\StateImg\HuanFa,Buff,获得的护甲增加30%,1,1
-1004,亡语重伤,Image\UIImage\StateImg\HuanFa,Buff,死亡时对击杀者赋予2层重伤,0,0
+1004,亡语重伤,Image\UIImage\StateImg\HuanFa,Buff,死亡时对击杀者赋予value层重伤,0,0
 1005,重伤,Image\UIImage\StateImg\HuanFa,Debuff,获得的护甲减少30%,1,1
 1006,二刀流,Image\UIImage\StateImg\DoubleBlade,Buff,每回合的第一张体术牌触发两次,1,1
+1007,起势,Image\UIImage\StateImg\QiShi,Buff,触发连斩时消耗一层，效果额外触发一次,0,1

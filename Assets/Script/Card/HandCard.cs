@@ -8,14 +8,17 @@ using GameCore;
 
 public class HandCard : BaseCard
 {
-
     //使用卡牌时的特效
     private GameObject useEffect;
+
     //手牌管理器的手牌列表
     private List<GameObject> handCardList;
+
     //是否正在被拖拽
     private bool isDragging;
+
     public bool IsDragging => isDragging;
+
     //初始卡牌位置
     private Vector3 originPos;
     public Vector3 OriginPos => originPos;
@@ -34,6 +37,7 @@ public class HandCard : BaseCard
         useEffect.SetActive(false);
         isDragging = false;
     }
+
     public override void InitCard(CardData data)
     {
         base.InitCard(data);
@@ -44,8 +48,10 @@ public class HandCard : BaseCard
         useEffect.SetActive(false);
         isDragging = false;
     }
+
     //是否正被选中
     private bool isSelecting;
+
     //获取卡牌外框
     protected override Sprite GetCardOutLine()
     {
@@ -88,13 +94,13 @@ public class HandCard : BaseCard
         Sprite outLine = ResourcesManager.Instance.LoadResources<Sprite>("Image/Card/CardOutLine/" + outLineName);
         return outLine;
     }
+
     //初始化卡牌事件
     protected override void InitEvent()
     {
         base.InitEvent();
-
-
     }
+
     //当鼠标进入卡牌时的回调
     protected override void OnEnter()
     {
@@ -119,6 +125,7 @@ public class HandCard : BaseCard
             handCardList[i].GetComponent<HandCard>().cardAnimator.SetBool("Daging", false);
         }
     }
+
     //当鼠标抬起时的回调
     protected override void OnUp()
     {
@@ -132,10 +139,12 @@ public class HandCard : BaseCard
                 UseCard();
                 return;
             }
+
             transform.localPosition = originPos;
             transform.localEulerAngles = originRot;
         }
     }
+
     //当鼠标点击时的回调
     protected override void OnDown()
     {
@@ -143,10 +152,12 @@ public class HandCard : BaseCard
         {
             return;
         }
+
         isDragging = true;
         isSelecting = true;
         HandCardManager.Instance.selectedCard = this;
     }
+
     //记录初始位置
     public void SaveOriginalPos()
     {
@@ -157,7 +168,6 @@ public class HandCard : BaseCard
     //检查是否可以使用
     private bool CheckUsable()
     {
-
         //如果卡牌位置满足条件则可以使用
         if (transform.localPosition.y >= 100 &&
             !(cardData.cardTarget == CardTarget.SingleEnemy && BattleManager.Instance.selectedTarget == null))
@@ -165,6 +175,7 @@ public class HandCard : BaseCard
             useEffect.SetActive(true);
             return true;
         }
+
         useEffect.SetActive(false);
         return false;
     }
@@ -173,6 +184,31 @@ public class HandCard : BaseCard
     public void UseCard()
     {
         BaseBattleUnit target = null;
+        //效果总共触发几次
+        int effectTimes = 1;
+        //如果有连斩M：额外触发N次这个效果，则触发对应的效果N次
+        if (cardData.cardEffectDic.ContainsKey(1006) &&
+            BattleManager.Instance.CheckCombo(cardData.cardEffectDic[1006].combo))
+        {
+            //如果有起势则再触发一次并消耗其层数
+            if (StateManager.CheckState(Player.Instance,1007))
+            {
+                effectTimes += cardData.cardEffectDic[1006].EffectValue;
+                Player.Instance.stateDic[1007].stateData.stateStack -= 1;
+                Player.Instance.CheckClearState();
+            }
+            effectTimes += cardData.cardEffectDic[1006].EffectValue;
+        }
+
+        //如果该牌为体术牌，且玩家具有二刀的心得则效果次数+1
+        if (cardData.cardType == CardType.TiShu)
+        {
+            if (StateManager.CheckState(Player.Instance, 1006))
+            {
+                effectTimes += 1;
+            }
+        }
+
         foreach (var effect in cardData.cardEffectDic)
         {
             //根据卡牌的目标类型选择目标
@@ -185,62 +221,22 @@ public class HandCard : BaseCard
                     break;
                 //如果是全体敌人则随便选择一个敌人
                 case CardTarget.AllEnemy:
-                    if (BattleManager.Instance.inBattleEnemyList.Count>0)
+                    if (BattleManager.Instance.inBattleEnemyList.Count > 0)
                     {
                         target = BattleManager.Instance.inBattleEnemyList[0];
                     }
                     break;
             }
-            //如果有连斩M：额外触发N次这个效果，则触发对应的效果N次
-            if (cardData.cardEffectDic.ContainsKey(1006) && BattleManager.Instance.CheckCombo(cardData.cardEffectDic[1006].combo))
+
+            //触发N次效果
+            for (int i = 0; i < effectTimes; i++)
             {
-                for (int i = 0; i <= cardData.cardEffectDic[1006].EffectValue; i++)
-                {
-                    BattleManager.Instance.TakeCardEffect(effect.Key, effect.Value.actualValue, target, BattleManager.Instance.CheckCanXin(cardData, effect.Value));
-                }
-            }
-            else
-            {
-                BattleManager.Instance.TakeCardEffect(effect.Key, effect.Value.actualValue, target, BattleManager.Instance.CheckCanXin(cardData,effect.Value));
+               
+                BattleManager.Instance.TakeCardEffect(effect.Key, effect.Value.actualValue, target,
+                    BattleManager.Instance.CheckCanXin(cardData, effect.Value));
             }
         }
-        //如果该牌为体术牌且拥有二刀的心得则额外生效一次
-        if (cardData.cardType==CardType.TiShu)
-        {
-            if (StateManager.CheckState(Player.Instance,1006))
-            {
-                foreach (var effect in cardData.cardEffectDic)
-                {
-                    //根据卡牌的目标类型选择目标
-                    switch (cardData.cardTarget)
-                    {
-                        case CardTarget.MyPlayer:
-                            target = Player.Instance;
-                            break;
-                        case CardTarget.SingleEnemy:
-                            break;
-                        //如果是全体敌人则随便选择一个敌人
-                        case CardTarget.AllEnemy:
-                            target = BattleManager.Instance.inBattleEnemyList[0];
-                            break;
-                        default:
-                            break;
-                    }
-                    //如果有连斩M：额外触发N次这个效果，则触发对应的效果N次
-                    if (cardData.cardEffectDic.ContainsKey(1006) && BattleManager.Instance.CheckCombo(cardData.cardEffectDic[1006].combo))
-                    {
-                        for (int i = 0; i <= cardData.cardEffectDic[1006].EffectValue; i++)
-                        {
-                            BattleManager.Instance.TakeCardEffect(effect.Key, effect.Value.actualValue, target, BattleManager.Instance.CheckCanXin(cardData, effect.Value));
-                        }
-                    }
-                    else
-                    {
-                        BattleManager.Instance.TakeCardEffect(effect.Key, effect.Value.actualValue, target, BattleManager.Instance.CheckCanXin(cardData, effect.Value));
-                    }
-                }
-            }
-        }
+
         //连斩数+1
         BattleManager.Instance.currentTurnCombo++;
         //消耗能量
@@ -249,6 +245,7 @@ public class HandCard : BaseCard
         {
             handCardList[i].GetComponent<HandCard>().cardAnimator.SetBool("Daging", false);
         }
+
         //弃牌处理
         DeskManager.Instance.disCardDeskList.Add(this.cardData);
         HandCardManager.Instance.RemoveCard(this.gameObject);
@@ -259,6 +256,7 @@ public class HandCard : BaseCard
         {
             hcg.GetComponent<HandCard>().SaveOriginalPos();
         }
+
         //更新卡牌UI
         BattleManager.Instance.UpdateCardAndActionValue();
     }
@@ -269,6 +267,7 @@ public class HandCard : BaseCard
         canvasGroup.interactable = false;
         canvasGroup.blocksRaycasts = false;
     }
+
     //激活UI事件检测
     public void ActiveUIEventListen()
     {
@@ -294,6 +293,7 @@ public class HandCard : BaseCard
             ActiveUIEventListen();
         }
     }
+
     private void Update()
     {
         CheckUsable();
