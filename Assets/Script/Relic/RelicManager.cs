@@ -5,6 +5,8 @@ using GameCore;
 using UnityEngine;
 using Newtonsoft.Json;
 using System.IO;
+using Random = UnityEngine.Random;
+
 public class RelicData
 {
     //遗物ID
@@ -52,11 +54,34 @@ public class RelicManager : UnitySingleton<RelicManager>
         newRelic.InitRelic(relicDic[id]);
         //添加到玩家字典
         playerRelicDic.Add(id,relicDic[id]);
+        //触发获取事件
+        OnGetRelic(id);
     }
    //检测是否拥有某遗物
    public bool CheckRelic(int id)
    {
        return playerRelicDic.ContainsKey(id);
+   }
+   //获取遗物效果
+   public void OnGetRelic(int id)
+   {
+       switch (id)
+       {
+            case 1002:
+                //确认卡牌列表
+                List<CardData> chooseList = new List<CardData>();
+                while (chooseList.Count<3)
+                {
+                    CardData newCard=DeskManager.Instance.allCardDataList[Random.Range(0,DeskManager.Instance.allCardDataList.Count)];
+                    if (newCard.cardRare==CardRare.Epic&&!chooseList.Contains(newCard))
+                    {
+                        chooseList.Add(newCard);
+                    }
+                }
+                //开始选牌
+                StartCoroutine(DeskManager.Instance.ChooseCardAddToDesk(1, chooseList));
+                break;
+       }
    }
     //读取Json文件初始化遗物数据列表和对应字典
     public void InitRelicManager()
@@ -74,8 +99,8 @@ public class RelicManager : UnitySingleton<RelicManager>
         relicPrefab = ResourcesManager.Instance.LoadResources<GameObject>("Prefabs/Battle/Relic");
         //获取遗物content
         relicContent = GameObject.Find("RelicContent");
-        //调试用
-        GetRelic(1001);
+        //获得初始遗物
+        GetRelic(1004);
     }
     //检测各种遗物的战斗开始效果
     public void CheckRelicBattleStartEffect()

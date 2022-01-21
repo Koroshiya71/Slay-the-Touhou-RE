@@ -174,5 +174,22 @@ public class GameManager : UnitySingleton<GameManager>
                 BattleManager.Instance.inBattleEnemyList[0].Die();
             }
         }
+        //获取遗物
+        if (Input.GetKeyDown(KeyCode.Alpha1)) //结束战斗
+        {
+            RelicManager.Instance.GetRelic(1001);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha2)) //结束战斗
+        {
+            RelicManager.Instance.GetRelic(1002);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha3)) //结束战斗
+        {
+            RelicManager.Instance.GetRelic(1003);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha4)) //结束战斗
+        {
+            RelicManager.Instance.GetRelic(1004);
+        }
     }
 }

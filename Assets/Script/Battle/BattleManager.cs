@@ -138,7 +138,16 @@ public class BattleManager : UnitySingleton<BattleManager>
         yield return new WaitForSeconds(0.5f);
 
         //初始化能量、连斩数
-        currentEnergy = maxEnergy;
+        //偷来的书检测
+        if (currentEnergy > 0 && RelicManager.Instance.CheckRelic(1003))
+        {
+            currentEnergy = maxEnergy + 1;
+        }
+        else
+        {
+            currentEnergy = maxEnergy;
+        }
+
         currentTurnCombo = 0;
         StateManager.Instance.hasDoubleBlade = false;
         //触发回合开始效果
@@ -323,7 +332,7 @@ public class BattleManager : UnitySingleton<BattleManager>
     }
 
     //根据卡牌效果ID和效果值触发效果
-    public void TakeCardEffect(int effectID, int effectValue, BaseBattleUnit target = null, bool isCanXin = false,
+    public void TakeCardEffect(int effectID, int effectValue, BaseBattleUnit target = null, int isCanXin = 0,
         bool isLianZhan = false)
     {
         //如果没有特别指定目标则默认指定当前选中的目标
@@ -358,26 +367,50 @@ public class BattleManager : UnitySingleton<BattleManager>
                 break;
             //残心：获得能量
             case 1003:
-                if (!isCanXin)
+                switch (isCanXin)
+                {
+                    case 0:
+                        break;
+                    case 1:
+                        turnStartEffectDelegate += delegate { EditEnergy(currentEnergy+effectValue); };
+                        break;
+                    case 2:
+                        EditEnergy(currentEnergy + effectValue);
+                        break;
+
+                }
+                if (isCanXin==0)
                 {
                     break;
                 }
 
-                turnStartEffectDelegate += delegate { currentEnergy += effectValue; };
+                if (isCanXin==2)
+                {
+                    
+                }
+
                 break;
             //残心：对随机敌人造成伤害
             case 1004:
-                if (!isCanXin)
+                switch (isCanXin)
                 {
-                    break;
-                }
+                    case 0:
+                        break;
+                    case 1:
+                        turnStartEffectDelegate += delegate
+                        {
+                            target = BattleManager.Instance.inBattleEnemyList[
+                                Random.Range(0, BattleManager.Instance.inBattleEnemyList.Count)];
+                            target.TakeDamage(effectValue, Player.Instance);
+                        };
+                        break;
+                    case 2:
+                        target = BattleManager.Instance.inBattleEnemyList[
+                            Random.Range(0, BattleManager.Instance.inBattleEnemyList.Count)];
+                        target.TakeDamage(effectValue, Player.Instance);
+                        break;
 
-                turnStartEffectDelegate += delegate
-                {
-                    target = BattleManager.Instance.inBattleEnemyList[
-                        Random.Range(0, BattleManager.Instance.inBattleEnemyList.Count)];
-                    target.TakeDamage(effectValue, Player.Instance);
-                };
+                }
                 break;
             //附加恐惧
             case 1005:
@@ -514,18 +547,25 @@ public class BattleManager : UnitySingleton<BattleManager>
     }
 
     //残心检测
-    public bool CheckCanXin(CardData data, CardEffectData effect)
+    public int CheckCanXin(CardData data, CardEffectData effect)
     {
+        //楼观剑检测
+        if (effect.isCanXin && battleCanXinCount == 0 && RelicManager.Instance.CheckRelic(1004))
+        {
+            battleCanXinCount++;
+            return 2;
+        }
+
         if (data.cardCost == currentEnergy)
         {
             if (effect.isCanXin)
             {
                 battleCanXinCount++;
-                return true;
+                return 1;
             }
         }
 
-        return false;
+        return 0;
     }
 
     //连斩检测（连斩数）

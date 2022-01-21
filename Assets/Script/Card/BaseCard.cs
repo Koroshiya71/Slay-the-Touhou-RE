@@ -111,8 +111,9 @@ public class BaseCard : MonoBehaviour
         cardAnimator = GetComponent<Animator>();
         text_CardName = GameTool.GetTheChildComponent<Text>(gameObject, "Text_CardName");
         text_CardName.text = cardData.cardName;
+        text_cardCost = GameTool.GetTheChildComponent<Text>(gameObject, "Text_CardCost");
+        text_cardCost.text = cardData.cardCost.ToString();
 
-        
         if (cardData.cardType != CardType.SpellCard)
         {
             if (cardID >= 1000 && cardID < 2000)
