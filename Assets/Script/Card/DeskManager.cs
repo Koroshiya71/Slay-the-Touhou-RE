@@ -100,7 +100,13 @@ public class DeskManager : UnitySingleton<DeskManager>
         //清空抽牌堆和弃牌堆
         drawCardDeskList.Clear();
         disCardDeskList.Clear();
-
+        //清空手牌
+        for (int i = 0; i < HandCardManager.Instance.handCardGoList.Count; i++)
+        {
+            var handCard = HandCardManager.Instance.handCardGoList[i];
+            Destroy(handCard);
+        }
+        HandCardManager.Instance.handCardGoList.Clear();
         //重置抽牌堆状态为未初始化
         hasInitDrawCardDesk = false;
     }

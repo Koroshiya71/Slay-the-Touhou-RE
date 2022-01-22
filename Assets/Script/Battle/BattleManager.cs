@@ -460,11 +460,11 @@ public class BattleManager : UnitySingleton<BattleManager>
                     bool get = false;
                     int drawIndex = Random.Range(0, DeskManager.Instance.drawCardDeskList.Count);
                     int disIndex = Random.Range(0, DeskManager.Instance.disCardDeskList.Count);
-                    CardData cardData = DeskManager.Instance.drawCardDeskList[drawIndex];
                     if (DeskManager.Instance.drawCardDeskList.Count <= 0)
                     {
                         continue;
                     }
+                    CardData cardData = DeskManager.Instance.drawCardDeskList[drawIndex];
 
                     foreach (var eff in cardData.cardEffectDic.Values)
                     {
@@ -475,17 +475,15 @@ public class BattleManager : UnitySingleton<BattleManager>
                             break;
                         }
                     }
-
                     if (get)
                     {
                         break;
                     }
-
-                    cardData = DeskManager.Instance.disCardDeskList[disIndex];
                     if (DeskManager.Instance.disCardDeskList.Count <= 0)
                     {
                         continue;
                     }
+                    cardData = DeskManager.Instance.disCardDeskList[disIndex];
 
                     foreach (var eff in cardData.cardEffectDic.Values)
                     {
