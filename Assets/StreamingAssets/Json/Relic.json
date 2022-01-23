@@ -4,31 +4,27 @@
         "relicDes": "⑨的人偶\n战斗开始时，对所有敌人造成⑨点伤害",
         "relicCount": 0,
         "relicSpriteRes": "Image/UIImage/Relic/RelicTest",
-        "showCount": false,
-        "price": 150
+        "showCount": false
     },
     {
         "relicID": 1002,
         "relicDes": "神社的贡品\n获取时，从三张史诗牌中选择一张加入牌库",
         "relicCount": 0,
         "relicSpriteRes": "Image/UIImage/Relic/RelicTest",
-        "showCount": false,
-        "price": 180
+        "showCount": false
     },
     {
         "relicID": 1003,
         "relicDes": "偷来的书\n回合结束时如果有剩余能量，在下个回合获得1点额外的能量",
         "relicCount": 0,
         "relicSpriteRes": "Image/UIImage/Relic/RelicTest",
-        "showCount": false,
-        "price": 170
+        "showCount": false
     },
     {
         "relicID": 1004,
         "relicDes": "楼观剑\n每场战斗的第一次残心效果可以无条件触发并且立刻生效",
         "relicCount": 0,
         "relicSpriteRes": "Image/UIImage/Relic/RelicTest",
-        "showCount": false,
-        "price": 0
+        "showCount": false
     }
 ]

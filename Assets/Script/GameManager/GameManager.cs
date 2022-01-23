@@ -38,6 +38,7 @@ public class CardRareClass
     {
     }
 }
+//商店卡牌数据
 
 public class GameManager : UnitySingleton<GameManager>
 {
@@ -50,6 +51,10 @@ public class GameManager : UnitySingleton<GameManager>
     //战斗结束选牌数
     public int chooseCardNumAfterBattle = 3;
 
+    //商店卡牌ID、价格字典
+    public Dictionary<int, int> storeCardPriceDic = new Dictionary<int, int>();
+    //商店遗物ID、价格字典
+    public Dictionary<int, int> storeRelicPriceDic = new Dictionary<int, int>();
     private void Awake()
     {
         StreamReader reader;
@@ -65,7 +70,15 @@ public class GameManager : UnitySingleton<GameManager>
         //读取卡牌掉落稀有度配置
         reader = new StreamReader(SaveManager.jsonDataPath + "RareCard.json");
         cardRare = JsonConvert.DeserializeObject<CardRareClass>(reader.ReadToEnd());
+
+        //读取商店数据
+        reader = new StreamReader(SaveManager.jsonDataPath + "StoreCard.json");
+        storeCardPriceDic = JsonConvert.DeserializeObject<Dictionary<int, int>>(reader.ReadToEnd());
+
+        reader = new StreamReader(SaveManager.jsonDataPath + "StoreRelic.json");
+        storeRelicPriceDic = JsonConvert.DeserializeObject<Dictionary<int, int>>(reader.ReadToEnd());
         reader.Close();
+
     }
 
     //战斗后选牌方法
@@ -162,6 +175,12 @@ public class GameManager : UnitySingleton<GameManager>
     public void GetGold(int goldNum)
     {
         playerData.gold += goldNum;
+        EventDispatcher.TriggerEvent(E_MessageType.UpdateGameMainUI);
+    }
+    //消费金币
+    public void Pay(int goldNum)
+    {
+        playerData.gold -= goldNum;
         EventDispatcher.TriggerEvent(E_MessageType.UpdateGameMainUI);
     }
     void Update()

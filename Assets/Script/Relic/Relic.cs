@@ -21,20 +21,24 @@ public class Relic : MonoBehaviour,IPointerEnterHandler,IPointerExitHandler
         
     }
 
-    private void Awake()
+    protected virtual void Awake()
+    {
+        Init();
+    }
+
+    protected virtual void Init()
     {
         relicImg = GetComponent<Image>();
         text_Des = GameTool.GetTheChildComponent<Text>(gameObject, "Text_Des");
         text_Count = GameTool.GetTheChildComponent<Text>(gameObject, "Text_Count");
 
     }
-
     void Update()
     {
         
     }
     //根据遗物数据初始化遗物
-    public void InitRelic(RelicData data)
+    public virtual void InitRelic(RelicData data)
     {
         relicData = data;
         //读取Sprite
@@ -50,12 +54,12 @@ public class Relic : MonoBehaviour,IPointerEnterHandler,IPointerExitHandler
         text_Des.enabled = false;
     }
     //鼠标悬浮事件
-    public void OnPointerEnter(PointerEventData eventData)
+    public virtual void OnPointerEnter(PointerEventData eventData)
     {
         text_Des.enabled = true;
     }
     //鼠标离开事件
-    public void OnPointerExit(PointerEventData eventData)
+    public virtual void OnPointerExit(PointerEventData eventData)
     {
         text_Des.enabled = false;
     }

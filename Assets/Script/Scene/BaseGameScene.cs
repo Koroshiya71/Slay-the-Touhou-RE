@@ -117,6 +117,14 @@ public class BaseGameScene : MonoBehaviour
                     BattleManager.Instance.InitBattle(battleData);
                 });
                 break;
+            //如果场景类型为商店，则显示商店页面
+            case SceneType.Store:
+                gameSceneButton.onClick.AddListener(delegate
+                {
+                    UIManager.Instance.ShowUI(E_UiId.StoreUI);
+                    EventDispatcher.TriggerEvent(E_MessageType.ShowStoreUI);
+                });
+                break;
         }
     }
     //改变场景可选状态

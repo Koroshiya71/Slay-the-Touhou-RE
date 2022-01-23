@@ -92,16 +92,7 @@ public class HandCardManager : UnitySingleton<HandCardManager>
     {
 
     }
-    //清除所有战斗牌库
-    public void ClearAllBattleDesk()
-    {
-        for (int i = 0; i < handCardGoList.Count; i++)
-        {
-            var handCard = handCardGoList[i];
-            Destroy(handCard);
-        }
-        handCardGoList.Clear();
-    }
+    
     //调整卡牌位置和旋转
     public void MoveAndRotateCard()
     {

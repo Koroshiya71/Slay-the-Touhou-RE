@@ -18,6 +18,7 @@ public enum E_MessageType
     ShowChooseCardUI,//显示选牌UI
     UpdateGameMainUI,//更新游戏主UI
     BattleReward,//战斗奖励结算
+    ShowStoreUI,//显示StoreUI
 }
 //物品的分类
 //public enum E_GoodsType
@@ -62,7 +63,8 @@ public enum E_UiId
     DisplayCardUI,
     EventUI,
     ChooseCardUI,
-    BattleRewardUI
+    BattleRewardUI,
+    StoreUI
 }
 public class GameDefine
 {
@@ -79,6 +81,8 @@ public class GameDefine
         { E_UiId.EventUI,"UIPrefab/"+"EventUI"},
         { E_UiId.ChooseCardUI,"UIPrefab/"+"ChooseCardUI"},
         { E_UiId.BattleRewardUI,"UIPrefab/"+"BattleRewardUI"},
+        { E_UiId.StoreUI,"UIPrefab/"+"StoreUI"},
+
 
     };
     public static Type GetUIScriptType(E_UiId uiId)
@@ -116,7 +120,9 @@ public class GameDefine
                 break;
             case E_UiId.BattleRewardUI:
                 scriptType = typeof(BattleRewardUI);
-
+                break;
+            case E_UiId.StoreUI:
+                scriptType = typeof(StoreUI);
                 break;
             default:
                 break;
