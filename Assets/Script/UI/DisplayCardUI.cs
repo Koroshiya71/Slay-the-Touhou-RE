@@ -73,6 +73,7 @@ public class DisplayCardUI : BaseUI
                 //newCardGo.localPosition = new Vector3(250 + 350 * (i % 5), -200 - 400 * (i / 5));
                 DisplayCard newCard = newCardGo.GetComponent<DisplayCard>();
                 newCard.InitCard(dataList[i].cardID);
+                newCard.index = i;
                 //添加到列表
                 cardObjList.Add(newCardGo.gameObject);
             }
@@ -86,6 +87,8 @@ public class DisplayCardUI : BaseUI
             {
                 cardObjList[i].SetActive(true);
                 cardObjList[i].GetComponent<DisplayCard>().InitCard(dataList[i].cardID);
+                cardObjList[i].GetComponent<DisplayCard>().index = i;
+
             }
             //隐藏大于列表量的游戏物体
             for (int i = count; i < cardObjList.Count; i++)
@@ -101,6 +104,8 @@ public class DisplayCardUI : BaseUI
             {
                 cardObjList[i].SetActive(true);
                 cardObjList[i].GetComponent<DisplayCard>().InitCard(dataList[i].cardID);
+                cardObjList[i].GetComponent<DisplayCard>().index = i;
+
             }
             //生成大于列表量的游戏物体
             for (int i = cardObjList.Count; i < count; i++)
@@ -112,6 +117,7 @@ public class DisplayCardUI : BaseUI
                 //newCardGo.localPosition = new Vector3(250 + 350 * (i % 5), -200 - 400 * (i / 5));
                 DisplayCard newCard = newCardGo.GetComponent<DisplayCard>();
                 newCard.InitCard(dataList[i].cardID);
+                newCard.index = i;
                 //添加到列表
                 cardObjList.Add(newCardGo.gameObject);
             }
@@ -119,6 +125,7 @@ public class DisplayCardUI : BaseUI
         //更新上一次显示的类型
         lastShowType = type;
     }
+    
 }
 
 

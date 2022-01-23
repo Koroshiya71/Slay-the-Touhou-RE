@@ -10,6 +10,7 @@ public enum ChooseType
     Empty,//空
     AddToDesk,//加入牌库
     AddToHand,//加入手中
+    BuffCard,//强化卡牌
     Other,//其他效果
 }
 public class ChooseCardUI : BaseUI
@@ -116,6 +117,10 @@ public class ChooseCardUI : BaseUI
                     DeskManager.Instance.isChoosing = false;
 
                 });
+                break;
+            //强化卡牌
+            case ChooseType.BuffCard:
+                btn_Confirm.enabled = false;
                 break;
         }
         lastType = type;

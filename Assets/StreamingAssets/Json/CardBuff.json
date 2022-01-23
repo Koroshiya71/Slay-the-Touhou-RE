@@ -1,0 +1,28 @@
+[
+    {
+        "buffId":1001,
+        "buffDes":"费用-1",
+        "needEffectType":"Any"
+    },
+    {
+        "buffId":1002,
+        "buffDes":"数值*1.5",
+        "needEffectType":"Basic"
+    },
+    {
+        "buffId":1003,
+        "buffDes":"抽1张牌",
+        "needEffectType":"Any"
+
+    },
+    {
+        "buffId":1004,
+        "buffDes":"附加效果加2层",
+        "needEffectType":"Buff"
+    },
+    {
+        "buffId":1005,
+        "buffDes":"附加效果加一层，数值*1.25",
+        "needEffectType":"Basic_Buff"
+    }
+]

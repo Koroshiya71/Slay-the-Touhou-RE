@@ -5,6 +5,16 @@ using GameCore;
 using Newtonsoft.Json;
 using System.IO;
 
+//卡牌强化需求类型
+public enum NeedEffectType
+{
+    
+    Basic,//护盾、伤害
+    Any,//任意
+    Buff,//效果
+    Basic_Buff,//效果和护盾、伤害
+}
+
 //玩家数据
 public class PlayerData
 {
@@ -38,8 +48,21 @@ public class CardRareClass
     {
     }
 }
-//商店卡牌数据
+//卡牌强化数据
+public class CardBuffData
+{
+    //强化ID
+    public int buffId;
+    //强化描述
+    public string buffDes;
+    //需要的卡牌类型
+    public NeedEffectType needEffectType;
 
+    public CardBuffData()
+    {
+
+    }
+}
 public class GameManager : UnitySingleton<GameManager>
 {
     //玩家数据
@@ -55,6 +78,9 @@ public class GameManager : UnitySingleton<GameManager>
     public Dictionary<int, int> storeCardPriceDic = new Dictionary<int, int>();
     //商店遗物ID、价格字典
     public Dictionary<int, int> storeRelicPriceDic = new Dictionary<int, int>();
+
+    //卡牌强化列表id，强化data
+    public List<CardBuffData> cardBuffList = new List<CardBuffData>();
     private void Awake()
     {
         StreamReader reader;
@@ -77,6 +103,10 @@ public class GameManager : UnitySingleton<GameManager>
 
         reader = new StreamReader(SaveManager.jsonDataPath + "StoreRelic.json");
         storeRelicPriceDic = JsonConvert.DeserializeObject<Dictionary<int, int>>(reader.ReadToEnd());
+
+        //读取卡牌强化
+        reader = new StreamReader(SaveManager.jsonDataPath + "CardBuff.json");
+        cardBuffList = JsonConvert.DeserializeObject<List<CardBuffData>>(reader.ReadToEnd());
         reader.Close();
 
     }
@@ -209,6 +239,11 @@ public class GameManager : UnitySingleton<GameManager>
         if (Input.GetKeyDown(KeyCode.Alpha4)) //结束战斗
         {
             RelicManager.Instance.GetRelic(1004);
+        }
+        //强化卡牌
+        if (Input.GetKeyDown(KeyCode.U)) //结束战斗
+        {
+            StartCoroutine(DeskManager.Instance.BuffCardCoroutine());
         }
     }
 }

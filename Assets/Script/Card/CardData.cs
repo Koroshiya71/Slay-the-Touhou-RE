@@ -56,6 +56,7 @@ public enum CardTarget
 
     //玩家自身
     MyPlayer,
+
     //全部敌人
     AllEnemy
 }
@@ -100,7 +101,11 @@ public class CardEffectData
     /// </summary>
     public int EffectID => effectID;
 
-    public int EffectValue => effectValue;
+    public int EffectValue
+    {
+        get => effectValue;
+        set => effectValue = value;
+    }
 
     public string EffectDes
     {
@@ -191,6 +196,7 @@ public class CardData
 
     //卡牌数据是否有被修改过
     public bool hasModified = false;
+
     //卡牌原始费用
     public int originCost;
 
@@ -293,6 +299,26 @@ public class CardData
 
             string effectDes = cardEffectDic[effectID].EffectDes;
 
+            cardDes += effectDes;
+        }
+    }
+
+    public void UpdateEffectDes()
+    {
+        int count = 0;
+        cardDes = "";
+        foreach (var eff in cardEffectDic.Values)
+        {
+            count++;
+            if (count > 1)
+            {
+                cardDes += "，";
+            }
+
+            string effectDes = eff.EffectDes;
+            eff.actualValue = eff.EffectValue;
+            effectDes = effectDes.Replace("value", eff.actualValue.ToString());
+            Debug.Log(effectDes);
             cardDes += effectDes;
         }
     }

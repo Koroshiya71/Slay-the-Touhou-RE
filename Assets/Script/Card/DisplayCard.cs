@@ -4,6 +4,7 @@ using UnityEngine;
 using GameCore;
 public class DisplayCard : BaseCard
 {
+    public int index;
     //获取卡牌外框
     protected override Sprite GetCardOutLine()
     {
@@ -46,9 +47,20 @@ public class DisplayCard : BaseCard
         Sprite outLine = ResourcesManager.Instance.LoadResources<Sprite>("Image/Card/CardOutLine/" + outLineName);
         return outLine;
     }
-    void Start()
-    {
 
+
+
+
+
+    protected override void OnDown()
+    {
+        base.OnDown();
+        //如果正在选牌
+        if (DeskManager.Instance.isChoosing)
+        {
+            DeskManager.Instance.hasChosenCardList.Add(cardData);
+            DeskManager.Instance.originalIndex = index;
+        }
     }
 
     // Update is called once per frame

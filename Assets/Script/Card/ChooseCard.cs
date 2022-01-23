@@ -7,7 +7,7 @@ using UnityEngine.EventSystems;
 
 public class ChooseCard : BaseCard
 {
-    //使用卡牌时的特效
+    //选中卡牌时的特效
     public GameObject chooseEffect;
     //初始化
     public override void InitCard(CardData data)

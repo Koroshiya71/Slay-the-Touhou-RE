@@ -19,6 +19,7 @@ public enum E_MessageType
     UpdateGameMainUI,//更新游戏主UI
     BattleReward,//战斗奖励结算
     ShowStoreUI,//显示StoreUI
+    GetDisplayCardIndex,//获取展示卡牌Index
 }
 //物品的分类
 //public enum E_GoodsType
