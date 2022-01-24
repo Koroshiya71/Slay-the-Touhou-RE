@@ -125,6 +125,16 @@ public class BaseGameScene : MonoBehaviour
                     EventDispatcher.TriggerEvent(E_MessageType.ShowStoreUI);
                 });
                 break;
+            //如果场景类型为休息处，则回复时间并显示休息处页面
+            case SceneType.Lounge:
+                gameSceneButton.onClick.AddListener(delegate
+                {
+                    UIManager.Instance.ShowUI(E_UiId.LoungeUI);
+                    GameManager.Instance.loungeData.loungeTime = GameManager.Instance.loungeData.maxLoungeTime;
+                    EventDispatcher.TriggerEvent(E_MessageType.ShowLoungeUI);
+                });
+                
+                break;
         }
     }
     //改变场景可选状态

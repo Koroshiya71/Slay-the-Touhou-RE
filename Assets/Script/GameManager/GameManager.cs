@@ -1,9 +1,12 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using GameCore;
 using Newtonsoft.Json;
 using System.IO;
+using UnityEngine.Serialization;
+using Random = UnityEngine.Random;
 
 //卡牌强化需求类型
 public enum NeedEffectType
@@ -31,7 +34,24 @@ public class PlayerData
     {
     }
 }
+//休息处数据
+[Serializable]
+public class LoungeData
+{
+    //最大休息处时间
+    public int maxLoungeTime = 12;
+    //当前休息处时间
+    public int loungeTime = 12;
+    //休息消耗时间
+    [FormerlySerializedAs("restTime")] public int restCost = 6;
+    //研习消耗时间
+    [FormerlySerializedAs("studyTime")] public int studyCost = 6;
 
+    public LoungeData()
+    {
+
+    }
+}
 //出货率 
 public class CardRareClass
 {
@@ -81,6 +101,9 @@ public class GameManager : UnitySingleton<GameManager>
 
     //卡牌强化列表id，强化data
     public List<CardBuffData> cardBuffList = new List<CardBuffData>();
+
+    //休息处数据
+    public LoungeData loungeData = new LoungeData();
     private void Awake()
     {
         StreamReader reader;
@@ -244,6 +267,31 @@ public class GameManager : UnitySingleton<GameManager>
         if (Input.GetKeyDown(KeyCode.U)) //结束战斗
         {
             StartCoroutine(DeskManager.Instance.BuffCardCoroutine());
+        }
+    }
+    //休息处休息方法
+    public void LoungeRest()
+    {
+        //如果时间足够则消耗时间并回复生命值
+        if (loungeData.loungeTime >= loungeData.restCost)
+        {
+            Player.Instance.Heal((int)(0.3f * Player.Instance.maxHp));
+            loungeData.loungeTime -= loungeData.restCost;
+            //更新UI显示
+            EventDispatcher.TriggerEvent(E_MessageType.ShowLoungeUI);
+        }
+    }
+    //休息处强化卡牌方法
+    public void LoungeBuffCard()
+    {
+        //如果时间足够则消耗时间并回复生命值
+        if (loungeData.loungeTime >= loungeData.studyCost)
+        {
+            //选牌
+            StartCoroutine(DeskManager.Instance.BuffCardCoroutine());
+            loungeData.loungeTime -= loungeData.studyCost;
+            //更新UI显示
+            EventDispatcher.TriggerEvent(E_MessageType.ShowLoungeUI);
         }
     }
 }
