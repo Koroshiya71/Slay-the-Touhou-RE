@@ -5,6 +5,8 @@ using GameCore;
 using UnityEngine;
 using Newtonsoft.Json;
 using System.IO;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
 
 //存档数据
 [Serializable]
@@ -107,7 +109,17 @@ public class SaveManager : UnitySingleton<SaveManager>
         EventDispatcher.TriggerEvent(E_MessageType.UpdateGameMainUI);
         
     }
-
+    //列表深拷贝
+    public static List<T> Clone<T>(object List)
+    {
+        using (Stream objectStream = new MemoryStream())
+        {
+            IFormatter formatter = new BinaryFormatter();
+            formatter.Serialize(objectStream,formatter);
+            objectStream.Seek(0, SeekOrigin.Begin);
+            return formatter.Deserialize(objectStream) as List<T>;
+        }
+    }
     void Update()
     {
     }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using GameCore;
 using JetBrains.Annotations;
 using UnityEngine;
 
@@ -76,7 +77,7 @@ public enum CardUseType
     //用于选择的卡牌
     ChooseCard
 }
-
+[Serializable]
 public class CardEffectData
 {
     //效果ID
@@ -314,11 +315,10 @@ public class CardData
             {
                 cardDes += "，";
             }
+            var newEff= new CardEffectData(eff.EffectID, eff.EffectValue);
 
-            string effectDes = eff.EffectDes;
-            eff.actualValue = eff.EffectValue;
-            effectDes = effectDes.Replace("value", eff.actualValue.ToString());
-            Debug.Log(effectDes);
+            string effectDes = newEff.EffectDes;
+            newEff.actualValue = newEff.EffectValue;
             cardDes += effectDes;
         }
     }
@@ -330,7 +330,7 @@ public class CardData
     //克隆方法
     public CardData(CardData data)
     {
-        hasModified = false;
+        hasModified = data.hasModified;
         this.cardID = data.cardID;
         this.cardName = data.cardName;
         this.cardImgRes = data.cardImgRes;
@@ -342,11 +342,11 @@ public class CardData
         this.cardUseType = data.cardUseType;
         this.cardEffectDic = new Dictionary<int, CardEffectData>();
         originCost = data.originCost;
-
-        foreach (var effectElement in data.cardEffectDic)
-        {
-            cardEffectDic.Add(effectElement.Key, effectElement.Value);
-        }
+        cardEffectDic = DeepCopy.Copy(data.cardEffectDic) as Dictionary<int, CardEffectData>;
+        //foreach (var effectElement in data.cardEffectDic)
+        //{
+        //    cardEffectDic.Add(effectElement.Key, effectElement.Value);
+        //}
     }
 
     private string ReadCfgCardData(string key, int id)

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using GameCore;
 using UnityEngine;
 using System.IO;
+using System.Linq;
 using Newtonsoft.Json;
 using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
@@ -13,7 +14,6 @@ public class DeskManager : UnitySingleton<DeskManager>
     /// <summary>
     /// 用以管理各种牌库的管理器
     /// </summary>
-
 
     //牌库列表对象<卡牌数据>
     public List<CardData> deskCardList = new List<CardData>();
@@ -29,14 +29,17 @@ public class DeskManager : UnitySingleton<DeskManager>
 
     //本场战斗是否已经初始化过抽牌堆
     public bool hasInitDrawCardDesk = false;
+
     //是否正在选牌
     public bool isChoosing = false;
     [FormerlySerializedAs("hasChoose")] public bool hasChosen = false;
 
     //已选牌列表
     public List<CardData> hasChosenCardList = new List<CardData>();
+
     //强化牌的原始地址
     public int originalIndex = 0;
+
     //初始化牌库管理器
     public void InitDeskManager()
     {
@@ -51,21 +54,17 @@ public class DeskManager : UnitySingleton<DeskManager>
             {
                 deskCardList.Add(new CardData(cardID));
             }
-
         }
         //否则直接读存储数据
         else
         {
-
             foreach (var data in SaveManager.Instance.saveData.cardDataList)
             {
-                Debug.Log(deskCardList.Count);
-
                 deskCardList.Add(data);
             }
         }
-
     }
+
     //初始化抽牌堆
     public void InitDrawCardDesk()
     {
@@ -79,6 +78,7 @@ public class DeskManager : UnitySingleton<DeskManager>
             {
                 drawCardDeskList.Add(cardData);
             }
+
             //洗牌
             drawCardDeskList = Shuffle(drawCardDeskList);
         }
@@ -90,9 +90,11 @@ public class DeskManager : UnitySingleton<DeskManager>
                 drawCardDeskList.Add(disCardDeskList[i]);
                 disCardDeskList.Remove(disCardDeskList[i]);
             }
+
             //洗牌
             drawCardDeskList = Shuffle(drawCardDeskList);
         }
+
         //洗牌
         drawCardDeskList = GameTool.RandomSort(drawCardDeskList);
     }
@@ -109,10 +111,12 @@ public class DeskManager : UnitySingleton<DeskManager>
             var handCard = HandCardManager.Instance.handCardGoList[i];
             Destroy(handCard);
         }
+
         HandCardManager.Instance.handCardGoList.Clear();
         //重置抽牌堆状态为未初始化
         hasInitDrawCardDesk = false;
     }
+
     //抽牌轮转方法
     public void DrawCard()
     {
@@ -120,6 +124,7 @@ public class DeskManager : UnitySingleton<DeskManager>
         {
             InitDrawCardDesk();
         }
+
         //抽取抽牌堆的第一张牌，如果该牌没有被修改过则直接根据ID初始化卡牌
         CardData data = drawCardDeskList[0];
         if (data.hasModified)
@@ -131,9 +136,11 @@ public class DeskManager : UnitySingleton<DeskManager>
         {
             HandCardManager.Instance.GetCardByID(data.cardID);
         }
+
         drawCardDeskList.Remove(data);
         EventDispatcher.TriggerEvent(E_MessageType.DrawCard);
     }
+
     //抽取特定卡牌方法
     public void DrawTargetCard(CardData data)
     {
@@ -151,6 +158,7 @@ public class DeskManager : UnitySingleton<DeskManager>
         {
             return;
         }
+
         if (data.hasModified)
         {
             HandCardManager.Instance.GetCardByData(data);
@@ -160,26 +168,30 @@ public class DeskManager : UnitySingleton<DeskManager>
         {
             HandCardManager.Instance.GetCardByID(data.cardID);
         }
+
         drawCardDeskList.Remove(data);
         EventDispatcher.TriggerEvent(E_MessageType.DrawCard);
     }
+
     //将卡牌加入牌组携程(选牌数量，卡牌数据列表)
-    public IEnumerator ChooseCardAddToDesk(int chooseNum,List<CardData> cardDataList)
+    public IEnumerator ChooseCardAddToDesk(int chooseNum, List<CardData> cardDataList)
     {
         //显示UI和对应的卡牌
         isChoosing = true;
         hasChosen = false;
         UIManager.Instance.ShowUI(E_UiId.ChooseCardUI);
-        EventDispatcher.TriggerEvent<List<CardData>,ChooseType>(E_MessageType.ShowChooseCardUI,cardDataList,ChooseType.AddToDesk);
+        EventDispatcher.TriggerEvent<List<CardData>, ChooseType>(E_MessageType.ShowChooseCardUI, cardDataList,
+            ChooseType.AddToDesk);
         //等待选牌结束
-        while (hasChosenCardList.Count<chooseNum&&isChoosing)
+        while (hasChosenCardList.Count < chooseNum && isChoosing)
         {
             yield return new WaitForFixedUpdate();
         }
+
         //选牌结束后进行相关处理
-        if (hasChosenCardList.Count<=0)
+        if (hasChosenCardList.Count <= 0)
         {
-            hasChosen =false;
+            hasChosen = false;
         }
         else
         {
@@ -190,16 +202,17 @@ public class DeskManager : UnitySingleton<DeskManager>
                 deskCardList.Add(data);
             }
         }
-        
+
         //隐藏UI
         UIManager.Instance.HideSingleUI(E_UiId.ChooseCardUI);
         isChoosing = false;
         hasChosenCardList.Clear();
-        
+
         yield break;
     }
+
     //强化卡牌携程
-    public IEnumerator BuffCardCoroutine( )
+    public IEnumerator BuffCardCoroutine()
     {
         //显示UI和对应的卡牌
         isChoosing = true;
@@ -216,7 +229,7 @@ public class DeskManager : UnitySingleton<DeskManager>
 
         //随机选取三种强化
         List<CardBuffData> newBuffList = new List<CardBuffData>();
-        while (newBuffList.Count<3)
+        while (newBuffList.Count < 3)
         {
             //随机获取一个Buff
             CardBuffData newBuff =
@@ -231,23 +244,25 @@ public class DeskManager : UnitySingleton<DeskManager>
                 case NeedEffectType.Basic:
                     foreach (var effect in hasChosenCardList[0].cardEffectDic.Values)
                     {
-                        if (effect.effectType==CardEffectType.Damage|| effect.effectType == CardEffectType.Shield)
+                        if (effect.effectType == CardEffectType.Damage || effect.effectType == CardEffectType.Shield)
                         {
                             fit = true;
                         }
                     }
+
                     break;
                 case NeedEffectType.Buff:
                     foreach (var effect in hasChosenCardList[0].cardEffectDic.Values)
                     {
-                        if (effect.effectType == CardEffectType.Buff )
+                        if (effect.effectType == CardEffectType.Buff)
                         {
                             fit = true;
                         }
                     }
+
                     break;
                 case NeedEffectType.Basic_Buff:
-                    bool fit0=false,fit1=false;
+                    bool fit0 = false, fit1 = false;
                     foreach (var effect in hasChosenCardList[0].cardEffectDic.Values)
                     {
                         if (effect.effectType == CardEffectType.Buff)
@@ -260,87 +275,109 @@ public class DeskManager : UnitySingleton<DeskManager>
                             fit1 = true;
                         }
                     }
-                    if (fit0&&fit1)
+
+                    if (fit0 && fit1)
                     {
                         fit = true;
                     }
+
                     break;
             }
-            if (newBuffList.Contains(newBuff)||!fit)
+
+            if (newBuffList.Contains(newBuff) || !fit)
             {
                 continue;
             }
+
             newBuffList.Add(newBuff);
         }
         //添加强化后的卡牌
-        
+
         List<CardData> cardDataList = new List<CardData>();
-        for (int i = 0; i < 3; i++)
-        {
-            CardData upgradeData = new CardData(hasChosenCardList[0]);
-            switch (newBuffList[i].buffId)
+
+
+            for (int i = 0; i < 3; i++)
             {
-                //费用-1
-                case 1001:
-                    upgradeData.cardCost -= 1;
-                    break;
-                //效果*1.5
-                case 1002:
-                    foreach (var effect in upgradeData.cardEffectDic.Values)
-                    {
-                        if (effect.effectType==CardEffectType.Damage||effect.effectType==CardEffectType.Shield)
+                CardData upgradeData = new CardData(hasChosenCardList[0].cardID);
+
+                List<int> keys = upgradeData.cardEffectDic.Keys.ToList();
+                switch (newBuffList[i].buffId)
+                {
+                    //费用-1
+                    case 1001:
+                        upgradeData.cardCost -= 1;
+                        break;
+                    //效果*1.5
+                    case 1002:
+                        foreach (var t in keys)
                         {
-                            effect.EffectValue = (int)(1.5f*effect.EffectValue);
+                            var effect = upgradeData.cardEffectDic[t];
+
+
+                            if (effect.effectType == CardEffectType.Damage ||
+                                effect.effectType == CardEffectType.Shield)
+                            {
+                                upgradeData.cardEffectDic.Remove(effect.EffectID);
+                                effect.EffectValue = (int) (1.5f * effect.EffectValue);
+                                upgradeData.cardEffectDic.Add(effect.EffectID, effect);
+                            }
                         }
 
-                    }
+                        break;
+                    //抽一张牌
+                    case 1003:
+                        upgradeData.cardEffectDic.Add(1010, new CardEffectData(1010, 1));
+                        break;
+                    //附加效果加2层
+                    case 1004:
+                        foreach (var effect in upgradeData.cardEffectDic.Values)
+                        {
+                            if (effect.effectType == CardEffectType.Buff)
+                            {
+                                effect.EffectValue += 2;
+                                break;
+                            }
+                        }
 
-                    break;
-                //抽一张牌
-                case 1003:
-                    upgradeData.cardEffectDic.Add(1010,new CardEffectData(1010,1));
-                    break;
-                //附加效果加2层
-                case 1004:
-                    foreach (var effect in upgradeData.cardEffectDic.Values)
-                    {
-                        if (effect.effectType == CardEffectType.Buff)
+                        break;
+                    //附加效果加1层，数值*1.25
+                    case 1005:
+                        foreach (var effect in upgradeData.cardEffectDic.Values)
                         {
-                            effect.EffectValue += 2;
-                            break;
+                            if (effect.effectType == CardEffectType.Buff)
+                            {
+                                effect.EffectValue++;
+                            }
+
+                            if (effect.effectType == CardEffectType.Damage ||
+                                effect.effectType == CardEffectType.Shield)
+                            {
+                                effect.EffectValue = (int) (1.25f * effect.EffectValue);
+                            }
                         }
-                    }
-                    break;
-                //附加效果加1层，数值*1.25
-                case 1005:
-                    foreach (var effect in upgradeData.cardEffectDic.Values)
-                    {
-                        if (effect.effectType == CardEffectType.Buff)
-                        {
-                            effect.EffectValue ++;
-                        }
-                        if (effect.effectType == CardEffectType.Damage || effect.effectType == CardEffectType.Shield)
-                        {
-                            effect.EffectValue = (int)(1.25f * effect.EffectValue);
-                        }
-                    }
-                    break;
+
+                        break;
+                }
+
+                upgradeData.hasModified = true;
+                upgradeData.UpdateEffectDes();
+                cardDataList.Add(upgradeData);
             }
-            upgradeData.hasModified = true;
-            upgradeData.UpdateEffectDes();
-            cardDataList.Add(upgradeData);
-        }
+        
+
         hasChosenCardList.Clear();
         UIManager.Instance.ShowUI(E_UiId.ChooseCardUI);
-        EventDispatcher.TriggerEvent<List<CardData>, ChooseType>(E_MessageType.ShowChooseCardUI, cardDataList, ChooseType.BuffCard);
+        EventDispatcher.TriggerEvent<List<CardData>, ChooseType>(E_MessageType.ShowChooseCardUI, cardDataList,
+            ChooseType.BuffCard);
         //等待选牌结束
         while (hasChosenCardList.Count < 1 && isChoosing)
         {
             yield return new WaitForFixedUpdate();
         }
-
+        
         //进行强化处理
-        deskCardList[originalIndex] =new CardData(hasChosenCardList[0]);
+        deskCardList[originalIndex] = new CardData(hasChosenCardList[0]);
+        Debug.Log(deskCardList[originalIndex].cardCost);
         //隐藏UI
         UIManager.Instance.HideSingleUI(E_UiId.ChooseCardUI);
         UIManager.Instance.HideSingleUI(E_UiId.DisplayCardUI);
@@ -349,6 +386,7 @@ public class DeskManager : UnitySingleton<DeskManager>
 
         yield break;
     }
+
     //打乱列表
     public List<T> Shuffle<T>(List<T> original)
     {
@@ -365,16 +403,16 @@ public class DeskManager : UnitySingleton<DeskManager>
                 original[index] = temp;
             }
         }
+
         return original;
     }
+
     void Start()
     {
-
     }
 
     void Update()
     {
-
     }
 
     private void Awake()

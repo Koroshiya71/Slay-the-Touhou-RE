@@ -72,7 +72,7 @@ public class DisplayCardUI : BaseUI
                 newCardGo.localScale = new Vector2(1f, 1f);
                 //newCardGo.localPosition = new Vector3(250 + 350 * (i % 5), -200 - 400 * (i / 5));
                 DisplayCard newCard = newCardGo.GetComponent<DisplayCard>();
-                newCard.InitCard(dataList[i].cardID);
+                newCard.InitCard(dataList[i]);
                 newCard.index = i;
                 //添加到列表
                 cardObjList.Add(newCardGo.gameObject);
@@ -86,7 +86,7 @@ public class DisplayCardUI : BaseUI
             for (int i = 0; i < count; i++)
             {
                 cardObjList[i].SetActive(true);
-                cardObjList[i].GetComponent<DisplayCard>().InitCard(dataList[i].cardID);
+                cardObjList[i].GetComponent<DisplayCard>().InitCard(dataList[i]);
                 cardObjList[i].GetComponent<DisplayCard>().index = i;
 
             }
@@ -103,7 +103,7 @@ public class DisplayCardUI : BaseUI
             for (int i = 0; i < cardObjList.Count; i++)
             {
                 cardObjList[i].SetActive(true);
-                cardObjList[i].GetComponent<DisplayCard>().InitCard(dataList[i].cardID);
+                cardObjList[i].GetComponent<DisplayCard>().InitCard(dataList[i]);
                 cardObjList[i].GetComponent<DisplayCard>().index = i;
 
             }
@@ -116,7 +116,7 @@ public class DisplayCardUI : BaseUI
                 newCardGo.localScale = new Vector2(1f, 1f);
                 //newCardGo.localPosition = new Vector3(250 + 350 * (i % 5), -200 - 400 * (i / 5));
                 DisplayCard newCard = newCardGo.GetComponent<DisplayCard>();
-                newCard.InitCard(dataList[i].cardID);
+                newCard.InitCard(dataList[i]);
                 newCard.index = i;
                 //添加到列表
                 cardObjList.Add(newCardGo.gameObject);
