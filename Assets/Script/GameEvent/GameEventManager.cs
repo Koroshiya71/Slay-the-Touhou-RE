@@ -175,6 +175,8 @@ public class GameEventManager : UnitySingleton<GameEventManager>
                 //当前所在层数+1
                 GameSceneManager.Instance.currentLayer++;
                 GameSceneManager.Instance.UpdateGameSceneState();
+                //存档
+                SaveManager.SaveGame();
                 break;
             case 1001://无事发生
                 break;
@@ -192,7 +194,7 @@ public class GameEventManager : UnitySingleton<GameEventManager>
         {
             EventDispatcher.TriggerEvent<int, string>(E_MessageType.ShowEventPage, data.nextPageID, effectString);
         }
-
+        
     }
     void Update()
     {

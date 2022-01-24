@@ -230,13 +230,14 @@ public class Enemy : BaseBattleUnit
         BattleManager.Instance.inBattleEnemyList.Remove(this);
         Destroy(this.gameObject);
 
+        //累计战斗金币
+        BattleManager.Instance.battleGold += enemyData.dropGold;
         //如果该敌人死亡后敌人数量为0，触发战斗结束方法
         if (BattleManager.Instance.inBattleEnemyList.Count == 0)
         {
             BattleManager.Instance.BattleEnd();
         }
-        //累计战斗金币
-        BattleManager.Instance.battleGold += enemyData.dropGold;
+        
     }
     
     //更新UI

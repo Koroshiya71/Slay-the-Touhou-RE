@@ -25,6 +25,9 @@ public class SaveData
     //上次选择的地址
     public int mapIndex;
 
+    //遗物ID列表
+    public List<int> relicIDList = new List<int>();
+
     //构造函数
     public SaveData(bool isSave)
     {
@@ -41,6 +44,10 @@ public class SaveData
 
         mapLayer = GameSceneManager.Instance.currentLayer;
         mapIndex = GameSceneManager.Instance.lastIndex;
+        foreach (var id in RelicManager.Instance.playerRelicDic.Keys)
+        {
+            relicIDList.Add(id);
+        }
     }
 
     public SaveData()
@@ -63,7 +70,7 @@ public class SaveManager : UnitySingleton<SaveManager>
     {
 #if UNITY_EDITOR
         jsonDataPath = "Assets/StreamingAssets/Json/";
-#else 
+#else
         jsonDataPath = "Slay the Touhou_Data/StreamingAssets/Json/";
 #endif
     }
@@ -86,17 +93,19 @@ public class SaveManager : UnitySingleton<SaveManager>
     //读取存档数据
     public void LoadData()
     {
-        if (GameTool.GetString("HasSave")!="True")
+        if (GameTool.GetString("HasSave") != "True")
         {
             Debug.Log("没有存储数据");
             return;
         }
+
         isLoad = true;
         StreamReader reader = new StreamReader(jsonDataPath + "SaveData.json");
         saveData = JsonConvert.DeserializeObject<SaveData>(reader.ReadToEnd());
         reader.Close();
         GameManager.Instance.playerData = saveData.playerData;
         EventDispatcher.TriggerEvent(E_MessageType.UpdateGameMainUI);
+        
     }
 
     void Update()

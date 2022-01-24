@@ -103,6 +103,8 @@ public class StoreUI : BaseUI
             //当前所在层数+1
             GameSceneManager.Instance.currentLayer++;
             GameSceneManager.Instance.UpdateGameSceneState();
+            //存档
+            SaveManager.SaveGame();
         });
     }
 }
