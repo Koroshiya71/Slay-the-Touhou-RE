@@ -135,6 +135,10 @@ public class BaseGameScene : MonoBehaviour
                 });
                 
                 break;
+            //如果是Boss战，则初始化一场Boss战斗
+            case SceneType.BossCombat:
+
+                break;
         }
     }
     //改变场景可选状态

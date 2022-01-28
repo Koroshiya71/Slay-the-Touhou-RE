@@ -18,7 +18,8 @@ public class GameSceneManager : UnitySingleton<GameSceneManager>
     private Transform contentParent;
     //游戏中的所有场景
     public List<BaseGameScene> inGameSceneList = new List<BaseGameScene>();
-
+    //游戏中的Boss场景
+    public BossGameScene bossScene;
     //初始化游戏场景管理器
     public void InitGameSceneManager()
     {
@@ -57,6 +58,7 @@ public class GameSceneManager : UnitySingleton<GameSceneManager>
         foreach (var gameScene in inGameSceneList)
         {
             //根据当前层数更新交互状态
+            
             if (gameScene.sceneData.Layer == currentLayer)
             {
                 //如果是第一层，则全部都可交互
@@ -74,6 +76,16 @@ public class GameSceneManager : UnitySingleton<GameSceneManager>
             }
             //不满足上面条件的则无法交互
             gameScene.ChangeGameSceneState(false);
+        }
+
+        if (currentLayer==21)
+        {
+            bossScene.ChangeGameSceneState(true);
+        }
+        else
+        {
+            bossScene.ChangeGameSceneState(false);
+            Debug.Log(1);
         }
     }
     void Start()

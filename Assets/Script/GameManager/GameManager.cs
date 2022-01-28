@@ -246,27 +246,10 @@ public class GameManager : UnitySingleton<GameManager>
                 BattleManager.Instance.inBattleEnemyList[0].Die();
             }
         }
-        //获取遗物
-        if (Input.GetKeyDown(KeyCode.Alpha1)) //结束战斗
+
+        if (Input.GetKeyDown(KeyCode.B)) //解锁Boss战
         {
-            RelicManager.Instance.GetRelic(1001);
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha2)) //结束战斗
-        {
-            RelicManager.Instance.GetRelic(1002);
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha3)) //结束战斗
-        {
-            RelicManager.Instance.GetRelic(1003);
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha4)) //结束战斗
-        {
-            RelicManager.Instance.GetRelic(1004);
-        }
-        //强化卡牌
-        if (Input.GetKeyDown(KeyCode.U)) //结束战斗
-        {
-            StartCoroutine(DeskManager.Instance.BuffCardCoroutine());
+            GameSceneManager.Instance.bossScene.ChangeGameSceneState(true);
         }
     }
     //休息处休息方法

@@ -31,7 +31,14 @@ public class SceneData
     public string resourcePath;
     public string ResourcePath => resourcePath;
 
-    //构造函数
+    //Boss场景构造函数
+    public SceneData(bool isBoss)
+    {
+        layer = 21;
+        sceneType = SceneType.BossCombat;
+        resourcePath = "Image/" + "UIImage/" + "GameScene/" + "BossCombat";
+    }
+    //一般构造函数
     public SceneData(int index)
     {
         int sceneSeed = Random.Range(0, 5);
@@ -39,6 +46,10 @@ public class SceneData
         if (layer == 1)
         {
             sceneType = SceneType.NormalCombat;
+        }
+        else if (layer == 20)
+        {
+            sceneType = SceneType.Lounge;
         }
         else
         {
