@@ -1,0 +1,5 @@
+E:\UnityBook\Chapter7\Server\Game\Game\bin\Debug\Game.exe
+E:\UnityBook\Chapter7\Server\Game\Game\bin\Debug\Game.pdb
+E:\UnityBook\Chapter7\Server\Game\Game\obj\x86\Debug\Game.exe
+E:\UnityBook\Chapter7\Server\Game\Game\obj\x86\Debug\Game.pdb
+E:\UnityBook\Chapter7\Server\Game\Game\obj\x86\Debug\Game.csprojResolveAssemblyReference.cache
