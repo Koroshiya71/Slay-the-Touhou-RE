@@ -8,6 +8,13 @@ public partial class MsgHandler {
 		MsgPong msgPong = new MsgPong();
 		NetManager.Send(c, msgPong);
 	}
+    public static void MsgSave(ClientState c, MsgBase msgBase)
+    {
+        Console.WriteLine("MsgSave");
+        MsgSave msgSave=(MsgSave)msgBase;
+        PlayerManager.GetPlayer(msgSave.id).data.playerDataStr=msgSave.saveData;
+        DbManager.UpdatePlayerData(msgSave.id, msgSave.saveData);
+    }
 }
 
 

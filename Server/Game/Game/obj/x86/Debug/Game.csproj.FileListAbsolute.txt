@@ -3,3 +3,10 @@ E:\UnityBook\Chapter7\Server\Game\Game\bin\Debug\Game.pdb
 E:\UnityBook\Chapter7\Server\Game\Game\obj\x86\Debug\Game.exe
 E:\UnityBook\Chapter7\Server\Game\Game\obj\x86\Debug\Game.pdb
 E:\UnityBook\Chapter7\Server\Game\Game\obj\x86\Debug\Game.csprojResolveAssemblyReference.cache
+E:\Slay-the-Touhou-RE\Server\Game\Game\bin\Debug\Game.exe
+E:\Slay-the-Touhou-RE\Server\Game\Game\bin\Debug\Game.pdb
+E:\Slay-the-Touhou-RE\Server\Game\Game\bin\Debug\System.Web.Extensions.dll
+E:\Slay-the-Touhou-RE\Server\Game\Game\obj\x86\Debug\Game.csproj.AssemblyReference.cache
+E:\Slay-the-Touhou-RE\Server\Game\Game\obj\x86\Debug\Game.csproj.CoreCompileInputs.cache
+E:\Slay-the-Touhou-RE\Server\Game\Game\obj\x86\Debug\Game.exe
+E:\Slay-the-Touhou-RE\Server\Game\Game\obj\x86\Debug\Game.pdb

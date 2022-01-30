@@ -194,12 +194,11 @@ public class DbManager {
 
 
 	//保存角色
-	public static bool UpdatePlayerData(string id, PlayerData playerData)
+	public static bool UpdatePlayerData(string id, string saveDataJsonStr)
 	{
-		//序列化
-		string data = Js.Serialize(playerData); 
+
 		//sql
-		string sql = string.Format("update player set data='{0}' where id ='{1}';", data, id);
+		string sql = string.Format("update player set data='{0}' where id ='{1}';", saveDataJsonStr, id);
 		//更新
 		try 
 		{

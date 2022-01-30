@@ -201,12 +201,7 @@ public class BaseBattleUnit : MonoBehaviour
     //生命值归零时的死亡方法
     public virtual void Die()
     {
-        //返魂碟检测
-        if (StateManager.CheckState(this, 1008))
-        {
-            stateDic[1008].stateData.stateStack--;
-
-        }
+        
     }
     #region 初始化   
     //初始化UI

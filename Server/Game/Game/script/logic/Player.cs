@@ -9,10 +9,7 @@ public class Player {
 	public Player(ClientState state){
 		this.state = state;
 	}
-	//临时数据，如：坐标
-	public int x; 
-	public int y; 
-	public int z;
+
 	//数据库数据
 	public PlayerData data;
 
