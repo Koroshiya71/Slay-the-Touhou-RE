@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using GameCore;
 using UnityEngine;
 
 public enum ActionType
@@ -21,17 +22,17 @@ public class ActionData
     private ActionType actionType;
     //行为描述
     private string actionDes;
-    //行动效果值
-    private int actionValue;
+
     //是否需要目标
     private bool needTarget;
+
     /// <summary>
     /// 属性
     /// </summary>
-    public int ActionValue => actionValue;
+    public List<int> ActionValue;
     public string ActionDes => actionDes;
     public bool NeedTarget => needTarget;
-    public int actualValue;
+    public List<int> actualValue;
     public int ActionID
     {
         get => actionID;
@@ -43,12 +44,12 @@ public class ActionData
     }
 
     //构造函数(行动ID，行动值)
-    public ActionData(int id, int value)
+    public ActionData(int id, List<int> value)
     {
         actionID = id;
         actionDes = ReadActionCfgData("ActionEffectDes", id);
-        actionValue = value;
-        actualValue = value;
+        ActionValue = DeepCopy.Copy(value)as List<int>;
+        actualValue = DeepCopy.Copy(value) as List<int>;
         string tempStr = ReadActionCfgData("ActionType", id);
         switch (tempStr)
         {
@@ -81,6 +82,10 @@ public class ActionData
         }
     }
 
+    public ActionData()
+    {
+
+    }
     //根据cfg数据表读取敌人行动数据
     private string ReadActionCfgData(string key, int id)
     {

@@ -220,15 +220,15 @@ public class BattleManager : UnitySingleton<BattleManager>
             //对玩家造成value点伤害
             case 1001:
             case 2001:
-                Player.Instance.TakeDamage(actData.actualValue, null);
+                Player.Instance.TakeDamage(actData.actualValue[0], null);
                 break;
             //自身获得value层灵体
             case 1002:
-                StateManager.AddStateToTarget(unit, 1001, actData.actualValue);
+                StateManager.AddStateToTarget(unit, 1001, actData.actualValue[0]);
                 break;
             //获得value点护甲
             case 1003:
-                unit.GetShield(actData.actualValue);
+                unit.GetShield(actData.actualValue[0]);
                 break;
             //什么都不做
             case 1004:
@@ -238,7 +238,7 @@ public class BattleManager : UnitySingleton<BattleManager>
                 break;
             //给予自身value层护甲重伤
             case 1006:
-                StateManager.AddStateToTarget(unit, 1004, actData.actualValue);
+                StateManager.AddStateToTarget(unit, 1004, actData.actualValue[0]);
                 break;
         }
     }
@@ -313,7 +313,7 @@ public class BattleManager : UnitySingleton<BattleManager>
                 (enemy.currentAction.ActionType == ActionType.Attack) && !enemy.hasCheckList.Contains(1002))
             {
                 enemy.hasCheckList.Add(1002);
-                enemy.currentAction.actualValue = (int) (enemy.currentAction.actualValue * 0.7f);
+                enemy.currentAction.actualValue[0] = (int) (enemy.currentAction.actualValue[0] * 0.7f);
             }
 
             enemy.UpdateUI();

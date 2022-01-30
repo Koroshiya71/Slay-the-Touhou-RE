@@ -82,9 +82,18 @@ public class Enemy : BaseBattleUnit
         text_ActionValue = GameTool.GetTheChildComponent<Text>(gameObject, "Text_ActionValue");
         
         //更新当前行动
-        currentAction = new ActionData(1004, 0);
+        currentAction = new ActionData(1004,new List<int>(){0});
         UpdateCurrentAction();
-        text_ActionDes.text = currentAction.ActionDes.Replace("value", currentAction.ActionValue.ToString());
+        text_ActionDes.text = "";
+        for (int i = 0; i < currentAction.actualValue.Count; i++)
+        {
+            if (i >= 1)
+            {
+                text_ActionDes.text += currentAction.ActionDes.Replace("value" + (i + 1), currentAction.ActionValue[i].ToString());
+
+            }
+            text_ActionDes.text += currentAction.ActionDes.Replace("value", currentAction.ActionValue[i].ToString());
+        }
         text_ActionDes.enabled = false;
     }
 
@@ -148,7 +157,16 @@ public class Enemy : BaseBattleUnit
     //显示行动描述
     public void ShowActionDes()
     {
-        text_ActionDes.text = currentAction.ActionDes.Replace("value", currentAction.ActionValue.ToString());
+        text_ActionDes.text = "";
+        for (int i = 0; i < currentAction.actualValue.Count; i++)
+        {
+            if (i>=1)
+            {
+                text_ActionDes.text += currentAction.ActionDes.Replace("value"+(i+1), currentAction.ActionValue[i].ToString());
+
+            }
+            text_ActionDes.text += currentAction.ActionDes.Replace("value", currentAction.ActionValue[i].ToString());
+        }
         text_ActionDes.enabled = true;
     }
 
@@ -193,7 +211,7 @@ public class Enemy : BaseBattleUnit
             case ActionType.Attack:
                 img_EnemyAction.sprite =
                     ResourcesManager.Instance.LoadResources<Sprite>("Image/" + "UIImage/" + "EnemyAction/" + "Attack");
-                text_ActionValue.text = currentAction.actualValue.ToString();
+                text_ActionValue.text = currentAction.actualValue[0].ToString();
                 text_ActionValue.enabled = true;
                 break;
             case ActionType.Buff:
@@ -215,11 +233,20 @@ public class Enemy : BaseBattleUnit
                 img_EnemyAction.sprite =
                     ResourcesManager.Instance.LoadResources<Sprite>("Image/" + "UIImage/" + "EnemyAction/" + "Shield");
                 text_ActionValue.enabled = true;
-                text_ActionValue.text = currentAction.actualValue.ToString();
+                text_ActionValue.text = currentAction.actualValue[0].ToString();
                 break;
         }
 
-        text_ActionDes.text = currentAction.ActionDes.Replace("value", currentAction.actualValue.ToString());
+        text_ActionDes.text = "";
+        for (int i = 0; i < currentAction.actualValue.Count; i++)
+        {
+            if (i >= 1)
+            {
+                text_ActionDes.text += currentAction.ActionDes.Replace("value" + (i + 1), currentAction.ActionValue[i].ToString());
+
+            }
+            text_ActionDes.text += currentAction.ActionDes.Replace("value", currentAction.ActionValue[i].ToString());
+        }
         text_ActionDes.enabled = false;
     }
 
@@ -252,7 +279,13 @@ public class Enemy : BaseBattleUnit
             case ActionType.Attack:
                 img_EnemyAction.sprite =
                     ResourcesManager.Instance.LoadResources<Sprite>("Image/" + "UIImage/" + "EnemyAction/" + "Attack");
-                text_ActionValue.text = currentAction.actualValue.ToString();
+                text_ActionValue.text = currentAction.actualValue[0].ToString();
+                text_ActionValue.enabled = true;
+                break;
+            case ActionType.Shield:
+                img_EnemyAction.sprite =
+                    ResourcesManager.Instance.LoadResources<Sprite>("Image/" + "UIImage/" + "EnemyAction/" + "Shield");
+                text_ActionValue.text = currentAction.actualValue[0].ToString();
                 text_ActionValue.enabled = true;
                 break;
             case ActionType.Buff:
@@ -262,7 +295,16 @@ public class Enemy : BaseBattleUnit
                 break;
         }
 
-        text_ActionDes.text = currentAction.ActionDes.Replace("value", currentAction.actualValue.ToString());
+        text_ActionDes.text = "";
+        for (int i = 0; i < currentAction.actualValue.Count; i++)
+        {
+            if (i >= 1)
+            {
+                text_ActionDes.text += currentAction.ActionDes.Replace("value" + (i + 1), currentAction.ActionValue[i].ToString());
+
+            }
+            text_ActionDes.text += currentAction.ActionDes.Replace("value", currentAction.ActionValue[i].ToString());
+        }
         text_ActionDes.enabled = false;
     }
 
@@ -276,7 +318,7 @@ public class Enemy : BaseBattleUnit
         {
             if (currentHp > (int) (0.7f * maxHp))
             {
-                currentAction = new ActionData(1004,0);
+                currentAction = new ActionData(1004,new List<int>(){0});
                 return true; 
             }
         }

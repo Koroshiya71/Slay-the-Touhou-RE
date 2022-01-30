@@ -23,5 +23,6 @@ public class BossGameScene : BaseGameScene
 
         //根据事件类型注册点击事件
         InitClickEvent();
+
     }
 }
