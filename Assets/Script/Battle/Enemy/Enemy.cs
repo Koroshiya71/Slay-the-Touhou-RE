@@ -84,18 +84,9 @@ public class Enemy : BaseBattleUnit
         //更新当前行动
         currentAction = new ActionData(1004,new List<int>(){0});
         UpdateCurrentAction();
-        text_ActionDes.text = "";
-        for (int i = 0; i < currentAction.actualValue.Count; i++)
-        {
-            if (i >= 1)
-            {
-                text_ActionDes.text += currentAction.ActionDes.Replace("value" + (i + 1), currentAction.ActionValue[i].ToString());
-
-            }
-            text_ActionDes.text += currentAction.ActionDes.Replace("value", currentAction.ActionValue[i].ToString());
-        }
-        text_ActionDes.enabled = false;
+        UpdateUI();
     }
+    //更新ActionUI
 
     #endregion
 
@@ -157,16 +148,7 @@ public class Enemy : BaseBattleUnit
     //显示行动描述
     public void ShowActionDes()
     {
-        text_ActionDes.text = "";
-        for (int i = 0; i < currentAction.actualValue.Count; i++)
-        {
-            if (i>=1)
-            {
-                text_ActionDes.text += currentAction.ActionDes.Replace("value"+(i+1), currentAction.ActionValue[i].ToString());
-
-            }
-            text_ActionDes.text += currentAction.ActionDes.Replace("value", currentAction.ActionValue[i].ToString());
-        }
+        UpdateUI();
         text_ActionDes.enabled = true;
     }
 
@@ -236,23 +218,23 @@ public class Enemy : BaseBattleUnit
                 text_ActionValue.text = currentAction.actualValue[0].ToString();
                 break;
         }
-
-        text_ActionDes.text = "";
-        for (int i = 0; i < currentAction.actualValue.Count; i++)
-        {
-            if (i >= 1)
-            {
-                text_ActionDes.text += currentAction.ActionDes.Replace("value" + (i + 1), currentAction.ActionValue[i].ToString());
-
-            }
-            text_ActionDes.text += currentAction.ActionDes.Replace("value", currentAction.ActionValue[i].ToString());
-        }
-        text_ActionDes.enabled = false;
+        BattleManager.Instance.UpdateCardAndActionValue();
+        UpdateUI(); 
     }
 
     //死亡方法
     public override void Die()
     {
+        //返魂碟检测
+        if (StateManager.CheckState(this, 1008))
+        {
+            stateDic[1008].stateData.stateStack--;
+            maxHp *= 2;
+            currentHp = maxHp;
+            CheckClearState();
+            UpdateUI();
+            return;
+        }
         //移除队列并销毁
         BattleManager.Instance.inBattleEnemyList.Remove(this);
         Destroy(this.gameObject);
@@ -271,6 +253,9 @@ public class Enemy : BaseBattleUnit
     public override void UpdateUI()
     {
         base.UpdateUI();
+
+
+
         //更新Action UI
         text_ActionDes.enabled = false;
         text_ActionValue.enabled = false;
@@ -280,6 +265,11 @@ public class Enemy : BaseBattleUnit
                 img_EnemyAction.sprite =
                     ResourcesManager.Instance.LoadResources<Sprite>("Image/" + "UIImage/" + "EnemyAction/" + "Attack");
                 text_ActionValue.text = currentAction.actualValue[0].ToString();
+                //特殊处理
+                if (currentAction.ActionID==1007)
+                {
+                    text_ActionValue.text = (Convert.ToInt32(currentAction.actualValue[0] * this.currentHp * 0.01f)).ToString();
+                }
                 text_ActionValue.enabled = true;
                 break;
             case ActionType.Shield:
@@ -298,12 +288,16 @@ public class Enemy : BaseBattleUnit
         text_ActionDes.text = "";
         for (int i = 0; i < currentAction.actualValue.Count; i++)
         {
-            if (i >= 1)
+            if (i==0)
             {
-                text_ActionDes.text += currentAction.ActionDes.Replace("value" + (i + 1), currentAction.ActionValue[i].ToString());
+                text_ActionDes.text = currentAction.ActionDes.Replace("value" + (i + 1), currentAction.ActionValue[i].ToString());
 
             }
-            text_ActionDes.text += currentAction.ActionDes.Replace("value", currentAction.ActionValue[i].ToString());
+            else
+            {
+                text_ActionDes.text = text_ActionDes.text.Replace("value" + (i + 1), currentAction.ActionValue[i].ToString());
+
+            }
         }
         text_ActionDes.enabled = false;
     }

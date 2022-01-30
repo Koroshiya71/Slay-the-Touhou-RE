@@ -85,7 +85,6 @@ public class GameSceneManager : UnitySingleton<GameSceneManager>
         else
         {
             bossScene.ChangeGameSceneState(false);
-            Debug.Log(1);
         }
     }
     void Start()

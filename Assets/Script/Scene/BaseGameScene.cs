@@ -137,7 +137,18 @@ public class BaseGameScene : MonoBehaviour
                 break;
             //如果是Boss战，则初始化一场Boss战斗
             case SceneType.BossCombat:
-
+                while (true)
+                {
+                    battleData =
+                        BattleManager.Instance.battleDataDic[
+                            Random.Range(1, BattleManager.Instance.battleDataDic.Count + 1)];
+                    if (battleData.BattleType == BattleType.Boss)
+                        break;
+                }
+                gameSceneButton.onClick.AddListener(delegate
+                {
+                    BattleManager.Instance.InitBattle(battleData);
+                });
                 break;
         }
     }

@@ -220,7 +220,7 @@ public class BattleManager : UnitySingleton<BattleManager>
             //对玩家造成value点伤害
             case 1001:
             case 2001:
-                Player.Instance.TakeDamage(actData.actualValue[0], null);
+                Player.Instance.TakeDamage(actData.actualValue[0], unit);
                 break;
             //自身获得value层灵体
             case 1002:
@@ -239,6 +239,24 @@ public class BattleManager : UnitySingleton<BattleManager>
             //给予自身value层护甲重伤
             case 1006:
                 StateManager.AddStateToTarget(unit, 1004, actData.actualValue[0]);
+                break;
+            //造成自身当前value%生命值的伤害
+            case 1007:
+                Player.Instance.TakeDamage(Convert.ToInt32(actData.actualValue[0]* unit.currentHp*0.01f ), unit);
+                break;
+            //回复value%生命值，获得value2层灵体
+            case 1008:
+                unit.Heal((int)(actData.actualValue[0] * 0.01f * unit.maxHp));
+                StateManager.AddStateToTarget(unit,1002, actData.actualValue[1]);
+                break;
+            //对目标造成value点伤害并附加value2层恐慌
+            case 1009:
+                Player.Instance.TakeDamage(actData.actualValue[0] , unit);
+                StateManager.AddStateToTarget(Player.Instance, 1002, actData.actualValue[1]);
+                break;
+            //获得value层返魂碟
+            case 1010:
+                StateManager.AddStateToTarget(unit, 1008, actData.actualValue[0]);
                 break;
         }
     }
@@ -318,6 +336,7 @@ public class BattleManager : UnitySingleton<BattleManager>
 
             enemy.UpdateUI();
         }
+
     }
 
     //根据效果类型更新卡牌UI
