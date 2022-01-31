@@ -196,14 +196,7 @@ public class GameEventManager : UnitySingleton<GameEventManager>
         }
         
     }
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            UIManager.Instance.ShowUI(E_UiId.EventUI);
-            EventDispatcher.TriggerEvent<int, string>(E_MessageType.ShowEventPage, 10011, "");
-        }
-    }
+
     private void Awake()
     {
         EventDispatcher.AddListener(E_MessageType.GameStart, InitGameEventManager);

@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 using System.IO;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
+using UnityEditor.Experimental.GraphView;
 
 //存档数据
 [Serializable]
@@ -95,19 +96,36 @@ public class SaveManager : UnitySingleton<SaveManager>
     //读取存档数据
     public void LoadData()
     {
-        if (GameTool.GetString("HasSave") != "True")
+        //如果已连接游戏
+        if (NetManager.socket.Connected)
         {
-            Debug.Log("没有存储数据");
-            return;
+            if (NetManager.playerDataStr=="empty")
+            {
+                Debug.Log("没有存储数据");
+                return;
+            }
+            saveData = JsonConvert.DeserializeObject<SaveData>(NetManager.playerDataStr);
+            GameManager.Instance.playerData = saveData.playerData;
+            EventDispatcher.TriggerEvent(E_MessageType.UpdateGameMainUI);
+            isLoad = true;
+        }
+        //如果是离线游戏
+        else
+        {
+            StreamReader reader = new StreamReader(jsonDataPath + "SaveData.json");
+            if (reader.ReadToEnd().Length <= 0)
+            {
+                Debug.Log("没有存储数据");
+                reader.Close();
+                return;
+            }
+            saveData = JsonConvert.DeserializeObject<SaveData>(reader.ReadToEnd());
+            reader.Close();
+            GameManager.Instance.playerData = saveData.playerData;
+            EventDispatcher.TriggerEvent(E_MessageType.UpdateGameMainUI);
+            isLoad = true;
         }
 
-        isLoad = true;
-        StreamReader reader = new StreamReader(jsonDataPath + "SaveData.json");
-        saveData = JsonConvert.DeserializeObject<SaveData>(reader.ReadToEnd());
-        reader.Close();
-        GameManager.Instance.playerData = saveData.playerData;
-        EventDispatcher.TriggerEvent(E_MessageType.UpdateGameMainUI);
-        
     }
     //列表深拷贝
     public static List<T> Clone<T>(object List)

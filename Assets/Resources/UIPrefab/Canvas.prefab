@@ -263,6 +263,7 @@ MonoBehaviour:
   isInit: 1
   currentTurnCombo: 0
   currentBattleType: 0
+  battleCanXinCount: 0
   enemyPrefab: {fileID: 0}
   inBattleEnemyList: []
   enemyPosList: []
@@ -283,6 +284,7 @@ MonoBehaviour:
   currentLayer: 0
   lastIndex: 0
   inGameSceneList: []
+  bossScene: {fileID: 0}
 --- !u!114 &2866397888423907500
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -303,6 +305,7 @@ MonoBehaviour:
   isChoosing: 0
   hasChosen: 0
   hasChosenCardList: []
+  originalIndex: 0
 --- !u!114 &4145815253739928787
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -315,6 +318,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d4c3d4efdec9b646a4b025f522ee2e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hasDoubleBlade: 0
 --- !u!114 &5792704667173095788
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -345,6 +349,7 @@ MonoBehaviour:
     sceneTypeList: 
     mapLayer: 0
     mapIndex: 0
+    relicIDList: 
 --- !u!114 &2917451373250688016
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -358,6 +363,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   chooseCardNumAfterBattle: 3
+  loungeData:
+    maxLoungeTime: 12
+    loungeTime: 12
+    restCost: 6
+    studyCost: 6
 --- !u!114 &3328707119313386171
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -370,6 +380,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e2e5a8ec2b83484182b51e3acf7f8aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  relicPrefab: {fileID: 0}
+  relicContent: {fileID: 0}
 --- !u!1 &4927724440435983436
 GameObject:
   m_ObjectHideFlags: 0

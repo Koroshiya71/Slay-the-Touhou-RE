@@ -67,7 +67,8 @@ public enum E_UiId
     ChooseCardUI,
     BattleRewardUI,
     StoreUI,
-    LoungeUI
+    LoungeUI,
+    LoginAndConnectUI
 }
 public class GameDefine
 {
@@ -86,6 +87,7 @@ public class GameDefine
         { E_UiId.BattleRewardUI,"UIPrefab/"+"BattleRewardUI"},
         { E_UiId.StoreUI,"UIPrefab/"+"StoreUI"},
         { E_UiId.LoungeUI,"UIPrefab/"+"LoungeUI"},
+        { E_UiId.LoginAndConnectUI,"UIPrefab/"+"LoginAndConnectUI"},
 
 
     };
@@ -130,6 +132,9 @@ public class GameDefine
                 break;
             case E_UiId.LoungeUI:
                 scriptType = typeof(LoungeUI);
+                break;
+            case E_UiId.LoginAndConnectUI:
+                scriptType = typeof(LoginAndConnectUI);
                 break;
             default:
                 break;

@@ -1,4 +1,4 @@
 ﻿public class PlayerData
 {
-    public string playerDataStr;
+    public string playerDataStr="empty";
 }

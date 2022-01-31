@@ -181,7 +181,8 @@ public class DbManager {
 			dataReader.Read();
 			string data = dataReader.GetString("data");
 			//反序列化
-			PlayerData playerData = Js.Deserialize<PlayerData>(data);
+            PlayerData playerData = new PlayerData();
+            playerData.playerDataStr = data;
 			dataReader.Close();
 			return playerData;
 		}

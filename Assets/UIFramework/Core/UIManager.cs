@@ -55,7 +55,7 @@ namespace GameCore
                 normalUIRoot = GameTool.FindTheChild(canvas.gameObject, "NormalUIRoot");
             }
             //刚进入游戏的时候，所要显现的界面就在这边进行显示
-            ShowUI(E_UiId.MainUI);
+            ShowUI(E_UiId.LoginAndConnectUI);
 
         }
       

@@ -26,7 +26,7 @@ public class StoreUI : BaseUI
         base.InitDataOnAwake();
         uiId = E_UiId.StoreUI;
         uiType.showMode = E_ShowUIMode.DoNothing;
-        uiType.uiRootType = E_UIRootType.KeepAbove;
+        uiType.uiRootType = E_UIRootType.Normal;
         storeCardPrefab= ResourcesManager.Instance.LoadResources<GameObject>("Prefabs/" + "Card/" + "StoreCard");
         storeRelicPrefab = ResourcesManager.Instance.LoadResources<GameObject>("Prefabs/" + "Battle/" + "StoreRelic");
     }

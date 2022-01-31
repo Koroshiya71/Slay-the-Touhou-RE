@@ -4,9 +4,11 @@ using UnityEngine;
 using System.Net.Sockets;
 using System;
 using System.Linq;
-public static class NetManager {
+using GameCore;
+
+public static class NetManager{
 	//定义套接字
-	static Socket socket;
+	public static Socket socket;
 	//接收缓冲区
 	static ByteArray readBuff;
 	//写入队列
@@ -29,7 +31,10 @@ public static class NetManager {
 	static float lastPingTime = 0;
 	//上一次收到PONG的时间
 	static float lastPongTime = 0;
-
+	//玩家ID
+    public static string playerID="";
+	//玩家数据字符串
+    public static string playerDataStr = "";
 	//事件
 	public enum NetEvent
 	{
@@ -374,4 +379,5 @@ public static class NetManager {
 	private static void OnMsgPong(MsgBase msgBase){
 		lastPongTime = Time.time;
 	}
+	
 }

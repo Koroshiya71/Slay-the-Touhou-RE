@@ -32,7 +32,7 @@ public partial class MsgHandler {
 		if(c.player != null){
 			msg.result = 1;
 			NetManager.Send(c, msg);
-			return;
+            return;
 		}
 		//如果已经登陆，踢下线
 		if(PlayerManager.IsOnline(msg.id)){
@@ -48,7 +48,7 @@ public partial class MsgHandler {
 		PlayerData playerData = DbManager.GetPlayerData(msg.id);
 		if(playerData == null){
 			msg.result = 1;
-			NetManager.Send(c, msg);
+            NetManager.Send(c, msg);
 			return;
 		}
 		//构建Player
@@ -60,5 +60,19 @@ public partial class MsgHandler {
 		//返回协议
 		msg.result = 0;
 		player.Send(msg);
-	}
+		//返回数据
+        MsgLoadData msgLoad = new MsgLoadData();
+        msgLoad.data = playerData.playerDataStr;
+		player.Send(msgLoad);
+		Console.WriteLine("Send MsgLoadData");
+    }
+	//保存协议
+    public static void MsgSave(ClientState c, MsgBase msgBase)
+    {
+        Console.WriteLine("MsgSave");
+        MsgSave msgSave = (MsgSave)msgBase;
+        PlayerManager.GetPlayer(msgSave.id).data.playerDataStr = msgSave.saveData;
+        DbManager.UpdatePlayerData(msgSave.id, msgSave.saveData);
+    }
+	
 }
