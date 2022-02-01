@@ -108,7 +108,7 @@ public class DbManager {
 		}
 		//序列化
 		PlayerData playerData = new PlayerData ();
-		string data = Js.Serialize(playerData); 
+        string data = playerData.playerDataStr;
 		//写入数据库
 		string sql = string.Format ("insert into player set id ='{0}' ,data ='{1}';", id, data);
 		try 
@@ -128,8 +128,9 @@ public class DbManager {
 	//检测用户名密码
 	public static bool CheckPassword(string id, string pw)
 	{
+
 		//防sql注入
-		if(!DbManager.IsSafeString(id)){
+		if (!DbManager.IsSafeString(id)){
 			Console.WriteLine("[数据库] CheckPassword fail, id not safe");
 			return false;
 		}
@@ -142,7 +143,7 @@ public class DbManager {
 
 		try 
 		{
-			MySqlCommand cmd = new MySqlCommand (sql, mysql);  
+			MySqlCommand cmd = new MySqlCommand (sql, mysql);
 			MySqlDataReader dataReader = cmd.ExecuteReader();
 			bool hasRows = dataReader.HasRows;
 			dataReader.Close();
@@ -180,7 +181,6 @@ public class DbManager {
 			//读取
 			dataReader.Read();
 			string data = dataReader.GetString("data");
-			//反序列化
             PlayerData playerData = new PlayerData();
             playerData.playerDataStr = data;
 			dataReader.Close();

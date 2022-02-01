@@ -63,6 +63,7 @@ public class RelicManager : UnitySingleton<RelicManager>
         newRelic.InitRelic(relicDic[id]);
         //添加到玩家字典
         playerRelicDic.Add(id, relicDic[id]);
+
         //触发获取事件，如果是读档则不触发
         if (!isLoad)
         {
@@ -131,6 +132,8 @@ public class RelicManager : UnitySingleton<RelicManager>
                 RelicManager.Instance.GetRelic(id, true);
             }
         }
+        //保存游戏
+        SaveManager.SaveGame();
     }
 
     //检测各种遗物的战斗开始效果

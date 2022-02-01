@@ -1,4 +1,5 @@
 ﻿using System;
+using MySql.Data.MySqlClient;
 
 public class ByteArray  {
 	//默认大小

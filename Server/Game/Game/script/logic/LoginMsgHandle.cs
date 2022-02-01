@@ -1,4 +1,5 @@
 ﻿using System;
+using MySql.Data.MySqlClient;
 
 
 public partial class MsgHandler {
@@ -21,6 +22,7 @@ public partial class MsgHandler {
 
 	//登陆协议处理
 	public static void MsgLogin(ClientState c, MsgBase msgBase){
+
 		MsgLogin msg = (MsgLogin)msgBase;
 		//密码校验
 		if(!DbManager.CheckPassword(msg.id, msg.pw)){

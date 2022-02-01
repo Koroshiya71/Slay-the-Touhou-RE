@@ -31,6 +31,7 @@ public class SaveData
     //遗物ID列表
     public List<int> relicIDList = new List<int>();
 
+    
     //构造函数
     public SaveData(bool isSave)
     {
@@ -51,6 +52,7 @@ public class SaveData
         {
             relicIDList.Add(id);
         }
+
     }
 
     public SaveData()
@@ -62,10 +64,10 @@ public class SaveManager : UnitySingleton<SaveManager>
 {
     //是否是通过读取存档初始化游戏
     public static bool isLoad = false;
-
-    public static string jsonDataPath;
     //Json数据保存路径
-
+    public static string jsonDataPath;
+    //是否离线读取
+    public bool isOffline = false;
     //存档数据
     public SaveData saveData = new SaveData();
 
@@ -91,21 +93,25 @@ public class SaveManager : UnitySingleton<SaveManager>
         writer.Write(s);
         writer.Close();
         Debug.Log("保存游戏");
+
     }
 
     //读取存档数据
     public void LoadData()
     {
         //如果已连接游戏
-        if (NetManager.socket.Connected)
+        if (NetManager.socket.Connected&&!isOffline)
         {
-            if (NetManager.playerDataStr=="empty")
+            Debug.Log(NetManager.playerDataStr);
+            if (NetManager.playerDataStr== "empty")
             {
                 Debug.Log("没有存储数据");
                 return;
             }
             saveData = JsonConvert.DeserializeObject<SaveData>(NetManager.playerDataStr);
             GameManager.Instance.playerData = saveData.playerData;
+            Debug.Log(GameManager.Instance.playerData);
+            Debug.Log(saveData.playerData);
             EventDispatcher.TriggerEvent(E_MessageType.UpdateGameMainUI);
             isLoad = true;
         }
@@ -113,18 +119,25 @@ public class SaveManager : UnitySingleton<SaveManager>
         else
         {
             StreamReader reader = new StreamReader(jsonDataPath + "SaveData.json");
-            if (reader.ReadToEnd().Length <= 0)
+            string saveStr = reader.ReadToEnd();
+            if (saveStr.Length <= 0)
             {
                 Debug.Log("没有存储数据");
                 reader.Close();
                 return;
             }
-            saveData = JsonConvert.DeserializeObject<SaveData>(reader.ReadToEnd());
+
+            saveData = JsonConvert.DeserializeObject<SaveData>(saveStr);
+
+            Debug.Log(GameManager.Instance.playerData);
+
             reader.Close();
             GameManager.Instance.playerData = saveData.playerData;
             EventDispatcher.TriggerEvent(E_MessageType.UpdateGameMainUI);
             isLoad = true;
         }
+
+        Debug.Log(saveData.relicIDList.Count);
 
     }
     //列表深拷贝

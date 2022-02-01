@@ -66,6 +66,7 @@ public class LoginAndConnectUI : BaseUI
         {
             HideUI();
             UIManager.Instance.ShowUI(E_UiId.MainUI);
+            SaveManager.Instance.isOffline = true;
         });
     }
 
@@ -142,6 +143,7 @@ public class LoginAndConnectUI : BaseUI
         msg.id = input_ID.text;
         msg.pw = input_PW.text;
         NetManager.Send(msg);
+        
     }
 
     //收到登陆协议
@@ -182,6 +184,8 @@ public class LoginAndConnectUI : BaseUI
         if (msg.data.Length>0)
         {
             NetManager.playerDataStr = msg.data;
+            UIManager.Instance.ShowUI(E_UiId.MainUI);
+            HideUI();
         }
 
         Debug.Log(NetManager.playerDataStr);
@@ -196,12 +200,6 @@ public class LoginAndConnectUI : BaseUI
 
     private void FixedUpdate()
     {
-        timer += Time.fixedDeltaTime;
-        if (!NetManager.socket.Connected && timer >= 2)
-        {
-            //两秒后尝试重新连接
-            ConnectServer();
-            timer = 0;
-        }
+        
     }
 }
