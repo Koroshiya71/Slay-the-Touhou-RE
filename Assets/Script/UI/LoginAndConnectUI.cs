@@ -29,14 +29,9 @@ public class LoginAndConnectUI : BaseUI
     protected override void Start()
     {
         base.Start();
-        NetManager.AddEventListener(NetManager.NetEvent.ConnectSucc, OnConnectSucc);
-        NetManager.AddEventListener(NetManager.NetEvent.ConnectFail, OnConnectFail);
-        NetManager.AddEventListener(NetManager.NetEvent.Close, OnConnectClose);
-        NetManager.AddMsgListener("MsgLoadData",OnMsgLoadData);
         NetManager.AddMsgListener("MsgRegister", OnMsgRegister);
         NetManager.AddMsgListener("MsgLogin", OnMsgLogin);
-        NetManager.AddMsgListener("MsgKick", OnMsgKick);
-        NetManager.AddMsgListener("MsgSaveText", OnMsgSaveText);
+
     }
 
     protected override void InitDataOnAwake()
@@ -70,11 +65,7 @@ public class LoginAndConnectUI : BaseUI
         });
     }
 
-    //玩家点击连接按钮
-    public void ConnectServer()
-    {
-        NetManager.Connect("127.0.0.1", 8888);
-    }
+    
 
     //主动关闭
     public void CloseConnect()
@@ -82,29 +73,7 @@ public class LoginAndConnectUI : BaseUI
         NetManager.Close();
     }
 
-    //连接成功回调
-    void OnConnectSucc(string err)
-    {
-        Debug.Log("OnConnectSucc");
-    }
-
-    //连接失败回调
-    void OnConnectFail(string err)
-    {
-        Debug.Log("OnConnectFail " + err);
-    }
-
-    //关闭连接
-    void OnConnectClose(string err)
-    {
-        Debug.Log("OnConnectClose");
-    }
-
-    //被踢下线
-    void OnMsgKick(MsgBase msgBase)
-    {
-        Debug.Log("被踢下线");
-    }
+   
 
     // Update is called once per frame
     void Update()
@@ -162,40 +131,6 @@ public class LoginAndConnectUI : BaseUI
         }
     }
 
-    //收到保存协议
-    public void OnMsgSaveText(MsgBase msgBase)
-    {
-        MsgSaveText msg = (MsgSaveText) msgBase;
-        if (msg.result == 0)
-        {
-            Debug.Log("保存成功");
-        }
-        else
-        {
-            Debug.Log("保存失败");
-        }
-    }
-
-    //收到获取数据协议
-    public void OnMsgLoadData(MsgBase msgBase)
-    {
-        Debug.Log("LoadData");
-        MsgLoadData msg = (MsgLoadData) msgBase;
-        if (msg.data.Length>0)
-        {
-            NetManager.playerDataStr = msg.data;
-            UIManager.Instance.ShowUI(E_UiId.MainUI);
-            HideUI();
-        }
-
-        Debug.Log(NetManager.playerDataStr);
-    }
-
-    protected override void OnEnable()
-    {
-        base.OnEnable();
-        ConnectServer();
-    }
 
 
     private void FixedUpdate()

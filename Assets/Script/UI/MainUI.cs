@@ -12,6 +12,10 @@ public class MainUI : BaseUI
     private Button btn_StartGame;
     //载入进度按钮
     private Button btn_LoadGame;
+    //多人游戏按钮
+    private Button btn_MultiGame;
+    //等待文本
+    private Text text_Wait;
     //获取UI组件并添加回调函数
     protected override void InitUiOnAwake()
     {
@@ -20,11 +24,11 @@ public class MainUI : BaseUI
         btn_StartGame.onClick.AddListener(LoadGameScene);
 
         btn_LoadGame = GameTool.GetTheChildComponent<Button>(gameObject, "Btn_LoadGame");
-        btn_LoadGame.onClick.AddListener(delegate
-        {
-            SaveManager.Instance.LoadData();
-            LoadGameScene();
-        });
+        
+
+        btn_MultiGame = GameTool.GetTheChildComponent<Button>(gameObject, "Btn_MultiGame");
+        text_Wait = GameTool.GetTheChildComponent<Text>(gameObject, "Text_Wait");
+        text_Wait.enabled = false;
     }
 
 
@@ -43,7 +47,31 @@ public class MainUI : BaseUI
         {
             UIManager.Instance.ShowUI(E_UiId.GameMainUI);
             UIManager.Instance.ShowUI(E_UiId.MapUI);
+        });
+    }
 
+    public override void AddMessageListener()
+    {
+        base.AddMessageListener();
+
+        btn_LoadGame.onClick.AddListener(delegate
+        {
+            SaveManager.Instance.LoadData();
+            LoadGameScene();
+        });
+
+        btn_MultiGame.onClick.AddListener(delegate
+        {
+            MsgMultiStart msg=new MsgMultiStart();
+            msg.id = NetManager.playerID;
+            //发送消息
+            NetManager.Send(msg);
+            Debug.Log("Send：StartMulti");
+        });
+
+        EventDispatcher.AddListener(E_MessageType.MultiWait, delegate
+        {
+            text_Wait.enabled = true;
         });
     }
 }

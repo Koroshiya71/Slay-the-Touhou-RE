@@ -6,7 +6,7 @@ using System;
 using System.Linq;
 using GameCore;
 
-public static class NetManager{
+public class NetManager:UnitySingleton<NetManager> {
 	//定义套接字
 	public static Socket socket;
 	//接收缓冲区

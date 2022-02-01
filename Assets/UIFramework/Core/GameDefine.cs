@@ -21,6 +21,7 @@ public enum E_MessageType
     ShowStoreUI,//显示StoreUI
     GetDisplayCardIndex,//获取展示卡牌Index
     ShowLoungeUI,//显示休息处UI
+    MultiWait,//等待多人连接
 }
 //物品的分类
 //public enum E_GoodsType
