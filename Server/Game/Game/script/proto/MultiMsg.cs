@@ -40,11 +40,21 @@ public class MsgChooseScene : MsgBase
     public string id;
 }
 
+//等待确认选择
+public class MsgWaitConfirm : MsgBase
+{
+    public MsgWaitConfirm() { protoName = "MsgWaitConfirm"; }
+    public SceneType type;
+}
+
 //确认选择
 public class MsgConfirmChoose : MsgBase
 {
     public MsgConfirmChoose() { protoName = "MsgConfirmChoose"; }
     public SceneType type;
+    //接受还是拒绝
+    public bool confirm;
+    public string id;
 }
 
 //进入场景
@@ -52,11 +62,4 @@ public class MsgEnterScene : MsgBase
 {
     public MsgEnterScene() { protoName = "MsgEnterScene"; }
     public SceneType type;
-}
-//等待确认选择
-public class MsgWaitConfirm : MsgBase
-{
-    public MsgWaitConfirm() { protoName = "MsgWaitConfirm"; }
-    public SceneType type;
-
 }

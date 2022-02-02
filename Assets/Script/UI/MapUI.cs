@@ -14,7 +14,8 @@ public class MapUI : BaseUI
     private Button btn_Confirm;
     //拒绝按钮
     private Button btn_Refuse;
-
+    //等待提示框
+    private GameObject waitBox;
     protected override void InitDataOnAwake()
     {
         base.InitDataOnAwake();
@@ -29,8 +30,9 @@ public class MapUI : BaseUI
         btn_Confirm = GameTool.GetTheChildComponent<Button>(gameObject, "Btn_Confirm");
         btn_Refuse = GameTool.GetTheChildComponent<Button>(gameObject, "Btn_Refuse");
         text_Confirm=GameTool.GetTheChildComponent<Text>(gameObject, "Text_Confirm");
-
+        waitBox=GameObject.Find("WaitBox");
         confirmBox.SetActive(false);
+        waitBox.SetActive(false);
     }
 
 public void ShowConfirmBox(SceneType type)
@@ -67,7 +69,7 @@ public void ShowConfirmBox(SceneType type)
     public override void AddMessageListener()
     {
         base.AddMessageListener();
-        EventDispatcher.AddListener<SceneType>(E_MessageType.WaitConfirm,ShowConfirmBox);
+        EventDispatcher.AddListener<SceneType>(E_MessageType.MultWaitConfirm,ShowConfirmBox);
 
         btn_Confirm.onClick.AddListener(delegate
         {
@@ -76,12 +78,31 @@ public void ShowConfirmBox(SceneType type)
             //发送接受消息
             MsgConfirmChoose msg = new MsgConfirmChoose();
             msg.type = MultiPlayMsgHandler.chosenSceneType;
+            msg.confirm = true;
+            msg.id = NetManager.playerID;
             NetManager.Send(msg);
         });
 
         btn_Refuse.onClick.AddListener(delegate
         {
             //隐藏面板
+            confirmBox.SetActive(false);
+            //发送拒绝消息
+            MsgConfirmChoose msg = new MsgConfirmChoose();
+            msg.type = MultiPlayMsgHandler.chosenSceneType;
+            msg.confirm = false;
+            msg.id = NetManager.playerID;
+            NetManager.Send(msg);
+        });
+
+        EventDispatcher.AddListener(E_MessageType.MultChooseScene, delegate
+        {
+            waitBox.SetActive(true);
+        });
+
+        EventDispatcher.AddListener(E_MessageType.MultEnterScene, delegate
+        {
+            waitBox.SetActive(false);
             confirmBox.SetActive(false);
         });
     }

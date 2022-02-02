@@ -23,7 +23,9 @@ public enum E_MessageType
     ShowLoungeUI,//显示休息处UI
     MultiWait,//等待多人连接
     MultiGameStart,//多人游戏开始
-    WaitConfirm,//等待确认场景选择
+    MultWaitConfirm,//等待确认场景选择
+    MultChooseScene,//选择场景
+    MultEnterScene,//进入场景
 }
 //物品的分类
 //public enum E_GoodsType

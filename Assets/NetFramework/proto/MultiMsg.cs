@@ -42,6 +42,9 @@ public class MsgConfirmChoose : MsgBase
 {
     public MsgConfirmChoose() { protoName = "MsgConfirmChoose"; }
     public SceneType type;
+    //接受还是拒绝
+    public bool confirm;
+    public string id;
 }
 
 //进入场景
