@@ -22,6 +22,7 @@ public enum E_MessageType
     GetDisplayCardIndex,//获取展示卡牌Index
     ShowLoungeUI,//显示休息处UI
     MultiWait,//等待多人连接
+    MultiGameStart,//多人游戏开始
 }
 //物品的分类
 //public enum E_GoodsType

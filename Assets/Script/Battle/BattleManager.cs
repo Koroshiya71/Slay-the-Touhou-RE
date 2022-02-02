@@ -84,6 +84,11 @@ public class BattleManager : UnitySingleton<BattleManager>
         //显示相应UI
         UIManager.Instance.HideSingleUI(E_UiId.MapUI);
         UIManager.Instance.ShowUI(E_UiId.BattleUI);
+        //如果不是多人游戏则隐藏同步角色
+        if (!GameManager.Instance.isMulti)
+        {
+            SyncPlayer.Instance.gameObject.SetActive(false);
+        }
         //初始化牌库
         DeskManager.Instance.ResetDesks();
         //战斗金币数归零

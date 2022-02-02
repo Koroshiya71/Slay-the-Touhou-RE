@@ -87,7 +87,9 @@ public class GameManager : UnitySingleton<GameManager>
 {
     //玩家数据
     public PlayerData playerData = new PlayerData();
-
+    //同步玩家数据
+    public PlayerData syncPlayerData = new PlayerData();
+    
     //卡牌出货率
     public CardRareClass cardRare;
 
@@ -104,6 +106,8 @@ public class GameManager : UnitySingleton<GameManager>
 
     //休息处数据
     public LoungeData loungeData = new LoungeData();
+    //是否是多人游戏
+    public bool isMulti = false;
     private void Awake()
     {
         StreamReader reader;
@@ -113,6 +117,12 @@ public class GameManager : UnitySingleton<GameManager>
             //读取玩家初始数值json
             reader = new StreamReader(SaveManager.jsonDataPath + "PlayerInit.json");
             playerData = JsonConvert.DeserializeObject<PlayerData>(reader.ReadToEnd());
+            //如果是多人游戏，
+            if (isMulti)
+            {
+                reader = new StreamReader(SaveManager.jsonDataPath + "PlayerInit.json");
+                syncPlayerData = JsonConvert.DeserializeObject<PlayerData>(reader.ReadToEnd());
+            }
             reader.Close();
         }
         

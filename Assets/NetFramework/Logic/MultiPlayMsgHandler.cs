@@ -34,11 +34,12 @@ public class MultiPlayMsgHandler : UnitySingleton<MultiPlayMsgHandler>
     public void InitMessageListener()
     {
         NetManager.AddMsgListener("MsgMultiWait",OnMsgMultiWait);
+        NetManager.AddMsgListener("MsgMultiEnter", OnMsgMultiEnter);
+
         NetManager.AddEventListener(NetManager.NetEvent.ConnectSucc, OnConnectSucc);
         NetManager.AddEventListener(NetManager.NetEvent.ConnectFail, OnConnectFail);
         NetManager.AddEventListener(NetManager.NetEvent.Close, OnConnectClose);
         NetManager.AddMsgListener("MsgLoadData", OnMsgLoadData);
-
         NetManager.AddMsgListener("MsgKick", OnMsgKick);
     }
     //连接成功回调
@@ -75,6 +76,11 @@ public class MultiPlayMsgHandler : UnitySingleton<MultiPlayMsgHandler>
             UIManager.Instance.ShowUI(E_UiId.MainUI);
         }
 
-        Debug.Log(NetManager.playerDataStr);
+    }
+    //进入多人游戏
+    public void OnMsgMultiEnter(MsgBase msgBase)
+    {
+        Debug.Log("Enter Game");
+        EventDispatcher.TriggerEvent(E_MessageType.MultiGameStart);
     }
 }

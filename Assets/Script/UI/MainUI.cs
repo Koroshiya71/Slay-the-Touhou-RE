@@ -21,7 +21,10 @@ public class MainUI : BaseUI
     {
         base.InitUiOnAwake();
         btn_StartGame = GameTool.GetTheChildComponent<Button>(gameObject, "Btn_StartGame");
-        btn_StartGame.onClick.AddListener(LoadGameScene);
+        btn_StartGame.onClick.AddListener(delegate
+        {
+            LoadGameScene();
+        });
 
         btn_LoadGame = GameTool.GetTheChildComponent<Button>(gameObject, "Btn_LoadGame");
         
@@ -41,12 +44,16 @@ public class MainUI : BaseUI
     }
 
     //加载游戏场景
-    private void LoadGameScene()
+    private void LoadGameScene(bool isMulti=false)
     {
         SceneController.Instance.LoadSceneAsync("GameScene", delegate
         {
             UIManager.Instance.ShowUI(E_UiId.GameMainUI);
             UIManager.Instance.ShowUI(E_UiId.MapUI);
+            if (isMulti)
+            {
+                GameManager.Instance.isMulti = true;
+            }
         });
     }
 
@@ -72,6 +79,10 @@ public class MainUI : BaseUI
         EventDispatcher.AddListener(E_MessageType.MultiWait, delegate
         {
             text_Wait.enabled = true;
+        });
+        EventDispatcher.AddListener(E_MessageType.MultiGameStart, delegate
+        {
+            LoadGameScene(true);
         });
     }
 }
