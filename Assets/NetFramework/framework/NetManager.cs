@@ -6,7 +6,7 @@ using System;
 using System.Linq;
 using GameCore;
 
-public class NetManager:UnitySingleton<NetManager> {
+public static class NetManager {
 	//定义套接字
 	public static Socket socket;
 	//接收缓冲区
@@ -324,7 +324,7 @@ public class NetManager:UnitySingleton<NetManager> {
 	}
 
 	//Update
-	public static void Update(){
+	public static void NetUpdate(){
 		MsgUpdate();
 		PingUpdate();
 	}

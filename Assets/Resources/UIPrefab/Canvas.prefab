@@ -183,7 +183,6 @@ GameObject:
   - component: {fileID: 2917451373250688016}
   - component: {fileID: 3328707119313386171}
   - component: {fileID: 6304084064333923457}
-  - component: {fileID: 3713586423172987621}
   m_Layer: 0
   m_Name: UnitySingletonObj
   m_TagString: Untagged
@@ -371,6 +370,7 @@ MonoBehaviour:
     loungeTime: 12
     restCost: 6
     studyCost: 6
+  isMulti: 0
 --- !u!114 &3328707119313386171
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -395,18 +395,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9e97cfb52b452164e8e53e2c6f88b1ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &3713586423172987621
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4927724440062425714}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 19a7b9bd2b7e0424cb8b178f336a8078, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &4927724440435983436

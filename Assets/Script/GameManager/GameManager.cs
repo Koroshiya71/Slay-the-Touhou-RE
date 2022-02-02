@@ -261,6 +261,8 @@ public class GameManager : UnitySingleton<GameManager>
         {
             GameSceneManager.Instance.bossScene.ChangeGameSceneState(true);
         }
+        //手动调用
+        NetManager.NetUpdate();
     }
     //休息处休息方法
     public void LoungeRest()

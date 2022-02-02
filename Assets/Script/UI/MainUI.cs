@@ -14,8 +14,10 @@ public class MainUI : BaseUI
     private Button btn_LoadGame;
     //多人游戏按钮
     private Button btn_MultiGame;
-    //等待文本
-    private Text text_Wait;
+    //等待Panel
+    private GameObject waitPanel;
+
+    
     //获取UI组件并添加回调函数
     protected override void InitUiOnAwake()
     {
@@ -30,8 +32,8 @@ public class MainUI : BaseUI
         
 
         btn_MultiGame = GameTool.GetTheChildComponent<Button>(gameObject, "Btn_MultiGame");
-        text_Wait = GameTool.GetTheChildComponent<Text>(gameObject, "Text_Wait");
-        text_Wait.enabled = false;
+        waitPanel=GameObject.Find("WaitPanel");
+        waitPanel.SetActive(false);
     }
 
 
@@ -53,6 +55,12 @@ public class MainUI : BaseUI
             if (isMulti)
             {
                 GameManager.Instance.isMulti = true;
+            }
+
+            if (!SaveManager.Instance.isOffline)
+            {
+
+
             }
         });
     }
@@ -78,7 +86,7 @@ public class MainUI : BaseUI
 
         EventDispatcher.AddListener(E_MessageType.MultiWait, delegate
         {
-            text_Wait.enabled = true;
+            waitPanel.SetActive(true);
         });
         EventDispatcher.AddListener(E_MessageType.MultiGameStart, delegate
         {

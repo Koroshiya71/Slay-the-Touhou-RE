@@ -29,8 +29,7 @@ public class LoginAndConnectUI : BaseUI
     protected override void Start()
     {
         base.Start();
-        NetManager.AddMsgListener("MsgRegister", OnMsgRegister);
-        NetManager.AddMsgListener("MsgLogin", OnMsgLogin);
+        
 
     }
 
@@ -75,11 +74,6 @@ public class LoginAndConnectUI : BaseUI
 
    
 
-    // Update is called once per frame
-    void Update()
-    {
-        NetManager.Update();
-    }
 
 
     //发送注册协议
@@ -91,19 +85,7 @@ public class LoginAndConnectUI : BaseUI
         NetManager.Send(msg);
     }
 
-    //收到注册协议
-    public void OnMsgRegister(MsgBase msgBase)
-    {
-        MsgRegister msg = (MsgRegister) msgBase;
-        if (msg.result == 0)
-        {
-            Debug.Log("注册成功");
-        }
-        else
-        {
-            Debug.Log("注册失败");
-        }
-    }
+   
 
     //发送登陆协议
     public void OnLoginClick()
@@ -115,23 +97,9 @@ public class LoginAndConnectUI : BaseUI
         
     }
 
-    //收到登陆协议
-    public void OnMsgLogin(MsgBase msgBase)
-    {
-        MsgLogin msg = (MsgLogin) msgBase;
-        if (msg.result == 0)
-        {
-            Debug.Log("登陆成功");
-            //保存当前玩家ID
-            NetManager.playerID = msg.id;
-        }
-        else
-        {
-            Debug.Log("登陆失败");
-        }
-    }
 
 
+    
 
     private void FixedUpdate()
     {

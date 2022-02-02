@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class MultiPlayMsgHandler : UnitySingleton<MultiPlayMsgHandler>
 {
+    //当前决策的场景类型吧
+    public static SceneType chosenSceneType;
     //玩家点击连接按钮
     public void ConnectServer()
     {
@@ -35,12 +37,43 @@ public class MultiPlayMsgHandler : UnitySingleton<MultiPlayMsgHandler>
     {
         NetManager.AddMsgListener("MsgMultiWait",OnMsgMultiWait);
         NetManager.AddMsgListener("MsgMultiEnter", OnMsgMultiEnter);
+        NetManager.AddMsgListener("MsgWaitConfirm", OnMsgWaitConfirm);
 
         NetManager.AddEventListener(NetManager.NetEvent.ConnectSucc, OnConnectSucc);
         NetManager.AddEventListener(NetManager.NetEvent.ConnectFail, OnConnectFail);
         NetManager.AddEventListener(NetManager.NetEvent.Close, OnConnectClose);
         NetManager.AddMsgListener("MsgLoadData", OnMsgLoadData);
         NetManager.AddMsgListener("MsgKick", OnMsgKick);
+        NetManager.AddMsgListener("MsgRegister", OnMsgRegister);
+        NetManager.AddMsgListener("MsgLogin", OnMsgLogin);
+    }
+    //收到登陆协议
+    public void OnMsgLogin(MsgBase msgBase)
+    {
+        MsgLogin msg = (MsgLogin)msgBase;
+        if (msg.result == 0)
+        {
+            Debug.Log("登陆成功");
+            //保存当前玩家ID
+            NetManager.playerID = msg.id;
+        }
+        else
+        {
+            Debug.Log("登陆失败");
+        }
+    }
+    //收到注册协议
+    public void OnMsgRegister(MsgBase msgBase)
+    {
+        MsgRegister msg = (MsgRegister)msgBase;
+        if (msg.result == 0)
+        {
+            Debug.Log("注册成功");
+        }
+        else
+        {
+            Debug.Log("注册失败");
+        }
     }
     //连接成功回调
     void OnConnectSucc(string err)
@@ -82,5 +115,13 @@ public class MultiPlayMsgHandler : UnitySingleton<MultiPlayMsgHandler>
     {
         Debug.Log("Enter Game");
         EventDispatcher.TriggerEvent(E_MessageType.MultiGameStart);
+    }
+    //确认选择协议
+    public void OnMsgWaitConfirm(MsgBase msgBase)
+    {
+        Debug.Log("OnMsgWaitConfirm");
+        MsgWaitConfirm msg = (MsgWaitConfirm) msgBase;
+        EventDispatcher.TriggerEvent<SceneType>(E_MessageType.WaitConfirm,msg.type);
+        chosenSceneType = msg.type;
     }
 }
