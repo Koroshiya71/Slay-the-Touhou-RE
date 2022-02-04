@@ -80,6 +80,7 @@ public void ShowConfirmBox(SceneType type)
             msg.type = MultiPlayMsgHandler.chosenSceneType;
             msg.confirm = true;
             msg.id = NetManager.playerID;
+
             NetManager.Send(msg);
         });
 

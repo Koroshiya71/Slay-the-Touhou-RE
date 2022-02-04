@@ -239,6 +239,10 @@ public class HandCard : BaseCard
 
         //连斩数+1
         BattleManager.Instance.currentTurnCombo++;
+        //如果是联机情况，发送消息
+        MsgUseCard msg = new MsgUseCard();
+        msg.id = NetManager.playerID;
+        NetManager.Send(msg);
         //消耗能量
         BattleManager.Instance.EditEnergy(BattleManager.Instance.CurrentEnergy - cardData.cardCost);
         for (int i = handCardList.IndexOf(this.gameObject) + 1; i < handCardList.Count; i++)

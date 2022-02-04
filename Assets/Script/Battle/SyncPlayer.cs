@@ -7,7 +7,8 @@ public class SyncPlayer : BaseBattleUnit
 {
     //同步玩家
     public static SyncPlayer Instance;
-
+    //当前连击数
+    public static int currentTurnCombo;
     //初始化玩家数据
     public void InitPlayerByData()
     {

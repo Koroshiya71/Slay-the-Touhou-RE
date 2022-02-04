@@ -52,6 +52,11 @@ public class BattleData
             enemyIDList.Add(int.Parse(ReadBattleCfgData("EnemyID"+i,id)));
         }
     }
+
+    public BattleData()
+    {
+
+    }
     //根据cfg数据表读取敌人数据
     private string ReadBattleCfgData(string key, int id)
     {

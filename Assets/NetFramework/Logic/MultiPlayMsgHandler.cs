@@ -1,13 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using GameCore;
+using Newtonsoft.Json;
 using UnityEngine;
 
 public class MultiPlayMsgHandler : UnitySingleton<MultiPlayMsgHandler>
 {
     //当前决策的场景类型吧
     public static SceneType chosenSceneType;
+    //当前所选的战斗数据和事件数据
+    public static BattleData currentBattleData;
 
+    public static EventData currentEventData;
     //玩家点击连接按钮
     public void ConnectServer()
     {
@@ -38,6 +42,8 @@ public class MultiPlayMsgHandler : UnitySingleton<MultiPlayMsgHandler>
         NetManager.AddMsgListener("MsgMultiEnter", OnMsgMultiEnter);
         NetManager.AddMsgListener("MsgWaitConfirm", OnMsgWaitConfirm);
         NetManager.AddMsgListener("MsgEnterScene", OnMsgEnterScene);
+        NetManager.AddMsgListener("MsgCardEffect",OnMsgCardEffect);
+        NetManager.AddMsgListener("MsgUseCard", OnMsgUseCard);
 
         NetManager.AddEventListener(NetManager.NetEvent.ConnectSucc, OnConnectSucc);
         NetManager.AddEventListener(NetManager.NetEvent.ConnectFail, OnConnectFail);
@@ -127,6 +133,9 @@ public class MultiPlayMsgHandler : UnitySingleton<MultiPlayMsgHandler>
         Debug.Log("OnMsgWaitConfirm");
         MsgWaitConfirm msg = (MsgWaitConfirm) msgBase;
         EventDispatcher.TriggerEvent<SceneType>(E_MessageType.MultWaitConfirm, msg.type);
+        currentBattleData = JsonConvert.DeserializeObject<BattleData>(msg.battleDataStr);
+        currentEventData= JsonConvert.DeserializeObject<EventData>(msg.eventDataStr);
+        Debug.Log(currentBattleData);
         chosenSceneType = msg.type;
     }
 
@@ -135,46 +144,26 @@ public class MultiPlayMsgHandler : UnitySingleton<MultiPlayMsgHandler>
     {
         Debug.Log("OnMsgEnterScene");
         MsgEnterScene msg = (MsgEnterScene) msgBase;
-        BattleData battleData;
-        EventData eventData;
+
+        Debug.Log(currentBattleData);
+
         switch (msg.type)
         {
             //如果场景类型为普通战斗，则随机选取一个战斗场景数据
             case SceneType.NormalCombat:
-                while (true)
-                {
-                    battleData =
-                        BattleManager.Instance.battleDataDic[
-                            Random.Range(1, BattleManager.Instance.battleDataDic.Count + 1)];
-                    if (battleData.BattleType == BattleType.Normal)
-                        break;
-                }
-
-                BattleManager.Instance.InitBattle(battleData);
+                BattleManager.Instance.InitBattle(currentBattleData);
 
                 break;
             //如果场景类型为事件，则随机选取一个事件
             case SceneType.Event:
-                eventData =
-                    GameEventManager.Instance.eventDic[
-                        GameEventManager.Instance.eventIDList1[
-                            Random.Range(0, GameEventManager.Instance.eventIDList1.Count)]];
+                
                 UIManager.Instance.ShowUI(E_UiId.EventUI);
                 EventDispatcher.TriggerEvent<int, string>(E_MessageType.ShowEventPage,
-                    eventData.pageDataList[0].pageID, "");
+                    currentEventData.pageDataList[0].pageID, "");
                 break;
             //如果场景类型为精英战斗，则随机选取一个精英战斗
             case SceneType.EliteCombat:
-                while (true)
-                {
-                    battleData =
-                        BattleManager.Instance.battleDataDic[
-                            Random.Range(1, BattleManager.Instance.battleDataDic.Count + 1)];
-                    if (battleData.BattleType == BattleType.Elite)
-                        break;
-                }
-
-                BattleManager.Instance.InitBattle(battleData);
+                BattleManager.Instance.InitBattle(currentBattleData);
                 break;
             //如果场景类型为商店，则显示商店页面
             case SceneType.Store:
@@ -189,18 +178,23 @@ public class MultiPlayMsgHandler : UnitySingleton<MultiPlayMsgHandler>
                 break;
             //如果是Boss战，则初始化一场Boss战斗
             case SceneType.BossCombat:
-                while (true)
-                {
-                    battleData =
-                        BattleManager.Instance.battleDataDic[
-                            Random.Range(1, BattleManager.Instance.battleDataDic.Count + 1)];
-                    if (battleData.BattleType == BattleType.Boss)
-                        break;
-                }
-
-                BattleManager.Instance.InitBattle(battleData);
+                BattleManager.Instance.InitBattle(currentBattleData);
                 break;
         }
         EventDispatcher.TriggerEvent(E_MessageType.MultEnterScene);
+    }
+    //收到卡牌效果协议
+    public void OnMsgCardEffect(MsgBase msgBase)
+    {
+        MsgCardEffect msg = (MsgCardEffect) msgBase;
+        BattleManager.Instance.TakeCardEffect(msg.effectID,msg.effectValue,
+            BattleManager.Instance.GetBattleUnitByIndex(msg.targetIndex),msg.isCanXin,msg.isLianZhan,true);
+    }
+
+    //使用卡牌协议
+    public void OnMsgUseCard(MsgBase msgBase)
+    {
+        MsgUseCard msg = (MsgUseCard) msgBase;
+        SyncPlayer.currentTurnCombo++;
     }
 }

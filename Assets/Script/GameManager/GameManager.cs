@@ -261,8 +261,24 @@ public class GameManager : UnitySingleton<GameManager>
         {
             GameSceneManager.Instance.bossScene.ChangeGameSceneState(true);
         }
+
+        if (Input.GetKeyDown(KeyCode.Alpha0))//登录Koroshiya
+        {
+            MsgLogin msg = new MsgLogin();
+            msg.id = "Koroshiya";
+            msg.pw = "123123";
+            NetManager.Send(msg);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha9))//登录Koroshiya71
+        {
+            MsgLogin msg = new MsgLogin();
+            msg.id = "Koroshiya71";
+            msg.pw = "123123";
+            NetManager.Send(msg);
+        }
         //手动调用
         NetManager.NetUpdate();
+
     }
     //休息处休息方法
     public void LoungeRest()

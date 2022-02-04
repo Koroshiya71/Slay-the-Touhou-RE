@@ -154,6 +154,7 @@ public class BattleManager : UnitySingleton<BattleManager>
         }
 
         currentTurnCombo = 0;
+        SyncPlayer.currentTurnCombo = 0;
         StateManager.Instance.hasDoubleBlade = false;
         //触发回合开始效果
         if (turnStartEffectDelegate != null)
@@ -357,7 +358,7 @@ public class BattleManager : UnitySingleton<BattleManager>
 
     //根据卡牌效果ID和效果值触发效果
     public void TakeCardEffect(int effectID, int effectValue, BaseBattleUnit target = null, int isCanXin = 0,
-        bool isLianZhan = false)
+        bool isLianZhan = false,bool isSync=false)
     {
         //如果没有特别指定目标则默认指定当前选中的目标
         if (target == null)
@@ -371,7 +372,7 @@ public class BattleManager : UnitySingleton<BattleManager>
             return;
         }
 
-        Debug.Log(GetBattleUnitIndex(target));
+        int targetIndex=GetBattleUnitIndex(target);
         switch (effectID)
         {
             //对目标造成单体伤害
@@ -409,6 +410,10 @@ public class BattleManager : UnitySingleton<BattleManager>
                 break;
             //残心：对随机敌人造成伤害
             case 1004:
+                if (isSync)
+                {
+                    break;
+                }
                 switch (isCanXin)
                 {
                     case 0:
@@ -418,16 +423,19 @@ public class BattleManager : UnitySingleton<BattleManager>
                         {
                             target = BattleManager.Instance.inBattleEnemyList[
                                 Random.Range(0, BattleManager.Instance.inBattleEnemyList.Count)];
-                            target.TakeDamage(effectValue, Player.Instance);
+                            targetIndex = GetBattleUnitIndex(target);
+                            TakeCardEffect(1001,effectValue,target);
+
                         };
                         break;
                     case 2:
                         target = BattleManager.Instance.inBattleEnemyList[
                             Random.Range(0, BattleManager.Instance.inBattleEnemyList.Count)];
-                        target.TakeDamage(effectValue, Player.Instance);
+                        targetIndex = GetBattleUnitIndex(target);
+                        TakeCardEffect(1001, effectValue, target);
                         break;
-
                 }
+
                 break;
             //附加恐惧
             case 1005:
@@ -450,6 +458,10 @@ public class BattleManager : UnitySingleton<BattleManager>
                 break;
             //抽牌
             case 1010:
+                if (isSync)
+                {
+                    break;
+                }
                 for (int i = 0; i < effectValue; i++)
                 {
                     DeskManager.Instance.DrawCard();
@@ -458,11 +470,16 @@ public class BattleManager : UnitySingleton<BattleManager>
                 break;
             //如果是本回合使用的第一张牌，对目标造成伤害
             case 1011:
-                if (currentTurnCombo == 0)
+                if (isSync&&SyncPlayer.currentTurnCombo==0)
+                {
+                    target.TakeDamage(effectValue, Player.Instance);
+                }
+                else if (currentTurnCombo == 0)
                 {
                     target.TakeDamage(effectValue, Player.Instance);
                 }
 
+                Debug.Log(currentTurnCombo+":"+SyncPlayer.currentTurnCombo);
                 break;
             //附加起势
             case 1012:
@@ -470,7 +487,11 @@ public class BattleManager : UnitySingleton<BattleManager>
                 break;
             //抽取一张连斩牌:
             case 1013:
-                int count = 300;
+                if (isSync)
+                {
+                    break;
+                }
+                int count = 3000;
                 while (true)
                 {
                     count--;
@@ -526,6 +547,19 @@ public class BattleManager : UnitySingleton<BattleManager>
                 break;
             default:
                 break;
+        }
+        //如果正在多人游戏则发送使用卡牌消息
+        if (GameManager.Instance.isMulti&&!isSync)
+        {
+            MsgCardEffect msg = new MsgCardEffect();
+            msg.effectValue = effectValue;
+            msg.isCanXin = isCanXin;
+            msg.effectID = effectID;
+            msg.isLianZhan = isLianZhan;
+            msg.targetIndex = targetIndex;
+            msg.id = NetManager.playerID;
+            NetManager.Send(msg);
+            Debug.Log("Send MsgCardData");
         }
     }
 

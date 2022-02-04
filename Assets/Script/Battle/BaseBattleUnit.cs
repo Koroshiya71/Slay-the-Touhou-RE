@@ -67,7 +67,7 @@ public class BaseBattleUnit : MonoBehaviour
         UpdateUI();
         if (currentHp <= 0)
         {
-            CheckDieEffect(source);
+            CheckDieEffect(this);
             Die();
             return true;
         }

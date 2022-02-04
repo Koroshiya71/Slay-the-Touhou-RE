@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using GameCore;
+using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
@@ -90,8 +91,78 @@ public class BaseGameScene : MonoBehaviour
                 msg.id = NetManager.playerID;
                 msg.index = GameSceneManager.Instance.inGameSceneList.IndexOf(this);
                 msg.type = sceneData.SceneType;
+                BattleData newBattleData=new BattleData(1);
+                EventData newEventData=new EventData(1);
+                switch (sceneData.SceneType)
+                {
+                    //如果场景类型为普通战斗，则随机选取一个战斗场景数据
+                    case SceneType.NormalCombat:
+                        while (true)
+                        {
+                            newBattleData =
+                                BattleManager.Instance.battleDataDic[
+                                    Random.Range(1, BattleManager.Instance.battleDataDic.Count + 1)];
+                            if (newBattleData.BattleType == BattleType.Normal)
+                                break;
+                        }
+
+                        break;
+                    //如果场景类型为事件，则随机选取一个事件
+                    case SceneType.Event:
+                        newEventData =
+                            GameEventManager.Instance.eventDic[
+                                GameEventManager.Instance.eventIDList1[
+                                    Random.Range(0, GameEventManager.Instance.eventIDList1.Count)]];
+                        gameSceneButton.onClick.AddListener(delegate
+                        {
+                            UIManager.Instance.ShowUI(E_UiId.EventUI);
+                            EventDispatcher.TriggerEvent<int, string>(E_MessageType.ShowEventPage,
+                                eventData.pageDataList[0].pageID, "");
+                        });
+                        break;
+                    //如果场景类型为精英战斗，则随机选取一个精英战斗
+                    case SceneType.EliteCombat:
+                        while (true)
+                        {
+                            newBattleData =
+                                BattleManager.Instance.battleDataDic[
+                                    Random.Range(1, BattleManager.Instance.battleDataDic.Count + 1)];
+                            if (newBattleData.BattleType == BattleType.Elite)
+                                break;
+                        }
+                        break;
+                    //如果是Boss战，则初始化一场Boss战斗
+                    case SceneType.BossCombat:
+                        while (true)
+                        {
+                            newBattleData =
+                                BattleManager.Instance.battleDataDic[
+                                    Random.Range(1, BattleManager.Instance.battleDataDic.Count + 1)];
+                            if (newBattleData.BattleType == BattleType.Boss)
+                                break;
+                        }
+                        break;
+                    default:
+                        while (true)
+                        {
+                            newBattleData =
+                                BattleManager.Instance.battleDataDic[
+                                    Random.Range(1, BattleManager.Instance.battleDataDic.Count + 1)];
+                            if (newBattleData.BattleType == BattleType.Normal)
+                                break;
+                        }
+                        break;
+                }
+
+                Debug.Log(newBattleData.BattleID);
+                msg.battleDataStr = JsonConvert.SerializeObject(newBattleData);
+                msg.eventDataStr = JsonConvert.SerializeObject(newEventData);
+                MultiPlayMsgHandler.currentBattleData = newBattleData;
+                MultiPlayMsgHandler.currentEventData = newEventData;
                 NetManager.Send(msg);
+
             });
+
         }
         //否则直接注册事件
         else

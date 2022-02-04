@@ -85,6 +85,11 @@ public class EventData
         eventID = ID;
 
     }
+
+    public EventData()
+    {
+
+    }
 }
 
 public class EventResultData

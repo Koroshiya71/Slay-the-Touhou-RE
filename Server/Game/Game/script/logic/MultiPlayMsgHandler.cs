@@ -24,6 +24,7 @@ public partial class MsgHandler
             }
 
             PlayerManager.inGamePlayers.Add(newGamePlayers);
+            PlayerManager.waitingMultiPlayers.Clear();
         }
         //否则就让其等待
         else
@@ -51,8 +52,10 @@ public partial class MsgHandler
                     {
                         MsgWaitConfirm msgConfirm = new MsgWaitConfirm();
                         msgConfirm.type = msg.type;
+                        msgConfirm.battleDataStr = msg.battleDataStr;
+                        msgConfirm.eventDataStr = msg.eventDataStr;
+
                         pl.Send(msgConfirm);
-                        Console.WriteLine("Send MsgConfirmWait");
                     }
                 }
             }
@@ -74,7 +77,48 @@ public partial class MsgHandler
                     {
                         MsgEnterScene msgEnter = new MsgEnterScene();
                         msgEnter.type = msg.type;
+
                         pl.Send(msgEnter);
+                    }
+                }
+            }
+        }
+    }
+
+    public static void MsgCardEffect(ClientState c, MsgBase msgBase)
+    {
+        MsgCardEffect msg = (MsgCardEffect) msgBase;
+        //给除自己以外的玩家转发消息
+        foreach (var list in PlayerManager.inGamePlayers)
+        {
+            if (list.Contains(PlayerManager.GetPlayer(msg.id)))
+            {
+                foreach (var pl in list)
+                {
+                    if (pl.id != msg.id)
+                    {
+                        pl.Send(msg);
+                        Console.WriteLine("Send MsgCardEffect");
+                    }
+                }
+            }
+        }
+    }
+
+    public static void MsgUseCard(ClientState c, MsgBase msgBase)
+    {
+        MsgUseCard msg=(MsgUseCard)msgBase;
+        //给除自己以外的玩家转发消息
+        foreach (var list in PlayerManager.inGamePlayers)
+        {
+            if (list.Contains(PlayerManager.GetPlayer(msg.id)))
+            {
+                foreach (var pl in list)
+                {
+                    if (pl.id != msg.id)
+                    {
+                        pl.Send(msg);
+
                     }
                 }
             }
