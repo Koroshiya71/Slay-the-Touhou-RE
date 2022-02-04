@@ -371,6 +371,7 @@ public class BattleManager : UnitySingleton<BattleManager>
             return;
         }
 
+        Debug.Log(GetBattleUnitIndex(target));
         switch (effectID)
         {
             //对目标造成单体伤害
@@ -403,15 +404,7 @@ public class BattleManager : UnitySingleton<BattleManager>
                         break;
 
                 }
-                if (isCanXin==0)
-                {
-                    break;
-                }
-
-                if (isCanXin==2)
-                {
-                    
-                }
+             
 
                 break;
             //残心：对随机敌人造成伤害
@@ -595,7 +588,43 @@ public class BattleManager : UnitySingleton<BattleManager>
     {
         return currentTurnCombo >= combo;
     }
+    //根据战斗单位获取其下标
+    public int GetBattleUnitIndex(BaseBattleUnit unit)
+    {
+        //如果是玩家本身则返回-2
+        if (unit == Player.Instance)
+        {
+            return -2;
+        }
+        //如果是同步玩家返回-1
+        else if (GameManager.Instance.isMulti&&unit==SyncPlayer.Instance)
+        {
+            return -1;
+        }
+        //否则直接取敌人下标
+        else
+        {
+            return inBattleEnemyList.IndexOf((Enemy)unit);
+        }
+    }
+    //根据下标获取战斗单位
+    public BaseBattleUnit GetBattleUnitByIndex(int index)
+    {
+        if (index>inBattleEnemyList.Count)
+        {
+            return null;
+        }
+        switch (index)
+        {
+            case -2:
+                return Player.Instance;
+            case -1:
+                return SyncPlayer.Instance;
+            default:
+                return BattleManager.Instance.inBattleEnemyList[index];
+        }
 
+    }
     private void Update()
     {
     }

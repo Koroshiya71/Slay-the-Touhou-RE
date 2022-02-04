@@ -53,3 +53,14 @@ public class MsgEnterScene : MsgBase
     public MsgEnterScene() { protoName = "MsgEnterScene"; }
     public SceneType type;
 }
+
+//使用卡牌消息
+public class MsgUseCard : MsgBase
+{
+    public MsgUseCard() { protoName = "MsgUseCard"; }
+    public int effectID;
+    public int effectValue;
+    public int targetIndex = 0;
+    public int isCanXin = 0;
+    public bool isLianZhan = false;
+}
