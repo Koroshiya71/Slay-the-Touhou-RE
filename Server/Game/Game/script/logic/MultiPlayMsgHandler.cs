@@ -186,5 +186,46 @@ public partial class MsgHandler
             }
         }
     }
-    
+    public static void MsgTurnEnd(ClientState c, MsgBase msgBase)
+    {
+        MsgTurnEnd msg = (MsgTurnEnd)msgBase;
+        //标记该玩家回合完成
+        PlayerManager.GetPlayer(msg.id).TurnState = true;
+        //自己所在组的所有玩家都读取完成了就给所有玩家发送TurnFin消息，否则给该玩家发送TurnWait消息
+        int flag = 1;
+        foreach (var list in PlayerManager.inGamePlayers)
+        {
+            if (list.Contains(PlayerManager.GetPlayer(msg.id)))
+            {
+                foreach (var pl in list)
+                {
+                    //只要有一个玩家没读取完就置flag为0
+                    if (!pl.TurnState)
+                    {
+                        flag = 0;
+                    }
+                }
+            }
+        }
+
+        if (flag == 1)
+        {
+            foreach (var list in PlayerManager.inGamePlayers)
+            {
+                if (list.Contains(PlayerManager.GetPlayer(msg.id)))
+                {
+                    foreach (var pl in list)
+                    {
+                        MsgLoadEnd msgLoadEnd = new MsgLoadEnd();
+                        pl.Send(msgLoadEnd);
+                    }
+                }
+            }
+        }
+        else
+        {
+            PlayerManager.GetPlayer(msg.id).Send(new MsgLoadWait());
+        }
+    }
+
 }

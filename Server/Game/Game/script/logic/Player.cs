@@ -7,8 +7,9 @@ public class Player {
 	public ClientState state;
 	//读取情况
     public bool LoadState = false;
-	
-	//构造函数
+	//回合完成情况
+    public bool TurnState = false;
+    //构造函数
 	public Player(ClientState state){
 		this.state = state;
 	}

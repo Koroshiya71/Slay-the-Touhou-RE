@@ -59,6 +59,8 @@ public class MultiPlayMsgHandler : UnitySingleton<MultiPlayMsgHandler>
         NetManager.AddMsgListener("MsgLoadWait", OnMsgLoadWait);
         NetManager.AddMsgListener("MsgLoadEnd", OnMsgLoadEnd);
         NetManager.AddMsgListener("MsgSendSceneType", OnMsgSendSceneType);
+        NetManager.AddMsgListener("MsgTurnWait", OnMsgTurnWait);
+        NetManager.AddMsgListener("MsgTurnFin", OnMsgTurnFin);
 
 
         NetManager.AddEventListener(NetManager.NetEvent.ConnectSucc, OnConnectSucc);
@@ -228,6 +230,7 @@ public class MultiPlayMsgHandler : UnitySingleton<MultiPlayMsgHandler>
     {
         //等待别人
         EventDispatcher.TriggerEvent(E_MessageType.MultWaitLoad);
+        Debug.Log("LoadWait");
     }
     //等待读取完毕
     public void OnMsgLoadEnd(MsgBase msgBase)
@@ -240,5 +243,15 @@ public class MultiPlayMsgHandler : UnitySingleton<MultiPlayMsgHandler>
     {
         MsgSendSceneType msg = (MsgSendSceneType) msgBase;
         GameSceneManager.Instance.multScenes = JsonConvert.DeserializeObject<List<SceneType>>(msg.sceneTypeListStr);
+    }
+    //等待回合结束
+    public void OnMsgTurnWait(MsgBase msgBase)
+    {
+        EventDispatcher.TriggerEvent(E_MessageType.MultTurnWait);
+    }
+    //回合完成
+    public void OnMsgTurnFin(MsgBase msgBase)
+    {
+        StartCoroutine(BattleManager.Instance.TurnEnd());
     }
 }

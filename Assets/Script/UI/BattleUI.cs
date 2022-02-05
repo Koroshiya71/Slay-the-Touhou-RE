@@ -18,7 +18,8 @@ public class BattleUI : BaseUI
     //弃牌堆
     private Button btn_ShowDiscard;
     private Text text_ShowDiscard;
-
+    //等待面板
+    private GameObject waitBox;
     protected override void InitUiOnAwake()
     {
         base.InitUiOnAwake();
@@ -32,6 +33,8 @@ public class BattleUI : BaseUI
         btn_ShowDiscard = GameTool.GetTheChildComponent<Button>(gameObject, "Btn_ShowDisCard");
         text_ShowDiscard = GameTool.GetTheChildComponent<Text>(btn_ShowDiscard.gameObject, "Text_Num");
 
+        waitBox=GameObject.Find("WaitBox");
+        waitBox.SetActive(false);
         //查看抽牌堆
         btn_ShowDrawCard.onClick.AddListener(delegate
         {
@@ -110,6 +113,14 @@ public class BattleUI : BaseUI
             text_TurnChange.text = "敌人回合";
             StartCoroutine(TurnUpdate(false));
 
+        });
+        EventDispatcher.AddListener(E_MessageType.MultTurnWait, delegate
+        {
+            waitBox.SetActive(true);
+        });
+        EventDispatcher.AddListener(E_MessageType.TurnEnd, delegate
+        {
+            waitBox.SetActive(false);
         });
     }
     //启用/禁用回合结束按钮

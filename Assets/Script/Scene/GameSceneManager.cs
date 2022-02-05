@@ -26,7 +26,6 @@ public class GameSceneManager : UnitySingleton<GameSceneManager>
     //初始化游戏场景管理器
     public void InitGameSceneManager()
     {
-        Debug.Log(123);
         //获取游戏场景预制体等
         gameScenePrefab = ResourcesManager.Instance.LoadResources<GameObject>("Prefabs/" + "Scene/" + "GameScene");
         maxSceneNum = 20;
@@ -36,7 +35,6 @@ public class GameSceneManager : UnitySingleton<GameSceneManager>
         //生成场景
         for (int i = 0; i < 120; i++)
         {
-            Debug.Log(111);
 
             GameObject newSceneGO = Instantiate(gameScenePrefab);
             if (SaveManager.isLoad)
@@ -49,7 +47,6 @@ public class GameSceneManager : UnitySingleton<GameSceneManager>
                 newScene.ChangeGameSceneState(false);
 
             }
-            Debug.Log(111);
 
             //如果是多人游戏则获取场景类型列表
             if (GameManager.Instance.isMulti)
@@ -57,21 +54,13 @@ public class GameSceneManager : UnitySingleton<GameSceneManager>
                 var newScene = newSceneGO.GetComponent<BaseGameScene>();
                 newScene.sceneData = new SceneData(i);
                 newScene.sceneData.sceneType = multScenes[i];
-                Debug.Log(newScene.sceneData.sceneType);
-
-
                 newScene.ResetSprite();
-                Debug.Log(1);
-
 
                 newScene.ChangeGameSceneState(false);
-                Debug.Log(1);
 
             }
-            Debug.Log(111);
 
             newSceneGO.transform.SetParent(contentParent);
-            Debug.Log(111);
 
             newSceneGO.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
             newSceneGO.transform.position = new Vector2(220 + i % 6 * 300, 100 + i / 6 * 200);

@@ -51,7 +51,6 @@ public class MainUI : BaseUI
         if (isMulti)
         {
             GameManager.Instance.isMulti = true;
-            NetManager.Send(new MsgLoadOK() { id = NetManager.playerID });
         }
         SceneController.Instance.LoadSceneAsync("GameScene", delegate
         {
@@ -63,6 +62,11 @@ public class MainUI : BaseUI
             {
 
 
+            }
+
+            if (isMulti)
+            {
+                NetManager.Send(new MsgLoadOK() { id = NetManager.playerID });
             }
         });
     }

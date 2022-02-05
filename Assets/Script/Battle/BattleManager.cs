@@ -176,12 +176,22 @@ public class BattleManager : UnitySingleton<BattleManager>
         }
 
         UpdateCardAndActionValue();
-    }
+    }               
 
     //回合结束按钮点击回调
     public void OnTurnEndButtonDown()
     {
-        StartCoroutine(TurnEnd());
+        //如果是多人游戏则发送回合结束消息
+        if (GameManager.Instance.isMulti)
+        {
+            MsgTurnEnd msg = new MsgTurnEnd();
+            msg.id = NetManager.playerID;
+            NetManager.Send(msg);
+        }
+        else
+        {
+            StartCoroutine(TurnEnd());
+        }
     }
 
     //回合结束携程

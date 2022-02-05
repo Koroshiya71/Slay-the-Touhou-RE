@@ -50,7 +50,6 @@ public class BaseGameScene : MonoBehaviour
     //重新获取场景图片
     public virtual void ResetSprite()
     {
-        Debug.Log(12);
         switch (sceneData.sceneType)
         {
             case SceneType.NormalCombat:
@@ -72,10 +71,8 @@ public class BaseGameScene : MonoBehaviour
                 sceneData.resourcePath = "Image/" + "UIImage/" + "GameScene/" + "Event";
                 break;
         }
-        Debug.Log(12);
 
         sceneImage.sprite = ResourcesManager.Instance.LoadResources<Sprite>(sceneData.ResourcePath);
-        Debug.Log(12);
 
     }
 

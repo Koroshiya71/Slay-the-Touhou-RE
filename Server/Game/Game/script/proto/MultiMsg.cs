@@ -157,3 +157,33 @@ public class MsgSendSceneType : MsgBase
     public string id;
     public string sceneTypeListStr;
 }
+//点击回合结束
+public class MsgTurnEnd : MsgBase
+{
+    public MsgTurnEnd()
+    {
+        protoName = "MsgTurnEnd";
+    }
+
+    public string id;
+
+}
+//等待对方回合结束
+public class MsgTurnWait : MsgBase
+{
+    public MsgTurnWait()
+    {
+        protoName = "MsgTurnWait";
+    }
+
+    public string id;
+}
+//回合完成
+public class MsgTurnFin : MsgBase
+{
+    public MsgTurnFin()
+    {
+        protoName = "MsgTurnFin";
+    }
+    public string id;
+}

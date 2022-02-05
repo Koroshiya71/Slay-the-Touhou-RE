@@ -27,6 +27,7 @@ public enum E_MessageType
     MultChooseScene,//选择场景
     MultEnterScene,//进入场景,
     MultWaitLoad,//等待队友读取
+    MultTurnWait,//等待队友回合结束
 }
 //物品的分类
 //public enum E_GoodsType
