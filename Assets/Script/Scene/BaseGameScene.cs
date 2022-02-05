@@ -50,7 +50,8 @@ public class BaseGameScene : MonoBehaviour
     //重新获取场景图片
     public virtual void ResetSprite()
     {
-        switch (sceneData.SceneType)
+        Debug.Log(12);
+        switch (sceneData.sceneType)
         {
             case SceneType.NormalCombat:
                 sceneData.resourcePath = "Image/" + "UIImage/" + "GameScene/" + "NormalCombat";
@@ -71,8 +72,11 @@ public class BaseGameScene : MonoBehaviour
                 sceneData.resourcePath = "Image/" + "UIImage/" + "GameScene/" + "Event";
                 break;
         }
+        Debug.Log(12);
 
         sceneImage.sprite = ResourcesManager.Instance.LoadResources<Sprite>(sceneData.ResourcePath);
+        Debug.Log(12);
+
     }
 
     //根据事件类型注册事件
@@ -90,10 +94,10 @@ public class BaseGameScene : MonoBehaviour
                 MsgChooseScene msg = new MsgChooseScene();
                 msg.id = NetManager.playerID;
                 msg.index = GameSceneManager.Instance.inGameSceneList.IndexOf(this);
-                msg.type = sceneData.SceneType;
+                msg.type = sceneData.sceneType;
                 BattleData newBattleData=new BattleData(1);
                 EventData newEventData=new EventData(1);
-                switch (sceneData.SceneType)
+                switch (sceneData.sceneType)
                 {
                     //如果场景类型为普通战斗，则随机选取一个战斗场景数据
                     case SceneType.NormalCombat:
@@ -167,7 +171,7 @@ public class BaseGameScene : MonoBehaviour
         //否则直接注册事件
         else
         {
-            switch (sceneData.SceneType)
+            switch (sceneData.sceneType)
             {
                 //如果场景类型为普通战斗，则随机选取一个战斗场景数据
                 case SceneType.NormalCombat:
@@ -266,7 +270,7 @@ public class BaseGameScene : MonoBehaviour
     {
     }
 
-    protected virtual void Start()
+    protected virtual void Awake()
     {
         InitGameScene();
     }

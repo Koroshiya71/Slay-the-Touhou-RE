@@ -20,13 +20,9 @@ public class SceneData
 
 
     //场景类型
-    private SceneType sceneType;
+    public SceneType sceneType;
 
-    public SceneType SceneType
-    {
-        get { return sceneType; }
-        set { sceneType = value; }
-    }
+    
     //图片素材路径
     public string resourcePath;
     public string ResourcePath => resourcePath;
@@ -75,7 +71,7 @@ public class SceneData
             }
         }
 
-        switch (SceneType)
+        switch (sceneType)
         {
             case SceneType.NormalCombat:
                 resourcePath = "Image/" + "UIImage/" + "GameScene/" + "NormalCombat";
@@ -97,5 +93,5 @@ public class SceneData
                 break;
         }
     }
-
+    
 }

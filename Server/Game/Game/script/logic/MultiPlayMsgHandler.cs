@@ -118,10 +118,73 @@ public partial class MsgHandler
                     if (pl.id != msg.id)
                     {
                         pl.Send(msg);
-
                     }
                 }
             }
         }
     }
+    
+    public static void MsgLoadOK(ClientState c, MsgBase msgBase)
+    {
+        MsgLoadOK msg = (MsgLoadOK)msgBase;
+        //标记该玩家读取完成
+        PlayerManager.GetPlayer(msg.id).LoadState = true;
+        //自己所在组的所有玩家都读取完成了就给所有玩家发送LoadEnd消息，否则给该发送LoadWait消息
+        int flag = 1;
+        foreach (var list in PlayerManager.inGamePlayers)
+        {
+            if (list.Contains(PlayerManager.GetPlayer(msg.id)))
+            {
+                foreach (var pl in list)
+                {
+                    //只要有一个玩家没读取完就置flag为0
+                    if (!pl.LoadState)
+                    {
+                        flag = 0;
+                    }
+                }
+            }
+        }
+
+        if (flag==1)
+        {
+            foreach (var list in PlayerManager.inGamePlayers)
+            {
+                if (list.Contains(PlayerManager.GetPlayer(msg.id)))
+                {
+                    foreach (var pl in list)
+                    {
+                        MsgLoadEnd msgLoadEnd = new MsgLoadEnd();
+                        pl.Send(msgLoadEnd);
+                    }
+                }
+            }
+        }
+        else
+        {
+            PlayerManager.GetPlayer(msg.id).Send(new MsgLoadWait());
+        }
+    }
+
+    public static void MsgSendSceneType(ClientState c, MsgBase msgBase)
+    {
+        MsgSendSceneType msg=(MsgSendSceneType)msgBase;
+
+        //给其他玩家同步场景信息
+        foreach (var list in PlayerManager.inGamePlayers)
+        {
+            if (list.Contains(PlayerManager.GetPlayer(msg.id)))
+            {
+                foreach (var pl in list)
+                {
+                    if (pl.id != msg.id)
+                    {
+                        pl.Send(msg);
+                        Console.WriteLine(msg.id+(":Send SceneType"));
+                    }
+                }
+            }
+        }
+    }
+    
 }

@@ -308,5 +308,8 @@ public class GameManager : UnitySingleton<GameManager>
     //游戏结束时自动断开连接
     private void OnApplicationQuit()
     {
+        NetManager.Close();
     }
+
+    
 }

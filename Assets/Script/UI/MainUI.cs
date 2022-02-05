@@ -48,14 +48,16 @@ public class MainUI : BaseUI
     //加载游戏场景
     private void LoadGameScene(bool isMulti=false)
     {
+        if (isMulti)
+        {
+            GameManager.Instance.isMulti = true;
+            NetManager.Send(new MsgLoadOK() { id = NetManager.playerID });
+        }
         SceneController.Instance.LoadSceneAsync("GameScene", delegate
         {
             UIManager.Instance.ShowUI(E_UiId.GameMainUI);
             UIManager.Instance.ShowUI(E_UiId.MapUI);
-            if (isMulti)
-            {
-                GameManager.Instance.isMulti = true;
-            }
+            
 
             if (!SaveManager.Instance.isOffline)
             {

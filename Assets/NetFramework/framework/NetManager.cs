@@ -145,7 +145,7 @@ public static class NetManager {
 		//监听PONG协议
 		if(!msgListeners.ContainsKey("MsgPong")){
 			AddMsgListener("MsgPong", OnMsgPong);
-		}
+        }
 	}
 
 	//Connect回调

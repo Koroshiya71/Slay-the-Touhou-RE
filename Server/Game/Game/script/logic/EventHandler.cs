@@ -6,8 +6,7 @@ public partial class EventHandler
 		Console.WriteLine("Close");
 		//Player下线
 		if(c.player != null){
-			//保存数据
-			DbManager.UpdatePlayerData(c.player.id, c.player.data.playerDataStr);
+			
 			//移除
 			PlayerManager.RemovePlayer(c.player.id);
 		}

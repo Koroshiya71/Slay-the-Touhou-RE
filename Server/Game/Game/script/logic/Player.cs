@@ -5,6 +5,9 @@ public class Player {
 	public string id = "";
 	//指向ClientState
 	public ClientState state;
+	//读取情况
+    public bool LoadState = false;
+	
 	//构造函数
 	public Player(ClientState state){
 		this.state = state;

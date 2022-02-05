@@ -42,7 +42,7 @@ public class SaveData
 
         foreach (var sceneType in GameSceneManager.Instance.inGameSceneList)
         {
-            sceneTypeList.Add(sceneType.sceneData.SceneType);
+            sceneTypeList.Add(sceneType.sceneData.sceneType);
         }
 
         mapLayer = GameSceneManager.Instance.currentLayer;

@@ -99,6 +99,8 @@ public void ShowConfirmBox(SceneType type)
         EventDispatcher.AddListener(E_MessageType.MultChooseScene, delegate
         {
             waitBox.SetActive(true);
+            waitBox.GetComponentInChildren<Text>().text = "等待伙伴确认...";
+
         });
 
         EventDispatcher.AddListener(E_MessageType.MultEnterScene, delegate
@@ -106,12 +108,17 @@ public void ShowConfirmBox(SceneType type)
             waitBox.SetActive(false);
             confirmBox.SetActive(false);
         });
+        EventDispatcher.AddListener(E_MessageType.MultWaitLoad, delegate
+        {
+            waitBox.SetActive(true);
+            waitBox.GetComponentInChildren<Text>().text = "等待伙伴载入...";
+        });
     }
 
     protected override void Awake()
     {
         base.Awake();
         EventDispatcher.TriggerEvent(E_MessageType.GameStart);
-
+       
     }
 }

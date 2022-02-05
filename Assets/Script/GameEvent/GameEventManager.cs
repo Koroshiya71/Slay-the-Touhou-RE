@@ -158,7 +158,10 @@ public class GameEventManager : UnitySingleton<GameEventManager>
             }
 
         }
+        Debug.Log(12);
         EventDispatcher.TriggerEvent(E_MessageType.InitGameSceneManager);
+        Debug.Log(1234);
+
     }
     void Start()
     {

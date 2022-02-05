@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class MultiPlayMsgHandler : UnitySingleton<MultiPlayMsgHandler>
 {
-    //当前决策的场景类型吧
+    //当前决策的场景类型
     public static SceneType chosenSceneType;
     //当前所选的战斗数据和事件数据
     public static BattleData currentBattleData;
@@ -22,6 +22,18 @@ public class MultiPlayMsgHandler : UnitySingleton<MultiPlayMsgHandler>
     public void OnMsgMultiWait(MsgBase msgBase)
     {
         EventDispatcher.TriggerEvent(E_MessageType.MultiWait);
+        //生成场景
+        for (int i = 0; i < 120; i++)
+        {
+            if (i < 6)
+            {
+                GameSceneManager.Instance.multScenes.Add(SceneType.NormalCombat);
+            }
+            else
+            {
+                GameSceneManager.Instance.multScenes.Add(GameSceneManager.GetRandomSceneType());
+            }
+        }
     }
 
 
@@ -44,6 +56,10 @@ public class MultiPlayMsgHandler : UnitySingleton<MultiPlayMsgHandler>
         NetManager.AddMsgListener("MsgEnterScene", OnMsgEnterScene);
         NetManager.AddMsgListener("MsgCardEffect",OnMsgCardEffect);
         NetManager.AddMsgListener("MsgUseCard", OnMsgUseCard);
+        NetManager.AddMsgListener("MsgLoadWait", OnMsgLoadWait);
+        NetManager.AddMsgListener("MsgLoadEnd", OnMsgLoadEnd);
+        NetManager.AddMsgListener("MsgSendSceneType", OnMsgSendSceneType);
+
 
         NetManager.AddEventListener(NetManager.NetEvent.ConnectSucc, OnConnectSucc);
         NetManager.AddEventListener(NetManager.NetEvent.ConnectFail, OnConnectFail);
@@ -124,6 +140,16 @@ public class MultiPlayMsgHandler : UnitySingleton<MultiPlayMsgHandler>
     public void OnMsgMultiEnter(MsgBase msgBase)
     {
         Debug.Log("Enter Game");
+        if (GameSceneManager.Instance.multScenes.Count>0)
+        {
+            MsgSendSceneType msg = new MsgSendSceneType();
+            msg.id = NetManager.playerID;
+            msg.sceneTypeListStr = JsonConvert.SerializeObject(GameSceneManager.Instance.multScenes);
+            NetManager.Send(msg);
+            Debug.Log(NetManager.playerID+"：Send SceneTypeData");
+            Debug.Log(msg.sceneTypeListStr.Length);
+        }
+
         EventDispatcher.TriggerEvent(E_MessageType.MultiGameStart);
     }
 
@@ -196,5 +222,23 @@ public class MultiPlayMsgHandler : UnitySingleton<MultiPlayMsgHandler>
     {
         MsgUseCard msg = (MsgUseCard) msgBase;
         SyncPlayer.currentTurnCombo++;
+    }
+    //读取等待协议
+    public void OnMsgLoadWait(MsgBase msgBase)
+    {
+        //等待别人
+        EventDispatcher.TriggerEvent(E_MessageType.MultWaitLoad);
+    }
+    //等待读取完毕
+    public void OnMsgLoadEnd(MsgBase msgBase)
+    {
+        //取消等待框显示
+        EventDispatcher.TriggerEvent(E_MessageType.MultEnterScene);
+    }
+    //读取场景数据
+    public void OnMsgSendSceneType(MsgBase msgBase)
+    {
+        MsgSendSceneType msg = (MsgSendSceneType) msgBase;
+        GameSceneManager.Instance.multScenes = JsonConvert.DeserializeObject<List<SceneType>>(msg.sceneTypeListStr);
     }
 }

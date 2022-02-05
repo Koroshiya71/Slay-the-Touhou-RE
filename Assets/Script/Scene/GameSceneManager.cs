@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using GameCore;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class GameSceneManager : UnitySingleton<GameSceneManager>
 {
@@ -20,9 +21,12 @@ public class GameSceneManager : UnitySingleton<GameSceneManager>
     public List<BaseGameScene> inGameSceneList = new List<BaseGameScene>();
     //游戏中的Boss场景
     public BossGameScene bossScene;
+    //多人共用场景列表
+    public List<SceneType> multScenes=new List<SceneType>();
     //初始化游戏场景管理器
     public void InitGameSceneManager()
     {
+        Debug.Log(123);
         //获取游戏场景预制体等
         gameScenePrefab = ResourcesManager.Instance.LoadResources<GameObject>("Prefabs/" + "Scene/" + "GameScene");
         maxSceneNum = 20;
@@ -32,18 +36,43 @@ public class GameSceneManager : UnitySingleton<GameSceneManager>
         //生成场景
         for (int i = 0; i < 120; i++)
         {
+            Debug.Log(111);
+
             GameObject newSceneGO = Instantiate(gameScenePrefab);
             if (SaveManager.isLoad)
             {
                 var newScene = newSceneGO.GetComponent<BaseGameScene>();
-                newScene.sceneData.SceneType = SaveManager.Instance.saveData.sceneTypeList[i];
+                newScene.sceneData.sceneType = SaveManager.Instance.saveData.sceneTypeList[i];
                 newScene.ResetSprite();
                 currentLayer = SaveManager.Instance.saveData.mapLayer;
                 lastIndex = SaveManager.Instance.saveData.mapIndex;
                 newScene.ChangeGameSceneState(false);
 
             }
+            Debug.Log(111);
+
+            //如果是多人游戏则获取场景类型列表
+            if (GameManager.Instance.isMulti)
+            {
+                var newScene = newSceneGO.GetComponent<BaseGameScene>();
+                newScene.sceneData = new SceneData(i);
+                newScene.sceneData.sceneType = multScenes[i];
+                Debug.Log(newScene.sceneData.sceneType);
+
+
+                newScene.ResetSprite();
+                Debug.Log(1);
+
+
+                newScene.ChangeGameSceneState(false);
+                Debug.Log(1);
+
+            }
+            Debug.Log(111);
+
             newSceneGO.transform.SetParent(contentParent);
+            Debug.Log(111);
+
             newSceneGO.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
             newSceneGO.transform.position = new Vector2(220 + i % 6 * 300, 100 + i / 6 * 200);
         }
@@ -85,6 +114,36 @@ public class GameSceneManager : UnitySingleton<GameSceneManager>
         {
             bossScene.ChangeGameSceneState(false);
         }
+    }
+
+    //获取随机事件类型
+    public static SceneType GetRandomSceneType()
+    {
+        int sceneSeed = Random.Range(0, 5);
+        SceneType sceneType;
+        switch (sceneSeed)
+        {
+            case 0:
+                sceneType = SceneType.NormalCombat;
+                break;
+            case 1:
+                sceneType = SceneType.EliteCombat;
+                break;
+            case 2:
+                sceneType = SceneType.Store;
+                break;
+            case 3:
+                sceneType = SceneType.Event;
+                break;
+            case 4:
+                sceneType = SceneType.Lounge;
+                break;
+            default:
+                sceneType = SceneType.NormalCombat;
+                break;
+        }
+
+        return sceneType;
     }
     void Start()
     {
