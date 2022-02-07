@@ -71,10 +71,10 @@ public partial class MsgHandler {
 
     }
 	//保存协议
-	public static void MsgSave(ClientState c, MsgBase msgBase)
+	public static void MsgSaveData(ClientState c, MsgBase msgBase)
     {
         Console.WriteLine("MsgSave");
-        MsgSave msgSave = (MsgSave)msgBase;
+        MsgSaveData msgSave = (MsgSaveData)msgBase;
         PlayerManager.GetPlayer(msgSave.id).data.playerDataStr = msgSave.saveData;
         DbManager.UpdatePlayerData(msgSave.id, msgSave.saveData);
     }

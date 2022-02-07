@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using GameCore;
+using NetFramework.proto;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
@@ -89,6 +90,7 @@ public class BattleManager : UnitySingleton<BattleManager>
         {
             SyncPlayer.Instance.gameObject.SetActive(false);
         }
+
         //初始化牌库
         DeskManager.Instance.ResetDesks();
         //战斗金币数归零
@@ -176,7 +178,7 @@ public class BattleManager : UnitySingleton<BattleManager>
         }
 
         UpdateCardAndActionValue();
-    }               
+    }
 
     //回合结束按钮点击回调
     public void OnTurnEndButtonDown()
@@ -229,14 +231,20 @@ public class BattleManager : UnitySingleton<BattleManager>
     }
 
     //触发敌人行动效果
-    public void TriggerActionEffect(BaseBattleUnit unit, ActionData actData)
+    public void TriggerActionEffect(BaseBattleUnit unit, ActionData actData, bool toSync = false, bool isSync = false)
     {
         switch (actData.ActionID)
         {
             //对玩家造成value点伤害
             case 1001:
             case 2001:
-                Player.Instance.TakeDamage(actData.actualValue[0], unit);
+                if (toSync)
+                {
+                    SyncPlayer.Instance.TakeDamage(actData.actualValue[0], unit);
+                }
+                else
+                    Player.Instance.TakeDamage(actData.actualValue[0], unit);
+
                 break;
             //自身获得value层灵体
             case 1002:
@@ -252,22 +260,36 @@ public class BattleManager : UnitySingleton<BattleManager>
             //给予目标value层重伤
             case 1005:
                 break;
-            //给予自身value层护甲重伤
+            //给予自身value层亡语重伤
             case 1006:
                 StateManager.AddStateToTarget(unit, 1004, actData.actualValue[0]);
                 break;
             //造成自身当前value%生命值的伤害
             case 1007:
-                Player.Instance.TakeDamage(Convert.ToInt32(actData.actualValue[0]* unit.currentHp*0.01f ), unit);
+                if (toSync)
+                {
+                    SyncPlayer.Instance.TakeDamage(Convert.ToInt32(actData.actualValue[0] * unit.currentHp * 0.01f),
+                        unit);
+                }
+                else
+                    Player.Instance.TakeDamage(Convert.ToInt32(actData.actualValue[0] * unit.currentHp * 0.01f), unit);
+
                 break;
             //回复value%生命值，获得value2层灵体
             case 1008:
-                unit.Heal((int)(actData.actualValue[0] * 0.01f * unit.maxHp));
-                StateManager.AddStateToTarget(unit,1002, actData.actualValue[1]);
+                unit.Heal((int) (actData.actualValue[0] * 0.01f * unit.maxHp));
+                StateManager.AddStateToTarget(unit, 1002, actData.actualValue[1]);
                 break;
             //对目标造成value点伤害并附加value2层恐慌
             case 1009:
-                Player.Instance.TakeDamage(actData.actualValue[0] , unit);
+                if (toSync)
+                {
+                    SyncPlayer.Instance.TakeDamage(actData.actualValue[0], unit);
+                }
+                else
+                { 
+                    Player.Instance.TakeDamage(actData.actualValue[0], unit);
+                }
                 StateManager.AddStateToTarget(Player.Instance, 1002, actData.actualValue[1]);
                 break;
             //获得value层返魂碟
@@ -352,7 +374,6 @@ public class BattleManager : UnitySingleton<BattleManager>
 
             enemy.UpdateUI();
         }
-
     }
 
     //根据效果类型更新卡牌UI
@@ -368,7 +389,7 @@ public class BattleManager : UnitySingleton<BattleManager>
 
     //根据卡牌效果ID和效果值触发效果
     public void TakeCardEffect(int effectID, int effectValue, BaseBattleUnit target = null, int isCanXin = 0,
-        bool isLianZhan = false,bool isSync=false)
+        bool isLianZhan = false, bool isSync = false)
     {
         //如果没有特别指定目标则默认指定当前选中的目标
         if (target == null)
@@ -382,7 +403,7 @@ public class BattleManager : UnitySingleton<BattleManager>
             return;
         }
 
-        int targetIndex=GetBattleUnitIndex(target);
+        int targetIndex = GetBattleUnitIndex(target);
         switch (effectID)
         {
             //对目标造成单体伤害
@@ -408,14 +429,13 @@ public class BattleManager : UnitySingleton<BattleManager>
                     case 0:
                         break;
                     case 1:
-                        turnStartEffectDelegate += delegate { EditEnergy(currentEnergy+effectValue); };
+                        turnStartEffectDelegate += delegate { EditEnergy(currentEnergy + effectValue); };
                         break;
                     case 2:
                         EditEnergy(currentEnergy + effectValue);
                         break;
-
                 }
-             
+
 
                 break;
             //残心：对随机敌人造成伤害
@@ -424,6 +444,7 @@ public class BattleManager : UnitySingleton<BattleManager>
                 {
                     break;
                 }
+
                 switch (isCanXin)
                 {
                     case 0:
@@ -434,8 +455,7 @@ public class BattleManager : UnitySingleton<BattleManager>
                             target = BattleManager.Instance.inBattleEnemyList[
                                 Random.Range(0, BattleManager.Instance.inBattleEnemyList.Count)];
                             targetIndex = GetBattleUnitIndex(target);
-                            TakeCardEffect(1001,effectValue,target);
-
+                            TakeCardEffect(1001, effectValue, target);
                         };
                         break;
                     case 2:
@@ -472,6 +492,7 @@ public class BattleManager : UnitySingleton<BattleManager>
                 {
                     break;
                 }
+
                 for (int i = 0; i < effectValue; i++)
                 {
                     DeskManager.Instance.DrawCard();
@@ -480,7 +501,7 @@ public class BattleManager : UnitySingleton<BattleManager>
                 break;
             //如果是本回合使用的第一张牌，对目标造成伤害
             case 1011:
-                if (isSync&&SyncPlayer.currentTurnCombo==0)
+                if (isSync && SyncPlayer.currentTurnCombo == 0)
                 {
                     target.TakeDamage(effectValue, Player.Instance);
                 }
@@ -489,7 +510,7 @@ public class BattleManager : UnitySingleton<BattleManager>
                     target.TakeDamage(effectValue, Player.Instance);
                 }
 
-                Debug.Log(currentTurnCombo+":"+SyncPlayer.currentTurnCombo);
+                Debug.Log(currentTurnCombo + ":" + SyncPlayer.currentTurnCombo);
                 break;
             //附加起势
             case 1012:
@@ -501,6 +522,7 @@ public class BattleManager : UnitySingleton<BattleManager>
                 {
                     break;
                 }
+
                 int count = 3000;
                 while (true)
                 {
@@ -512,6 +534,7 @@ public class BattleManager : UnitySingleton<BattleManager>
                     {
                         continue;
                     }
+
                     CardData cardData = DeskManager.Instance.drawCardDeskList[drawIndex];
 
                     foreach (var eff in cardData.cardEffectDic.Values)
@@ -523,14 +546,17 @@ public class BattleManager : UnitySingleton<BattleManager>
                             break;
                         }
                     }
+
                     if (get)
                     {
                         break;
                     }
+
                     if (DeskManager.Instance.disCardDeskList.Count <= 0)
                     {
                         continue;
                     }
+
                     cardData = DeskManager.Instance.disCardDeskList[disIndex];
 
                     foreach (var eff in cardData.cardEffectDic.Values)
@@ -558,8 +584,9 @@ public class BattleManager : UnitySingleton<BattleManager>
             default:
                 break;
         }
+
         //如果正在多人游戏则发送使用卡牌消息
-        if (GameManager.Instance.isMulti&&!isSync)
+        if (GameManager.Instance.isMulti && !isSync)
         {
             MsgCardEffect msg = new MsgCardEffect();
             msg.effectValue = effectValue;
@@ -632,6 +659,7 @@ public class BattleManager : UnitySingleton<BattleManager>
     {
         return currentTurnCombo >= combo;
     }
+
     //根据战斗单位获取其下标
     public int GetBattleUnitIndex(BaseBattleUnit unit)
     {
@@ -641,23 +669,25 @@ public class BattleManager : UnitySingleton<BattleManager>
             return -2;
         }
         //如果是同步玩家返回-1
-        else if (GameManager.Instance.isMulti&&unit==SyncPlayer.Instance)
+        else if (GameManager.Instance.isMulti && unit == SyncPlayer.Instance)
         {
             return -1;
         }
         //否则直接取敌人下标
         else
         {
-            return inBattleEnemyList.IndexOf((Enemy)unit);
+            return inBattleEnemyList.IndexOf((Enemy) unit);
         }
     }
+
     //根据下标获取战斗单位
     public BaseBattleUnit GetBattleUnitByIndex(int index)
     {
-        if (index>inBattleEnemyList.Count)
+        if (index > inBattleEnemyList.Count)
         {
             return null;
         }
+
         switch (index)
         {
             case -2:
@@ -667,8 +697,8 @@ public class BattleManager : UnitySingleton<BattleManager>
             default:
                 return BattleManager.Instance.inBattleEnemyList[index];
         }
-
     }
+
     private void Update()
     {
     }

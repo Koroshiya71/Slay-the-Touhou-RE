@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using GameCore;
+using NetFramework.proto;
 using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.UI;
@@ -161,7 +162,7 @@ public class BaseGameScene : MonoBehaviour
                 MultiPlayMsgHandler.currentBattleData = newBattleData;
                 MultiPlayMsgHandler.currentEventData = newEventData;
                 NetManager.Send(msg);
-
+                EventDispatcher.TriggerEvent(E_MessageType.MultChooseScene);
             });
 
         }

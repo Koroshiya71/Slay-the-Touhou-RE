@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using GameCore;
+using NetFramework.proto;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -100,7 +101,6 @@ public void ShowConfirmBox(SceneType type)
         {
             waitBox.SetActive(true);
             waitBox.GetComponentInChildren<Text>().text = "µÈ´ý»ï°éÈ·ÈÏ...";
-
         });
 
         EventDispatcher.AddListener(E_MessageType.MultEnterScene, delegate

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using GameCore;
+using NetFramework.proto;
 using Newtonsoft.Json;
 using UnityEngine;
 
@@ -163,6 +164,7 @@ public class MultiPlayMsgHandler : UnitySingleton<MultiPlayMsgHandler>
         EventDispatcher.TriggerEvent<SceneType>(E_MessageType.MultWaitConfirm, msg.type);
         currentBattleData = JsonConvert.DeserializeObject<BattleData>(msg.battleDataStr);
         currentEventData= JsonConvert.DeserializeObject<EventData>(msg.eventDataStr);
+        GameSceneManager.Instance.lastIndex = msg.index;
         Debug.Log(currentBattleData);
         chosenSceneType = msg.type;
     }
@@ -173,8 +175,7 @@ public class MultiPlayMsgHandler : UnitySingleton<MultiPlayMsgHandler>
         Debug.Log("OnMsgEnterScene");
         MsgEnterScene msg = (MsgEnterScene) msgBase;
 
-        Debug.Log(currentBattleData);
-
+        
         switch (msg.type)
         {
             //如果场景类型为普通战斗，则随机选取一个战斗场景数据

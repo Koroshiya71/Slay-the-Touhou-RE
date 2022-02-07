@@ -17,14 +17,3 @@ public class MsgPong : MsgBase
     }
 }
 
-//存档协议
-public class MsgSave : MsgBase
-{
-    public MsgSave()
-    {
-        protoName = "MsgSave";
-    }
-
-    public string id;
-    public string saveData="";
-}

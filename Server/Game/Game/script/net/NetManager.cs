@@ -137,7 +137,12 @@ class NetManager
 		//解析协议名
 		int nameCount = 0;
 		string protoName = MsgBase.DecodeName(readBuff.bytes, readBuff.readIdx, out nameCount);
-		if(protoName == ""){
+		Console.WriteLine(nameCount);
+        Console.WriteLine(protoName);
+        Console.WriteLine(readBuff.length);
+
+
+		if (protoName == ""){
 			Console.WriteLine("OnReceiveData MsgBase.DecodeName fail");
 			Close(state);
 			return;

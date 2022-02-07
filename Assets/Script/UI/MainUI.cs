@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using GameCore;
+using NetFramework.proto;
 using UnityEngine;
 using UnityEngine.UI;
 

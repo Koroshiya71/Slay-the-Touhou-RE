@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 using System.IO;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
+using NetFramework.proto;
 
 //存档数据
 [Serializable]
@@ -86,6 +87,12 @@ public class SaveManager : UnitySingleton<SaveManager>
     //游戏存档
     public static void SaveGame()
     {
+        //多人模式下不进行存档
+        if (GameManager.Instance.isMulti)
+        {
+            return;
+        }
+        
         string s = JsonConvert.SerializeObject(new SaveData(true), Formatting.Indented, new JsonSerializerSettings { });
         GameTool.SetString("HasSave", "True");
         StreamWriter writer = new StreamWriter(jsonDataPath + "SaveData.json");
@@ -93,6 +100,17 @@ public class SaveManager : UnitySingleton<SaveManager>
         writer.Close();
         Debug.Log("保存游戏");
 
+        //如果是在线模式再额外进行一次云端存档
+        if (!Instance.isOffline)
+        {
+            MsgSaveData msg = new MsgSaveData();
+            msg.id = NetManager.playerID;
+            s = JsonConvert.SerializeObject(new SaveData(true));
+            msg.saveData = s;
+            NetManager.Send(msg);
+            Debug.Log("Save DB");
+
+        }
     }
 
     //读取存档数据
@@ -101,7 +119,7 @@ public class SaveManager : UnitySingleton<SaveManager>
         //如果已连接游戏
         if (NetManager.socket.Connected&&!isOffline)
         {
-            Debug.Log(NetManager.playerDataStr);
+            Debug.Log("云端读取");
             if (NetManager.playerDataStr== "empty")
             {
                 Debug.Log("没有存储数据");
@@ -109,10 +127,10 @@ public class SaveManager : UnitySingleton<SaveManager>
             }
             saveData = JsonConvert.DeserializeObject<SaveData>(NetManager.playerDataStr);
             GameManager.Instance.playerData = saveData.playerData;
-            Debug.Log(GameManager.Instance.playerData);
-            Debug.Log(saveData.playerData);
+
             EventDispatcher.TriggerEvent(E_MessageType.UpdateGameMainUI);
             isLoad = true;
+            
         }
         //如果是离线游戏
         else
@@ -134,6 +152,7 @@ public class SaveManager : UnitySingleton<SaveManager>
             GameManager.Instance.playerData = saveData.playerData;
             EventDispatcher.TriggerEvent(E_MessageType.UpdateGameMainUI);
             isLoad = true;
+            Debug.Log("本地读取");
         }
 
         Debug.Log(saveData.relicIDList.Count);

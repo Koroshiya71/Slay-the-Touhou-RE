@@ -62,6 +62,8 @@ public class MsgWaitConfirm : MsgBase
     public SceneType type;
     public string battleDataStr;
     public string eventDataStr;
+    public int index;
+
 }
 
 //确认选择
@@ -77,6 +79,7 @@ public class MsgConfirmChoose : MsgBase
     //接受还是拒绝
     public bool confirm;
     public string id;
+
 }
 
 //进入场景
@@ -186,4 +189,15 @@ public class MsgTurnFin : MsgBase
         protoName = "MsgTurnFin";
     }
     public string id;
+}
+//存档协议
+public class MsgSaveData : MsgBase
+{
+    public MsgSaveData()
+    {
+        protoName = "MsgSaveData";
+    }
+
+    public string id;
+    public string saveData = "";
 }

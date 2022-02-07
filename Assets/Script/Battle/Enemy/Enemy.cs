@@ -39,10 +39,12 @@ public class Enemy : BaseBattleUnit
 
     //当前即将执行的行动
     public ActionData currentAction;
-
+    //当前的同步行为
+    public ActionData currentSyncAction;
     //启用的行为模式
     protected string activeActionMode;
-
+    //启用的同步行为模式
+    public string activeSyncActionMode;
     //当前正在执行行为列表中的第几个行为
     protected int currentActionNo;
 
@@ -57,7 +59,13 @@ public class Enemy : BaseBattleUnit
         currentHp = maxHp;
         isPlayer = false;
         //从行动模式列表中随机选择一个行动模式
-        activeActionMode = enemyData.ActionModeList[Random.Range(0, enemyData.ActionModeList.Count)];
+        if(!GameManager.Instance.isMulti)
+            activeActionMode = enemyData.ActionModeList[Random.Range(0, enemyData.ActionModeList.Count)];
+        else
+        {
+            activeActionMode = enemyData.ActionModeList[0];
+            activeSyncActionMode = enemyData.ActionModeList[1];
+        }
         currentActionNo = 0;
         
 
@@ -167,6 +175,10 @@ public class Enemy : BaseBattleUnit
     public void TakeAction()
     {
         BattleManager.Instance.TriggerActionEffect(this, currentAction);
+        if (GameManager.Instance.isMulti)
+        {
+            BattleManager.Instance.TriggerActionEffect(this, currentAction,true);
+        }
     }
 
     //更新行动
@@ -180,7 +192,11 @@ public class Enemy : BaseBattleUnit
             currentActionNo %= activeActionMode.Length;
             currentAction = enemyData.EnemyActionDic
                 .ElementAt(Convert.ToInt32(activeActionMode[currentActionNo].ToString()) - 1).Value;
-
+            if (GameManager.Instance.isMulti)
+            {
+                currentAction = enemyData.EnemyActionDic
+                    .ElementAt(Convert.ToInt32(activeSyncActionMode[currentActionNo].ToString()) - 1).Value;
+            }
             currentActionNo++;
         }
 
@@ -254,8 +270,6 @@ public class Enemy : BaseBattleUnit
     {
         base.UpdateUI();
 
-
-
         //更新Action UI
         text_ActionDes.enabled = false;
         text_ActionValue.enabled = false;
@@ -313,6 +327,8 @@ public class Enemy : BaseBattleUnit
             if (currentHp > (int) (0.7f * maxHp))
             {
                 currentAction = new ActionData(1004,new List<int>(){0});
+                if(GameManager.Instance.isMulti)
+                    currentSyncAction = new ActionData(1004, new List<int>() { 0 });
                 return true; 
             }
         }

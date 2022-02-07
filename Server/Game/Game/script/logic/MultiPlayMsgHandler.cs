@@ -54,7 +54,7 @@ public partial class MsgHandler
                         msgConfirm.type = msg.type;
                         msgConfirm.battleDataStr = msg.battleDataStr;
                         msgConfirm.eventDataStr = msg.eventDataStr;
-
+                        msgConfirm.index = msg.index;
                         pl.Send(msgConfirm);
                     }
                 }
@@ -77,7 +77,7 @@ public partial class MsgHandler
                     {
                         MsgEnterScene msgEnter = new MsgEnterScene();
                         msgEnter.type = msg.type;
-
+                        pl.TurnState = false;
                         pl.Send(msgEnter);
                     }
                 }
@@ -216,7 +216,8 @@ public partial class MsgHandler
                 {
                     foreach (var pl in list)
                     {
-                        MsgLoadEnd msgLoadEnd = new MsgLoadEnd();
+                        pl.TurnState = false;
+                        MsgTurnFin msgLoadEnd = new MsgTurnFin();
                         pl.Send(msgLoadEnd);
                     }
                 }
@@ -224,8 +225,9 @@ public partial class MsgHandler
         }
         else
         {
-            PlayerManager.GetPlayer(msg.id).Send(new MsgLoadWait());
+            PlayerManager.GetPlayer(msg.id).Send(new MsgTurnWait());
         }
     }
 
+   
 }

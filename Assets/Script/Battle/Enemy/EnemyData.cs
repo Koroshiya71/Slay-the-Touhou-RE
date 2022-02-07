@@ -115,8 +115,16 @@ public class EnemyData
             case "精英":
                 enemyType = EnemyType.Elite;
                 break;
-        }
+            case "首领":
+                enemyType = EnemyType.Boss;
 
+                break;
+        }
+        //如果是多人模式则血量翻倍
+        if (GameManager.Instance.isMulti)
+        {
+            maxHp *= 2;
+        }
         //设置掉落金币数
         dropGold = int.Parse(ReadEnemyCfgData("Gold", enemyID));
     }
