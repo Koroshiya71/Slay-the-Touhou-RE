@@ -69,7 +69,7 @@ public partial class MsgHandler {
 		Console.WriteLine("Send MsgLoadData");
 
 
-    }
+	}
 	//保存协议
 	public static void MsgSaveData(ClientState c, MsgBase msgBase)
     {

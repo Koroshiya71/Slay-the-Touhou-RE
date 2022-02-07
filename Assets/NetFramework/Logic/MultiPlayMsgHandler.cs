@@ -22,6 +22,7 @@ public class MultiPlayMsgHandler : UnitySingleton<MultiPlayMsgHandler>
     //等待协议回调
     public void OnMsgMultiWait(MsgBase msgBase)
     {
+        Debug.Log("multiWait");
         EventDispatcher.TriggerEvent(E_MessageType.MultiWait);
         //生成场景
         for (int i = 0; i < 120; i++)
@@ -35,6 +36,7 @@ public class MultiPlayMsgHandler : UnitySingleton<MultiPlayMsgHandler>
                 GameSceneManager.Instance.multScenes.Add(GameSceneManager.GetRandomSceneType());
             }
         }
+
     }
 
 
@@ -229,9 +231,11 @@ public class MultiPlayMsgHandler : UnitySingleton<MultiPlayMsgHandler>
     //读取等待协议
     public void OnMsgLoadWait(MsgBase msgBase)
     {
+        Debug.Log("LoadWait");
         //等待别人
         EventDispatcher.TriggerEvent(E_MessageType.MultWaitLoad);
-        Debug.Log("LoadWait");
+        //设置为主玩家
+        NetManager.isMain = true;
     }
     //等待读取完毕
     public void OnMsgLoadEnd(MsgBase msgBase)

@@ -35,6 +35,8 @@ public static class NetManager {
     public static string playerID="";
 	//玩家数据字符串
     public static string playerDataStr = "";
+	//采取的行动逻辑
+    public static bool isMain = false;
 	//事件
 	public enum NetEvent
 	{
@@ -335,6 +337,10 @@ public static class NetManager {
 		if(msgCount == 0){
 			return;
 		}
+        else
+        {
+            Debug.Log(msgCount);
+        }
 		//重复处理消息
 		for(int i = 0; i< MAX_MESSAGE_FIRE; i++){
 			//获取第一条消息

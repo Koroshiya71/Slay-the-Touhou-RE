@@ -13,6 +13,8 @@ public partial class MsgHandler
         //添加到当前等待的多人游戏列表
         PlayerManager.waitingMultiPlayers.Add(msg.id, PlayerManager.players[msg.id]);
         Console.WriteLine(msg.id);
+        NetManager.Send(c, new MsgMultiWait());
+
         //如果人数够了就开始游戏
         if (PlayerManager.waitingMultiPlayers.Count % 2 == 0)
         {
@@ -30,15 +32,14 @@ public partial class MsgHandler
         else
         {
             NetManager.Send(c, new MsgMultiWait());
-            Console.WriteLine("send MsgMultiWait");
-
+            Console.WriteLine("send MsgMultiWait"+":"+msg.id);
         }
     }
 
     public static void MsgChooseScene(ClientState c, MsgBase msgBase)
     {
         Console.WriteLine("MsgChooseScene");
-        MsgChooseScene msg = (MsgChooseScene) msgBase;
+        MsgChooseScene msg = (MsgChooseScene) msgBase;  
         //给除此以外的其他玩家发布确认消息
         foreach (var list in PlayerManager.inGamePlayers)
         {

@@ -3,7 +3,7 @@ using MySql.Data.MySqlClient;
 
 public class ByteArray  {
 	//默认大小
-	const int DEFAULT_SIZE = 10240;
+	const int DEFAULT_SIZE = 1024;
 	//初始大小
 	int initSize = 0;
 	//缓冲区

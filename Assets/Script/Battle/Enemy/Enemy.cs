@@ -37,6 +37,14 @@ public class Enemy : BaseBattleUnit
     //敌人行动数值文本
     protected Text text_ActionValue;
 
+    //敌人同步意图Image
+    protected Image img_SyncAction;
+
+    //敌人同步意图描述文本
+    protected Text text_SyncActionDes;
+
+    //敌人同步行动数值文本
+    protected Text text_SyncActionValue;
     //当前即将执行的行动
     public ActionData currentAction;
     //当前的同步行为
@@ -61,10 +69,18 @@ public class Enemy : BaseBattleUnit
         //从行动模式列表中随机选择一个行动模式
         if(!GameManager.Instance.isMulti)
             activeActionMode = enemyData.ActionModeList[Random.Range(0, enemyData.ActionModeList.Count)];
-        else
+        else 
         {
-            activeActionMode = enemyData.ActionModeList[0];
-            activeSyncActionMode = enemyData.ActionModeList[1];
+            if (NetManager.isMain)
+            {
+                activeActionMode = enemyData.ActionModeList[0];
+                activeSyncActionMode = enemyData.ActionModeList[1];
+            }
+            else
+            {
+                activeActionMode = enemyData.ActionModeList[1];
+                activeSyncActionMode = enemyData.ActionModeList[0];
+            }
         }
         currentActionNo = 0;
         
@@ -89,8 +105,21 @@ public class Enemy : BaseBattleUnit
         text_ActionDes = GameTool.GetTheChildComponent<Text>(gameObject, "Text_ActionDes");
         text_ActionValue = GameTool.GetTheChildComponent<Text>(gameObject, "Text_ActionValue");
         
+        img_SyncAction= GameTool.GetTheChildComponent<Image>(gameObject, "Img_SyncAction");
+        text_SyncActionDes = GameTool.GetTheChildComponent<Text>(gameObject, "Text_SyncActionDes");
+        text_SyncActionValue = GameTool.GetTheChildComponent<Text>(gameObject, "Text_SyncActionValue");
+
         //更新当前行动
         currentAction = new ActionData(1004,new List<int>(){0});
+        if (GameManager.Instance.isMulti)
+        {
+            currentSyncAction = new ActionData(1004, new List<int>() { 0 });
+        }
+        //单机模式下隐藏
+        else
+        {
+            img_SyncAction.gameObject.SetActive(false);
+        }
         UpdateCurrentAction();
         UpdateUI();
     }
@@ -177,7 +206,7 @@ public class Enemy : BaseBattleUnit
         BattleManager.Instance.TriggerActionEffect(this, currentAction);
         if (GameManager.Instance.isMulti)
         {
-            BattleManager.Instance.TriggerActionEffect(this, currentAction,true);
+            BattleManager.Instance.TriggerActionEffect(this, currentSyncAction,true);
         }
     }
 
@@ -192,9 +221,10 @@ public class Enemy : BaseBattleUnit
             currentActionNo %= activeActionMode.Length;
             currentAction = enemyData.EnemyActionDic
                 .ElementAt(Convert.ToInt32(activeActionMode[currentActionNo].ToString()) - 1).Value;
+            //如果是联机模式更新同步行为
             if (GameManager.Instance.isMulti)
             {
-                currentAction = enemyData.EnemyActionDic
+                currentSyncAction = enemyData.EnemyActionDic
                     .ElementAt(Convert.ToInt32(activeSyncActionMode[currentActionNo].ToString()) - 1).Value;
             }
             currentActionNo++;
@@ -233,6 +263,42 @@ public class Enemy : BaseBattleUnit
                 text_ActionValue.enabled = true;
                 text_ActionValue.text = currentAction.actualValue[0].ToString();
                 break;
+        }
+
+        if (GameManager.Instance.isMulti)
+        {
+            text_SyncActionDes.enabled = false;
+            text_SyncActionValue.enabled = false;
+            switch (currentSyncAction.ActionType)
+            {
+                case ActionType.Attack:
+                    img_EnemyAction.sprite =
+                        ResourcesManager.Instance.LoadResources<Sprite>("Image/" + "UIImage/" + "EnemyAction/" + "Attack");
+                    text_ActionValue.text = currentAction.actualValue[0].ToString();
+                    text_ActionValue.enabled = true;
+                    break;
+                case ActionType.Buff:
+                    img_EnemyAction.sprite =
+                        ResourcesManager.Instance.LoadResources<Sprite>("Image/" + "UIImage/" + "EnemyAction/" + "Buff");
+                    text_ActionValue.enabled = false;
+                    break;
+                case ActionType.Weaken:
+                    img_EnemyAction.sprite =
+                        ResourcesManager.Instance.LoadResources<Sprite>("Image/" + "UIImage/" + "EnemyAction/" + "Weaken");
+                    text_ActionValue.enabled = false;
+                    break;
+                case ActionType.Special:
+                    img_EnemyAction.sprite =
+                        ResourcesManager.Instance.LoadResources<Sprite>("Image/" + "UIImage/" + "EnemyAction/" + "Special");
+                    text_ActionValue.enabled = false;
+                    break;
+                case ActionType.Shield:
+                    img_EnemyAction.sprite =
+                        ResourcesManager.Instance.LoadResources<Sprite>("Image/" + "UIImage/" + "EnemyAction/" + "Shield");
+                    text_ActionValue.enabled = true;
+                    text_ActionValue.text = currentAction.actualValue[0].ToString();
+                    break;
+            }
         }
         BattleManager.Instance.UpdateCardAndActionValue();
         UpdateUI(); 
@@ -314,6 +380,54 @@ public class Enemy : BaseBattleUnit
             }
         }
         text_ActionDes.enabled = false;
+        if (GameManager.Instance.isMulti)
+        {
+            //更新Action UI
+            text_SyncActionDes.enabled = false;
+            text_SyncActionValue.enabled = false;
+            switch (currentSyncAction.ActionType)
+            {
+                case ActionType.Attack:
+                    img_SyncAction.sprite =
+                        ResourcesManager.Instance.LoadResources<Sprite>("Image/" + "UIImage/" + "EnemyAction/" + "Attack");
+                    text_SyncActionValue.text = currentSyncAction.actualValue[0].ToString();
+                    //特殊处理
+                    if (currentSyncAction.ActionID == 1007)
+                    {
+                        text_SyncActionValue.text = (Convert.ToInt32(currentSyncAction.actualValue[0] * this.currentHp * 0.01f)).ToString();
+                    }
+                    text_SyncActionValue.enabled = true;
+                    break;
+                case ActionType.Shield:
+                    img_SyncAction.sprite =
+                        ResourcesManager.Instance.LoadResources<Sprite>("Image/" + "UIImage/" + "EnemyAction/" + "Shield");
+                    text_SyncActionValue.text = currentSyncAction.actualValue[0].ToString();
+                    text_SyncActionValue.enabled = true;
+                    break;
+                case ActionType.Buff:
+                    img_SyncAction.sprite =
+                        ResourcesManager.Instance.LoadResources<Sprite>("Image/" + "UIImage/" + "EnemyAction/" + "Buff");
+                    text_SyncActionValue.enabled = false;
+                    break;
+            }
+
+            text_SyncActionDes.text = "";
+            for (int i = 0; i < currentSyncAction.actualValue.Count; i++)
+            {
+                if (i == 0)
+                {
+                    text_SyncActionDes.text = currentSyncAction.ActionDes.Replace("value" + (i + 1), currentSyncAction.ActionValue[i].ToString());
+
+                }
+                else
+                {
+                    text_SyncActionDes.text = text_ActionDes.text.Replace("value" + (i + 1), currentSyncAction.ActionValue[i].ToString());
+
+                }
+            }
+            text_SyncActionDes.enabled = false;
+        }
+        
     }
 
     #endregion

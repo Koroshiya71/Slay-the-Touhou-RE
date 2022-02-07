@@ -372,6 +372,18 @@ public class BattleManager : UnitySingleton<BattleManager>
                 enemy.currentAction.actualValue[0] = (int) (enemy.currentAction.actualValue[0] * 0.7f);
             }
 
+            if (GameManager.Instance.isMulti)
+            {
+                //恐惧检测
+                if (StateManager.CheckState(enemy, 1002) &&
+                    (enemy.currentSyncAction.ActionType == ActionType.Attack) && !enemy.hasCheckList.Contains(1002))
+                {
+                    enemy.hasCheckList.Add(1002);
+                    enemy.currentSyncAction.actualValue[0] = (int)(enemy.currentSyncAction.actualValue[0] * 0.7f);
+                }
+            }
+            
+
             enemy.UpdateUI();
         }
     }
