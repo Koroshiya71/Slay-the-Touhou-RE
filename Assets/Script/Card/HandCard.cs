@@ -5,7 +5,6 @@ using System.Security.Cryptography;
 using UnityEngine;
 using UnityEngine.UI;
 using GameCore;
-using NetFramework.proto;
 
 public class HandCard : BaseCard
 {

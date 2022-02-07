@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using GameCore;
-using NetFramework.proto;
+
 using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.UI;
