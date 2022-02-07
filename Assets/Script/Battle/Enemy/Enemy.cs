@@ -106,6 +106,7 @@ public class Enemy : BaseBattleUnit
         text_ActionValue = GameTool.GetTheChildComponent<Text>(gameObject, "Text_ActionValue");
         
         img_SyncAction= GameTool.GetTheChildComponent<Image>(gameObject, "Img_SyncAction");
+        img_SyncAction.GetComponent<ActionImg>().isSyncAction = true;
         text_SyncActionDes = GameTool.GetTheChildComponent<Text>(gameObject, "Text_SyncActionDes");
         text_SyncActionValue = GameTool.GetTheChildComponent<Text>(gameObject, "Text_SyncActionValue");
 
@@ -188,13 +189,22 @@ public class Enemy : BaseBattleUnit
         UpdateUI();
         text_ActionDes.enabled = true;
     }
-
+    //显示同步行动描述
+    public void ShowSyncActionDes()
+    {
+        UpdateUI();
+        text_SyncActionDes.enabled = true;
+    }
     //隐藏行动描述
     public void HideActionDes()
     {
         text_ActionDes.enabled = false;
     }
-
+    //隐藏行动描述
+    public void HideSyncActionDes()
+    {
+        text_SyncActionDes.enabled = false;
+    }
     #endregion
 
 
@@ -215,6 +225,11 @@ public class Enemy : BaseBattleUnit
     {
         //更新前还原数值
         currentAction.actualValue = currentAction.ActionValue;
+        if (GameManager.Instance.isMulti)
+        { 
+            currentSyncAction.actualValue = currentSyncAction.ActionValue;
+        }
+
         if (!CheckSpecialAction())
         {
             //获取行动列表中的第一个行为

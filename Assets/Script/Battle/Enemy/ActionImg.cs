@@ -9,6 +9,8 @@ public class ActionImg : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
 {
     //所属的Enemy对象
     private Enemy thisEnemy;
+    //是否是同步Action
+    public bool isSyncAction = false;
     //事件触发器
     private void Awake()
     {
@@ -18,11 +20,29 @@ public class ActionImg : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        thisEnemy.ShowActionDes();
+        if (isSyncAction)
+        {
+            thisEnemy.ShowSyncActionDes();
+
+        }
+        else
+        {
+            thisEnemy.ShowActionDes();
+
+        }
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        thisEnemy.HideActionDes();
+        if (isSyncAction)
+        {
+            thisEnemy.HideSyncActionDes();
+
+        }
+        else
+        {
+            thisEnemy.HideActionDes();
+
+        }
     }
 }
