@@ -385,12 +385,12 @@ public class Enemy : BaseBattleUnit
         {
             if (i==0)
             {
-                text_ActionDes.text = currentAction.ActionDes.Replace("value" + (i + 1), currentAction.ActionValue[i].ToString());
+                text_ActionDes.text = currentAction.ActionDes.Replace("value" + (i + 1), currentAction.actualValue[i].ToString());
 
             }
             else
             {
-                text_ActionDes.text = text_ActionDes.text.Replace("value" + (i + 1), currentAction.ActionValue[i].ToString());
+                text_ActionDes.text = text_ActionDes.text.Replace("value" + (i + 1), currentAction.actualValue[i].ToString());
 
             }
         }

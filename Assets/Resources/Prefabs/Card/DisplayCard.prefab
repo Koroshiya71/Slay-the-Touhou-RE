@@ -235,7 +235,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -8476227761750629369, guid: 71bee5549767f214083df26d1f45c992, type: 3}
+  m_Sprite: {fileID: 7924499217689558870, guid: 71bee5549767f214083df26d1f45c992, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -520,6 +520,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cardID: 1001
+  index: 0
 --- !u!225 &8862769248804824729
 CanvasGroup:
   m_ObjectHideFlags: 0
