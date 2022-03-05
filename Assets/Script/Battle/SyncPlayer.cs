@@ -17,10 +17,10 @@ public class SyncPlayer : BaseBattleUnit
     }
     protected override void Awake()
     {
-        InitPlayerByData();
         Init();
         Instance = this;
         isPlayer = true;
+        InitPlayerByData();
     }
 
     //覆写更新UI方法

@@ -217,8 +217,9 @@ public class MultiPlayMsgHandler : UnitySingleton<MultiPlayMsgHandler>
     public void OnMsgCardEffect(MsgBase msgBase)
     {
         MsgCardEffect msg = (MsgCardEffect) msgBase;
+
         BattleManager.Instance.TakeCardEffect(msg.effectID,msg.effectValue,
-            BattleManager.Instance.GetBattleUnitByIndex(msg.targetIndex),msg.isCanXin,msg.isLianZhan,true);
+            BattleManager.Instance.GetBattleUnitByIndex(msg.targetIndex,true),msg.isCanXin,msg.isLianZhan,true);
     }
 
     //使用卡牌协议

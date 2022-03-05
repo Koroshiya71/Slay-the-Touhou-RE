@@ -431,12 +431,12 @@ public class Enemy : BaseBattleUnit
             {
                 if (i == 0)
                 {
-                    text_SyncActionDes.text = currentSyncAction.ActionDes.Replace("value" + (i + 1), currentSyncAction.ActionValue[i].ToString());
+                    text_SyncActionDes.text = currentSyncAction.ActionDes.Replace("value" + (i + 1), currentSyncAction.actualValue[i].ToString());
 
                 }
                 else
                 {
-                    text_SyncActionDes.text = text_ActionDes.text.Replace("value" + (i + 1), currentSyncAction.ActionValue[i].ToString());
+                    text_SyncActionDes.text = text_ActionDes.text.Replace("value" + (i + 1), currentSyncAction.actualValue[i].ToString());
 
                 }
             }

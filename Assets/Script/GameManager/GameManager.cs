@@ -11,11 +11,10 @@ using Random = UnityEngine.Random;
 //卡牌强化需求类型
 public enum NeedEffectType
 {
-    
-    Basic,//护盾、伤害
-    Any,//任意
-    Buff,//效果
-    Basic_Buff,//效果和护盾、伤害
+    Basic, //护盾、伤害
+    Any, //任意
+    Buff, //效果
+    Basic_Buff, //效果和护盾、伤害
 }
 
 //玩家数据
@@ -34,24 +33,28 @@ public class PlayerData
     {
     }
 }
+
 //休息处数据
 [Serializable]
 public class LoungeData
 {
     //最大休息处时间
     public int maxLoungeTime = 12;
+
     //当前休息处时间
     public int loungeTime = 12;
+
     //休息消耗时间
     [FormerlySerializedAs("restTime")] public int restCost = 6;
+
     //研习消耗时间
     [FormerlySerializedAs("studyTime")] public int studyCost = 6;
 
     public LoungeData()
     {
-
     }
 }
+
 //出货率 
 public class CardRareClass
 {
@@ -68,28 +71,32 @@ public class CardRareClass
     {
     }
 }
+
 //卡牌强化数据
 public class CardBuffData
 {
     //强化ID
     public int buffId;
+
     //强化描述
     public string buffDes;
+
     //需要的卡牌类型
     public NeedEffectType needEffectType;
 
     public CardBuffData()
     {
-
     }
 }
+
 public class GameManager : UnitySingleton<GameManager>
 {
     //玩家数据
     public PlayerData playerData = new PlayerData();
+
     //同步玩家数据
     public PlayerData syncPlayerData = new PlayerData();
-    
+
     //卡牌出货率
     public CardRareClass cardRare;
 
@@ -98,6 +105,7 @@ public class GameManager : UnitySingleton<GameManager>
 
     //商店卡牌ID、价格字典
     public Dictionary<int, int> storeCardPriceDic = new Dictionary<int, int>();
+
     //商店遗物ID、价格字典
     public Dictionary<int, int> storeRelicPriceDic = new Dictionary<int, int>();
 
@@ -106,8 +114,10 @@ public class GameManager : UnitySingleton<GameManager>
 
     //休息处数据
     public LoungeData loungeData = new LoungeData();
+
     //是否是多人游戏
     public bool isMulti = false;
+
     private void Awake()
     {
         StreamReader reader;
@@ -117,15 +127,13 @@ public class GameManager : UnitySingleton<GameManager>
             //读取玩家初始数值json
             reader = new StreamReader(SaveManager.jsonDataPath + "PlayerInit.json");
             playerData = JsonConvert.DeserializeObject<PlayerData>(reader.ReadToEnd());
-            //如果是多人游戏，
-            if (isMulti)
-            {
-                reader = new StreamReader(SaveManager.jsonDataPath + "PlayerInit.json");
-                syncPlayerData = JsonConvert.DeserializeObject<PlayerData>(reader.ReadToEnd());
-            }
+
+            reader = new StreamReader(SaveManager.jsonDataPath + "PlayerInit.json");
+            syncPlayerData = JsonConvert.DeserializeObject<PlayerData>(reader.ReadToEnd());
+
             reader.Close();
         }
-        
+
         //读取卡牌掉落稀有度配置
         reader = new StreamReader(SaveManager.jsonDataPath + "RareCard.json");
         cardRare = JsonConvert.DeserializeObject<CardRareClass>(reader.ReadToEnd());
@@ -141,7 +149,6 @@ public class GameManager : UnitySingleton<GameManager>
         reader = new StreamReader(SaveManager.jsonDataPath + "CardBuff.json");
         cardBuffList = JsonConvert.DeserializeObject<List<CardBuffData>>(reader.ReadToEnd());
         reader.Close();
-
     }
 
     //战斗后选牌方法
@@ -231,21 +238,25 @@ public class GameManager : UnitySingleton<GameManager>
                 }
             }
         }
+
         //选牌
         StartCoroutine(DeskManager.Instance.ChooseCardAddToDesk(1, chooseDataList));
     }
+
     //获取金币方法
     public void GetGold(int goldNum)
     {
         playerData.gold += goldNum;
         EventDispatcher.TriggerEvent(E_MessageType.UpdateGameMainUI);
     }
+
     //消费金币
     public void Pay(int goldNum)
     {
         playerData.gold -= goldNum;
         EventDispatcher.TriggerEvent(E_MessageType.UpdateGameMainUI);
     }
+
     void Update()
     {
         //GM调试命令
@@ -262,36 +273,39 @@ public class GameManager : UnitySingleton<GameManager>
             GameSceneManager.Instance.bossScene.ChangeGameSceneState(true);
         }
 
-        if (Input.GetKeyDown(KeyCode.Alpha0))//登录Koroshiya
+        if (Input.GetKeyDown(KeyCode.Alpha0)) //登录Koroshiya
         {
             MsgLogin msg = new MsgLogin();
             msg.id = "Koroshiya";
             msg.pw = "123123";
             NetManager.Send(msg);
         }
-        if (Input.GetKeyDown(KeyCode.Alpha9))//登录Koroshiya71
+
+        if (Input.GetKeyDown(KeyCode.Alpha9)) //登录Koroshiya71
         {
             MsgLogin msg = new MsgLogin();
             msg.id = "Koroshiya71";
             msg.pw = "123123";
             NetManager.Send(msg);
         }
+
         //手动调用
         NetManager.NetUpdate();
-
     }
+
     //休息处休息方法
     public void LoungeRest()
     {
         //如果时间足够则消耗时间并回复生命值
         if (loungeData.loungeTime >= loungeData.restCost)
         {
-            Player.Instance.Heal((int)(0.3f * Player.Instance.maxHp));
+            Player.Instance.Heal((int) (0.3f * Player.Instance.maxHp));
             loungeData.loungeTime -= loungeData.restCost;
             //更新UI显示
             EventDispatcher.TriggerEvent(E_MessageType.ShowLoungeUI);
         }
     }
+
     //休息处强化卡牌方法
     public void LoungeBuffCard()
     {
@@ -305,11 +319,10 @@ public class GameManager : UnitySingleton<GameManager>
             EventDispatcher.TriggerEvent(E_MessageType.ShowLoungeUI);
         }
     }
+
     //游戏结束时自动断开连接
     private void OnApplicationQuit()
     {
         NetManager.Close();
     }
-
-    
 }

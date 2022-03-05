@@ -175,6 +175,7 @@ public class BattleManager : UnitySingleton<BattleManager>
         foreach (var enemy in inBattleEnemyList)
         {
             enemy.hasCheckList.Clear();
+            enemy.hasSyncCheckList.Clear();
         }
 
         UpdateCardAndActionValue();
@@ -376,9 +377,9 @@ public class BattleManager : UnitySingleton<BattleManager>
             {
                 //恐惧检测
                 if (StateManager.CheckState(enemy, 1002) &&
-                    (enemy.currentSyncAction.ActionType == ActionType.Attack) && !enemy.hasCheckList.Contains(1002))
+                    (enemy.currentSyncAction.ActionType == ActionType.Attack) && !enemy.hasSyncCheckList.Contains(1002))
                 {
-                    enemy.hasCheckList.Add(1002);
+                    enemy.hasSyncCheckList.Add(1002);
                     enemy.currentSyncAction.actualValue[0] = (int)(enemy.currentSyncAction.actualValue[0] * 0.7f);
                 }
             }
@@ -693,7 +694,7 @@ public class BattleManager : UnitySingleton<BattleManager>
     }
 
     //根据下标获取战斗单位
-    public BaseBattleUnit GetBattleUnitByIndex(int index)
+    public BaseBattleUnit GetBattleUnitByIndex(int index,bool isSync=false)
     {
         if (index > inBattleEnemyList.Count)
         {
@@ -703,8 +704,12 @@ public class BattleManager : UnitySingleton<BattleManager>
         switch (index)
         {
             case -2:
+                if (isSync)
+                    return SyncPlayer.Instance;
                 return Player.Instance;
             case -1:
+                if (isSync)
+                    return Player.Instance;
                 return SyncPlayer.Instance;
             default:
                 return BattleManager.Instance.inBattleEnemyList[index];

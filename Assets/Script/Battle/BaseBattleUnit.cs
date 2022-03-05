@@ -28,6 +28,8 @@ public class BaseBattleUnit : MonoBehaviour
     public bool isPlayer;
     //已经检测过的状态ID列表
     public List<int> hasCheckList = new List<int>();
+    public List<int> hasSyncCheckList = new List<int>();
+
     //初始化UI和数据对象
     public virtual void Init(int id = 1)
     {
