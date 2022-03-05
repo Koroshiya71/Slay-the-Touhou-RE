@@ -16,17 +16,26 @@ public partial class MsgHandler
         NetManager.Send(c, new MsgMultiWait());
 
         //如果人数够了就开始游戏
-        if (PlayerManager.waitingMultiPlayers.Count % 2 == 0)
+        if (PlayerManager.waitingMultiPlayers.Count >= 2)
         {
             List<Player> newGamePlayers = new List<Player>();
-            foreach (var pl in PlayerManager.waitingMultiPlayers.Values)
+            List<Player> removeList = new List<Player>();
+            for (int i = 0; i < 2; i++)
             {
+                var pl = PlayerManager.waitingMultiPlayers.Values.ToArray()[i];
+                Console.WriteLine(pl);
                 NetManager.Send(pl.state, new MsgMultiEnter());
                 newGamePlayers.Add(pl);
+                //准备将其移除等待列表
+                removeList.Add(pl);
+            }
+
+            foreach (var pl in removeList)
+            {
+                PlayerManager.waitingMultiPlayers.Remove(pl.id);
             }
 
             PlayerManager.inGamePlayers.Add(newGamePlayers);
-            PlayerManager.waitingMultiPlayers.Clear();
         }
         //否则就让其等待
         else
