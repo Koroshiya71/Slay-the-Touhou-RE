@@ -44,15 +44,23 @@ public class MsgBase{
 		if(offset + 2 > bytes.Length){
 			return "";
 		}
+		Console.WriteLine(1);
 		//读取长度
 		Int16 len = (Int16)((bytes[offset+1] << 8 )| bytes[offset] );
+        Console.WriteLine(len);
+        Console.WriteLine(bytes.Length);
+
 		//长度必须足够
-		if(offset + 2 + len > bytes.Length){
+		if (offset + 2 + len > bytes.Length){
 			return "";
 		}
+        Console.WriteLine(2);
+
 		//解析
 		count = 2+len;
 		string name = System.Text.Encoding.UTF8.GetString(bytes, offset+2, len);
+        Console.WriteLine(3);
+
 		return name;
 	}
 }

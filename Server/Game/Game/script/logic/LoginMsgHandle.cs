@@ -67,9 +67,7 @@ public partial class MsgHandler {
         msgLoad.data = playerData.playerDataStr;
 		player.Send(msgLoad);
 		Console.WriteLine("Send MsgLoadData");
-
-
-	}
+    }
 	//保存协议
 	public static void MsgSaveData(ClientState c, MsgBase msgBase)
     {

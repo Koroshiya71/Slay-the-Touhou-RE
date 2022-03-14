@@ -137,6 +137,7 @@ public class MultiPlayMsgHandler : UnitySingleton<MultiPlayMsgHandler>
         {
             NetManager.playerDataStr = msg.data;
             UIManager.Instance.ShowUI(E_UiId.MainUI);
+            Debug.Log(msg.data.Length);
         }
     }
 

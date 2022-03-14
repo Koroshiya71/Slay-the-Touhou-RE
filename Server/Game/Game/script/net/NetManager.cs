@@ -141,7 +141,6 @@ class NetManager
         Console.WriteLine(protoName);
         Console.WriteLine(readBuff.length);
 
-
 		if (protoName == ""){
 			Console.WriteLine("OnReceiveData MsgBase.DecodeName fail");
 			Close(state);
