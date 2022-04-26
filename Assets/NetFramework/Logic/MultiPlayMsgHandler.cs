@@ -6,24 +6,24 @@ using UnityEngine;
 
 public class MultiPlayMsgHandler : UnitySingleton<MultiPlayMsgHandler>
 {
-    //µ±Ç°¾ö²ßµÄ³¡¾°ÀàĞÍ
+    //å½“å‰å†³ç­–çš„åœºæ™¯ç±»å‹
     public static SceneType chosenSceneType;
-    //µ±Ç°ËùÑ¡µÄÕ½¶·Êı¾İºÍÊÂ¼şÊı¾İ
+    //å½“å‰æ‰€é€‰çš„æˆ˜æ–—æ•°æ®å’Œäº‹ä»¶æ•°æ®
     public static BattleData currentBattleData;
 
     public static EventData currentEventData;
-    //Íæ¼Òµã»÷Á¬½Ó°´Å¥
+    //ç©å®¶ç‚¹å‡»è¿æ¥æŒ‰é’®
     public void ConnectServer()
     {
         NetManager.Connect("127.0.0.1", 8888);
     }
 
-    //µÈ´ıĞ­Òé»Øµ÷
+    //ç­‰å¾…åè®®å›è°ƒ
     public void OnMsgMultiWait(MsgBase msgBase)
     {
         Debug.Log("multiWait");
         EventDispatcher.TriggerEvent(E_MessageType.MultiWait);
-        //Éú³É³¡¾°
+        //ç”Ÿæˆåœºæ™¯
         for (int i = 0; i < 120; i++)
         {
             if (i < 6)
@@ -49,7 +49,7 @@ public class MultiPlayMsgHandler : UnitySingleton<MultiPlayMsgHandler>
     {
     }
 
-    //×¢²áÊÂ¼ş
+    //æ³¨å†Œäº‹ä»¶
     public void InitMessageListener()
     {
         NetManager.AddMsgListener("MsgMultiWait", OnMsgMultiWait);
@@ -74,61 +74,61 @@ public class MultiPlayMsgHandler : UnitySingleton<MultiPlayMsgHandler>
         NetManager.AddMsgListener("MsgLogin", OnMsgLogin);
     }
 
-    //ÊÕµ½µÇÂ½Ğ­Òé
+    //æ”¶åˆ°ç™»é™†åè®®
     public void OnMsgLogin(MsgBase msgBase)
     {
         MsgLogin msg = (MsgLogin) msgBase;
         if (msg.result == 0)
         {
-            Debug.Log("µÇÂ½³É¹¦");
-            //±£´æµ±Ç°Íæ¼ÒID
+            Debug.Log("ç™»é™†æˆåŠŸ");
+            //ä¿å­˜å½“å‰ç©å®¶ID
             NetManager.playerID = msg.id;
         }
         else
         {
-            Debug.Log("µÇÂ½Ê§°Ü");
+            Debug.Log("ç™»é™†å¤±è´¥");
         }
     }
 
-    //ÊÕµ½×¢²áĞ­Òé
+    //æ”¶åˆ°æ³¨å†Œåè®®
     public void OnMsgRegister(MsgBase msgBase)
     {
         MsgRegister msg = (MsgRegister) msgBase;
         if (msg.result == 0)
         {
-            Debug.Log("×¢²á³É¹¦");
+            Debug.Log("æ³¨å†ŒæˆåŠŸ");
         }
         else
         {
-            Debug.Log("×¢²áÊ§°Ü");
+            Debug.Log("æ³¨å†Œå¤±è´¥");
         }
     }
 
-    //Á¬½Ó³É¹¦»Øµ÷
+    //è¿æ¥æˆåŠŸå›è°ƒ
     void OnConnectSucc(string err)
     {
         Debug.Log("OnConnectSucc");
     }
 
-    //Á¬½ÓÊ§°Ü»Øµ÷
+    //è¿æ¥å¤±è´¥å›è°ƒ
     void OnConnectFail(string err)
     {
         Debug.Log("OnConnectFail " + err);
     }
 
-    //¹Ø±ÕÁ¬½Ó
+    //å…³é—­è¿æ¥
     void OnConnectClose(string err)
     {
         Debug.Log("OnConnectClose");
     }
 
-    //±»ÌßÏÂÏß
+    //è¢«è¸¢ä¸‹çº¿
     void OnMsgKick(MsgBase msgBase)
     {
-        Debug.Log("±»ÌßÏÂÏß");
+        Debug.Log("è¢«è¸¢ä¸‹çº¿");
     }
 
-    //ÊÕµ½»ñÈ¡Êı¾İĞ­Òé
+    //æ”¶åˆ°è·å–æ•°æ®åè®®
     public void OnMsgLoadData(MsgBase msgBase)
     {
         Debug.Log("LoadData");
@@ -141,7 +141,7 @@ public class MultiPlayMsgHandler : UnitySingleton<MultiPlayMsgHandler>
         }
     }
 
-    //½øÈë¶àÈËÓÎÏ·
+    //è¿›å…¥å¤šäººæ¸¸æˆ
     public void OnMsgMultiEnter(MsgBase msgBase)
     {
         Debug.Log("Enter Game");
@@ -151,14 +151,14 @@ public class MultiPlayMsgHandler : UnitySingleton<MultiPlayMsgHandler>
             msg.id = NetManager.playerID;
             msg.sceneTypeListStr = JsonConvert.SerializeObject(GameSceneManager.Instance.multScenes);
             NetManager.Send(msg);
-            Debug.Log(NetManager.playerID+"£ºSend SceneTypeData");
+            Debug.Log(NetManager.playerID+"ï¼šSend SceneTypeData");
             Debug.Log(msg.sceneTypeListStr.Length);
         }
 
         EventDispatcher.TriggerEvent(E_MessageType.MultiGameStart);
     }
 
-    //È·ÈÏÑ¡ÔñĞ­Òé
+    //ç¡®è®¤é€‰æ‹©åè®®
     public void OnMsgWaitConfirm(MsgBase msgBase)
     {
         Debug.Log("OnMsgWaitConfirm");
@@ -171,7 +171,7 @@ public class MultiPlayMsgHandler : UnitySingleton<MultiPlayMsgHandler>
         chosenSceneType = msg.type;
     }
 
-    //È·ÈÏÑ¡ÔñĞ­Òé
+    //ç¡®è®¤é€‰æ‹©åè®®
     public void OnMsgEnterScene(MsgBase msgBase)
     {
         Debug.Log("OnMsgEnterScene");
@@ -180,41 +180,41 @@ public class MultiPlayMsgHandler : UnitySingleton<MultiPlayMsgHandler>
         
         switch (msg.type)
         {
-            //Èç¹û³¡¾°ÀàĞÍÎªÆÕÍ¨Õ½¶·£¬ÔòËæ»úÑ¡È¡Ò»¸öÕ½¶·³¡¾°Êı¾İ
+            //å¦‚æœåœºæ™¯ç±»å‹ä¸ºæ™®é€šæˆ˜æ–—ï¼Œåˆ™éšæœºé€‰å–ä¸€ä¸ªæˆ˜æ–—åœºæ™¯æ•°æ®
             case SceneType.NormalCombat:
                 BattleManager.Instance.InitBattle(currentBattleData);
 
                 break;
-            //Èç¹û³¡¾°ÀàĞÍÎªÊÂ¼ş£¬ÔòËæ»úÑ¡È¡Ò»¸öÊÂ¼ş
+            //å¦‚æœåœºæ™¯ç±»å‹ä¸ºäº‹ä»¶ï¼Œåˆ™éšæœºé€‰å–ä¸€ä¸ªäº‹ä»¶
             case SceneType.Event:
                 
                 UIManager.Instance.ShowUI(E_UiId.EventUI);
                 EventDispatcher.TriggerEvent<int, string>(E_MessageType.ShowEventPage,
                     currentEventData.pageDataList[0].pageID, "");
                 break;
-            //Èç¹û³¡¾°ÀàĞÍÎª¾«Ó¢Õ½¶·£¬ÔòËæ»úÑ¡È¡Ò»¸ö¾«Ó¢Õ½¶·
+            //å¦‚æœåœºæ™¯ç±»å‹ä¸ºç²¾è‹±æˆ˜æ–—ï¼Œåˆ™éšæœºé€‰å–ä¸€ä¸ªç²¾è‹±æˆ˜æ–—
             case SceneType.EliteCombat:
                 BattleManager.Instance.InitBattle(currentBattleData);
                 break;
-            //Èç¹û³¡¾°ÀàĞÍÎªÉÌµê£¬ÔòÏÔÊ¾ÉÌµêÒ³Ãæ
+            //å¦‚æœåœºæ™¯ç±»å‹ä¸ºå•†åº—ï¼Œåˆ™æ˜¾ç¤ºå•†åº—é¡µé¢
             case SceneType.Store:
                 UIManager.Instance.ShowUI(E_UiId.StoreUI);
                 EventDispatcher.TriggerEvent(E_MessageType.ShowStoreUI);
                 break;
-            //Èç¹û³¡¾°ÀàĞÍÎªĞİÏ¢´¦£¬Ôò»Ø¸´Ê±¼ä²¢ÏÔÊ¾ĞİÏ¢´¦Ò³Ãæ
+            //å¦‚æœåœºæ™¯ç±»å‹ä¸ºä¼‘æ¯å¤„ï¼Œåˆ™å›å¤æ—¶é—´å¹¶æ˜¾ç¤ºä¼‘æ¯å¤„é¡µé¢
             case SceneType.Lounge:
                 UIManager.Instance.ShowUI(E_UiId.LoungeUI);
                 GameManager.Instance.loungeData.loungeTime = GameManager.Instance.loungeData.maxLoungeTime;
                 EventDispatcher.TriggerEvent(E_MessageType.ShowLoungeUI);
                 break;
-            //Èç¹ûÊÇBossÕ½£¬Ôò³õÊ¼»¯Ò»³¡BossÕ½¶·
+            //å¦‚æœæ˜¯Bossæˆ˜ï¼Œåˆ™åˆå§‹åŒ–ä¸€åœºBossæˆ˜æ–—
             case SceneType.BossCombat:
                 BattleManager.Instance.InitBattle(currentBattleData);
                 break;
         }
         EventDispatcher.TriggerEvent(E_MessageType.MultEnterScene);
     }
-    //ÊÕµ½¿¨ÅÆĞ§¹ûĞ­Òé
+    //æ”¶åˆ°å¡ç‰Œæ•ˆæœåè®®
     public void OnMsgCardEffect(MsgBase msgBase)
     {
         MsgCardEffect msg = (MsgCardEffect) msgBase;
@@ -223,39 +223,39 @@ public class MultiPlayMsgHandler : UnitySingleton<MultiPlayMsgHandler>
             BattleManager.Instance.GetBattleUnitByIndex(msg.targetIndex,true),msg.isCanXin,msg.isLianZhan,true);
     }
 
-    //Ê¹ÓÃ¿¨ÅÆĞ­Òé
+    //ä½¿ç”¨å¡ç‰Œåè®®
     public void OnMsgUseCard(MsgBase msgBase)
     {
         MsgUseCard msg = (MsgUseCard) msgBase;
         SyncPlayer.currentTurnCombo++;
     }
-    //¶ÁÈ¡µÈ´ıĞ­Òé
+    //è¯»å–ç­‰å¾…åè®®
     public void OnMsgLoadWait(MsgBase msgBase)
     {
         Debug.Log("LoadWait");
-        //µÈ´ı±ğÈË
+        //ç­‰å¾…åˆ«äºº
         EventDispatcher.TriggerEvent(E_MessageType.MultWaitLoad);
-        //ÉèÖÃÎªÖ÷Íæ¼Ò
+        //è®¾ç½®ä¸ºä¸»ç©å®¶
         NetManager.isMain = true;
     }
-    //µÈ´ı¶ÁÈ¡Íê±Ï
+    //ç­‰å¾…è¯»å–å®Œæ¯•
     public void OnMsgLoadEnd(MsgBase msgBase)
     {
-        //È¡ÏûµÈ´ı¿òÏÔÊ¾
+        //å–æ¶ˆç­‰å¾…æ¡†æ˜¾ç¤º
         EventDispatcher.TriggerEvent(E_MessageType.MultEnterScene);
     }
-    //¶ÁÈ¡³¡¾°Êı¾İ
+    //è¯»å–åœºæ™¯æ•°æ®
     public void OnMsgSendSceneType(MsgBase msgBase)
     {
         MsgSendSceneType msg = (MsgSendSceneType) msgBase;
         GameSceneManager.Instance.multScenes = JsonConvert.DeserializeObject<List<SceneType>>(msg.sceneTypeListStr);
     }
-    //µÈ´ı»ØºÏ½áÊø
+    //ç­‰å¾…å›åˆç»“æŸ
     public void OnMsgTurnWait(MsgBase msgBase)
     {
         EventDispatcher.TriggerEvent(E_MessageType.MultTurnWait);
     }
-    //»ØºÏÍê³É
+    //å›åˆå®Œæˆ
     public void OnMsgTurnFin(MsgBase msgBase)
     {
         StartCoroutine(BattleManager.Instance.TurnEnd());

@@ -702,8 +702,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.0000076294, y: 42.3}
-  m_SizeDelta: {x: 160, y: 30}
+  m_AnchoredPosition: {x: -0.0000076294, y: 50.1}
+  m_SizeDelta: {x: 160, y: 57.3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4780316744871850463
 CanvasRenderer:
@@ -838,6 +838,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 423d47b92d8d3b243b559b2acc841121, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isSyncAction: 0
 --- !u!114 &6841487871118104426
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -946,6 +947,7 @@ MonoBehaviour:
   currentHp: 0
   isPlayer: 0
   hasCheckList: 
+  hasSyncCheckList: 
   activeSyncActionMode: 
 --- !u!50 &4023559454031904978
 Rigidbody2D:
@@ -1173,8 +1175,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.0000076294, y: 42.3}
-  m_SizeDelta: {x: 160, y: 30}
+  m_AnchoredPosition: {x: 0.0000019073, y: 50.1}
+  m_SizeDelta: {x: 160, y: 57.3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5323320538182414710
 CanvasRenderer:
@@ -1483,6 +1485,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 423d47b92d8d3b243b559b2acc841121, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isSyncAction: 0
 --- !u!114 &7144730948050289626
 MonoBehaviour:
   m_ObjectHideFlags: 0
