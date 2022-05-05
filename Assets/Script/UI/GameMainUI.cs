@@ -13,6 +13,10 @@ public class GameMainUI : BaseUI
     private Text text_Gold;
     //生命值text
     private Text text_Hp;
+    //获胜Text
+    private GameObject table_Clear;
+    //失败Text
+    private GameObject table_Defeat;
     protected override void InitUiOnAwake()
     {
         base.InitUiOnAwake();
@@ -22,10 +26,14 @@ public class GameMainUI : BaseUI
         text_Gold.text = "金币："+GameManager.Instance.playerData.gold;
         text_Hp = GameTool.GetTheChildComponent<Text>(gameObject, "Text_Hp");
         text_Hp.text = "Hp：" + GameManager.Instance.playerData.currentHp + " / " + GameManager.Instance.playerData.maxHp;
+        table_Clear = GameTool.FindTheChild(gameObject,"Table_Clear").gameObject;
+        table_Defeat = GameTool.FindTheChild(gameObject, "Table_Defeat").gameObject;
+        table_Clear.SetActive(false);
+        table_Defeat.SetActive(false);
+
     }
     protected override void InitDataOnAwake()
     {
-
         base.InitDataOnAwake();
         this.uiId = E_UiId.GameMainUI;
         this.uiType.uiRootType = E_UIRootType.KeepAbove;
@@ -41,6 +49,14 @@ public class GameMainUI : BaseUI
     {
         base.AddMessageListener();
         EventDispatcher.AddListener(E_MessageType.UpdateGameMainUI,UpdateGameMainUI);
+        EventDispatcher.AddListener(E_MessageType.GameDefeat, delegate
+        {
+            table_Defeat.SetActive(true);
+        });
+        EventDispatcher.AddListener(E_MessageType.GameClear, delegate
+        {
+            table_Clear.SetActive(true); 
+        });
     }
 
     //展示牌库

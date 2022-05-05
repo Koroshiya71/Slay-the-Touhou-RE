@@ -31,5 +31,11 @@ public class Player : BaseBattleUnit
         GameManager.Instance.playerData.maxHp = maxHp;
         EventDispatcher.TriggerEvent(E_MessageType.UpdateGameMainUI);
     }
+    //覆写死亡方法
+    public override void Die()
+    {
+        base.Die();
+        EventDispatcher.TriggerEvent(E_MessageType.GameDefeat);
+    }
 }
 

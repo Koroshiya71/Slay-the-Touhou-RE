@@ -616,6 +616,12 @@ public class BattleManager : UnitySingleton<BattleManager>
     //战斗结束
     public void BattleEnd()
     {
+        //临时通关方法
+        if (currentBattleType==BattleType.Boss)
+        {
+            EventDispatcher.TriggerEvent(E_MessageType.GameClear);
+            return;
+        }
         //重置回合数
         isInit = true;
         //当前所在层数+1

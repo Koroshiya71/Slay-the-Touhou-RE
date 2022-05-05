@@ -28,6 +28,8 @@ public enum E_MessageType
     MultEnterScene,//进入场景,
     MultWaitLoad,//等待队友读取
     MultTurnWait,//等待队友回合结束
+    GameDefeat,//游戏失败
+    GameClear,//游戏通关
 }
 //物品的分类
 //public enum E_GoodsType

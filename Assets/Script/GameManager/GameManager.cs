@@ -289,6 +289,11 @@ public class GameManager : UnitySingleton<GameManager>
             NetManager.Send(msg);
         }
 
+        if (Input.GetKeyDown(KeyCode.D))
+        {
+            Player.Instance.Die();
+        }
+
         //手动调用
         NetManager.NetUpdate();
     }
